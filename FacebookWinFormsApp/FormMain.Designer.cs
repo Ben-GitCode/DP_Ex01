@@ -1,171 +1,213 @@
-﻿using System;
-using System.Drawing;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
 namespace BasicFacebookFeatures
 {
-    partial class FormMain : Form
+    partial class FormMain
     {
         private System.ComponentModel.IContainer components = null;
+
+        private TabControl tabControl1;
+        private TabPage tabPageLogin;
+        private TabPage tabPageEmpty; // Extra empty tab
+
         private Button buttonLogin;
         private Button buttonLogout;
-        private Label label1;
-        private TabControl tabControl1;
-        private TabPage tabPage1;
-        private TabPage tabPage2;
+        private Button buttonConnectAsDesig;
         private TextBox textBoxAppID;
         private PictureBox pictureBoxProfile;
-        private Button buttonConnectAsDesig;
+
+        private LinkLabel linkAlbums;
+        private LinkLabel linkEvents;
+        private LinkLabel linkGroups;
+        private LinkLabel linkPages;
+
+        private ListBox listBoxAlbums;
+        private ListBox listBoxEvents;
+        private ListBox listBoxGroups;
+        private ListBox listBoxPages;
+
+        private PictureBox pictureBoxAlbum;
+        private PictureBox pictureBoxEvent;
+        private PictureBox pictureBoxGroup;
+        private PictureBox pictureBoxPage;
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components != null))
-            {
+            if (disposing && components != null)
                 components.Dispose();
-            }
             base.Dispose(disposing);
         }
 
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.buttonLogin = new System.Windows.Forms.Button();
-            this.buttonLogout = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.pictureBoxProfile = new System.Windows.Forms.PictureBox();
-            this.textBoxAppID = new System.Windows.Forms.TextBox();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.buttonConnectAsDesig = new System.Windows.Forms.Button();
-            this.tabControl1.SuspendLayout();
-            this.tabPage1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxProfile)).BeginInit();
-            this.SuspendLayout();
-
-            // FormMain Styling
-            this.Font = new Font("Segoe UI", 11F);
-            this.BackColor = Color.FromArgb(59, 89, 152); // Facebook blue
-
-            // label1
-            this.label1.AutoSize = true;
-            this.label1.Location = new Point(314, 17);
-            this.label1.Name = "label1";
-            this.label1.Size = new Size(465, 78);
-            this.label1.TabIndex = 53;
-            this.label1.Text = "This is the AppID of 'Design Patterns App 2.4'.\r\nThe grader will use it to test your app.\r\nType here your own AppID to test it:";
-            this.label1.ForeColor = Color.White;
-            this.label1.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-
-            // tabControl1
-            this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Dock = DockStyle.Fill;
-            this.tabControl1.Location = new Point(0, 0);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new Size(862, 370);
-            this.tabControl1.TabIndex = 54;
-
-            // tabPage1
-            this.tabPage1.Controls.Add(this.buttonConnectAsDesig);
-            this.tabPage1.Controls.Add(this.pictureBoxProfile);
-            this.tabPage1.Controls.Add(this.textBoxAppID);
-            this.tabPage1.Controls.Add(this.label1);
-            this.tabPage1.Controls.Add(this.buttonLogout);
-            this.tabPage1.Controls.Add(this.buttonLogin);
-            this.tabPage1.Location = new Point(4, 35);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new Padding(3);
-            this.tabPage1.Size = new Size(854, 331);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Welcome";
-            this.tabPage1.UseVisualStyleBackColor = true;
-            this.tabPage1.BackColor = Color.White;
-
-            // tabPage2
-            this.tabPage2.Location = new Point(4, 35);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new Padding(3);
-            this.tabPage2.Size = new Size(752, 327);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Other";
-            this.tabPage2.UseVisualStyleBackColor = true;
-            this.tabPage2.BackColor = Color.White;
-
-            // buttonLogin
-            this.buttonLogin.Location = new Point(18, 17);
-            this.buttonLogin.Name = "buttonLogin";
-            this.buttonLogin.Size = new Size(268, 44);
-            this.buttonLogin.TabIndex = 36;
-            this.buttonLogin.Text = "Login";
-            this.buttonLogin.FlatStyle = FlatStyle.Flat;
-            this.buttonLogin.BackColor = Color.White;
-            this.buttonLogin.ForeColor = Color.FromArgb(59, 89, 152);
-            this.buttonLogin.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            this.buttonLogin.UseVisualStyleBackColor = true;
-            this.buttonLogin.Click += new EventHandler(this.buttonLogin_Click);
-
-            // buttonConnectAsDesig
-            this.buttonConnectAsDesig.Location = new Point(18, 69);
-            this.buttonConnectAsDesig.Name = "buttonConnectAsDesig";
-            this.buttonConnectAsDesig.Size = new Size(268, 44);
-            this.buttonConnectAsDesig.TabIndex = 56;
-            this.buttonConnectAsDesig.Text = "Connect As Desig";
-            this.buttonConnectAsDesig.FlatStyle = FlatStyle.Flat;
-            this.buttonConnectAsDesig.BackColor = Color.LightSkyBlue;
-            this.buttonConnectAsDesig.ForeColor = Color.White;
-            this.buttonConnectAsDesig.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            this.buttonConnectAsDesig.UseVisualStyleBackColor = true;
-            this.buttonConnectAsDesig.Click += new EventHandler(this.buttonConnectAsDesig_Click);
-
-            // buttonLogout
-            this.buttonLogout.Enabled = false;
-            this.buttonLogout.Location = new Point(18, 121);
-            this.buttonLogout.Name = "buttonLogout";
-            this.buttonLogout.Size = new Size(268, 43);
-            this.buttonLogout.TabIndex = 52;
-            this.buttonLogout.Text = "Logout";
-            this.buttonLogout.FlatStyle = FlatStyle.Flat;
-            this.buttonLogout.BackColor = Color.WhiteSmoke;
-            this.buttonLogout.ForeColor = Color.Gray;
-            this.buttonLogout.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            this.buttonLogout.UseVisualStyleBackColor = true;
-            this.buttonLogout.Click += new EventHandler(this.buttonLogout_Click);
-
-            // pictureBoxProfile
-            this.pictureBoxProfile.Location = new Point(18, 171);
-            this.pictureBoxProfile.Name = "pictureBoxProfile";
-            this.pictureBoxProfile.Size = new Size(79, 78);
-            this.pictureBoxProfile.SizeMode = PictureBoxSizeMode.Zoom;
-            this.pictureBoxProfile.TabIndex = 55;
-            this.pictureBoxProfile.TabStop = false;
-            this.pictureBoxProfile.BackColor = Color.White;
-            this.pictureBoxProfile.BorderStyle = BorderStyle.FixedSingle;
-
-            // textBoxAppID
-            this.textBoxAppID.Location = new Point(319, 126);
-            this.textBoxAppID.Name = "textBoxAppID";
-            this.textBoxAppID.Size = new Size(446, 32);
-            this.textBoxAppID.TabIndex = 54;
-            this.textBoxAppID.Text = "1282715863617766";
-            this.textBoxAppID.BackColor = Color.WhiteSmoke;
-            this.textBoxAppID.Font = new Font("Segoe UI", 12F);
-
-            // FormMain
-            this.AutoScaleDimensions = new SizeF(13F, 26F);
-            this.AutoScaleMode = AutoScaleMode.Font;
-            this.ClientSize = new Size(862, 370);
-            this.Controls.Add(this.tabControl1);
-            this.FormBorderStyle = FormBorderStyle.FixedDialog;
-            this.MaximizeBox = false;
+            this.ClientSize = new System.Drawing.Size(700, 500);
             this.StartPosition = FormStartPosition.CenterScreen;
             this.Text = "Facebook Features";
-            this.tabControl1.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxProfile)).EndInit();
-            this.ResumeLayout(false);
+
+            // Tab Control
+            tabControl1 = new TabControl
+            {
+                Dock = DockStyle.Fill
+            };
+
+            tabPageLogin = new TabPage("Facebook Data + Login");
+            tabPageEmpty = new TabPage("Empty Tab"); // Added empty tab
+
+            tabControl1.TabPages.Add(tabPageLogin);
+            tabControl1.TabPages.Add(tabPageEmpty); // Add to TabControl
+            this.Controls.Add(tabControl1);
+
+            // --- LOGIN CONTROLS ---
+            buttonLogin = new Button()
+            {
+                Text = "Login",
+                Location = new System.Drawing.Point(20, 20),
+                Size = new System.Drawing.Size(120, 30)
+            };
+            buttonLogin.Click += buttonLogin_Click;
+
+            buttonConnectAsDesig = new Button()
+            {
+                Text = "Connect As Desig",
+                Location = new System.Drawing.Point(150, 20),
+                Size = new System.Drawing.Size(120, 30)
+            };
+            buttonConnectAsDesig.Click += buttonConnectAsDesig_Click;
+
+            buttonLogout = new Button()
+            {
+                Text = "Logout",
+                Location = new System.Drawing.Point(280, 20),
+                Size = new System.Drawing.Size(120, 30),
+                Enabled = false
+            };
+            buttonLogout.Click += buttonLogout_Click;
+
+            textBoxAppID = new TextBox()
+            {
+                Text = "1282715863617766",
+                Location = new System.Drawing.Point(20, 60),
+                Size = new System.Drawing.Size(380, 25)
+            };
+
+            pictureBoxProfile = new PictureBox()
+            {
+                Location = new System.Drawing.Point(420, 20),
+                Size = new System.Drawing.Size(100, 100),
+                SizeMode = PictureBoxSizeMode.Zoom,
+                BorderStyle = BorderStyle.FixedSingle
+            };
+
+            tabPageLogin.Controls.Add(buttonLogin);
+            tabPageLogin.Controls.Add(buttonConnectAsDesig);
+            tabPageLogin.Controls.Add(buttonLogout);
+            tabPageLogin.Controls.Add(textBoxAppID);
+            tabPageLogin.Controls.Add(pictureBoxProfile);
+
+            // --- DATA CONTROLS ---
+            // Albums
+            linkAlbums = new LinkLabel()
+            {
+                Text = "Albums",
+                Location = new System.Drawing.Point(20, 140),
+                AutoSize = true
+            };
+            linkAlbums.LinkClicked += linkAlbums_LinkClicked;
+
+            listBoxAlbums = new ListBox()
+            {
+                Location = new System.Drawing.Point(20, 160),
+                Size = new System.Drawing.Size(150, 100)
+            };
+            listBoxAlbums.SelectedIndexChanged += listBoxAlbums_SelectedIndexChanged;
+
+            pictureBoxAlbum = new PictureBox()
+            {
+                Location = new System.Drawing.Point(180, 160),
+                Size = new System.Drawing.Size(100, 100),
+                SizeMode = PictureBoxSizeMode.Zoom,
+                BorderStyle = BorderStyle.FixedSingle
+            };
+
+            // Events
+            linkEvents = new LinkLabel()
+            {
+                Text = "Events",
+                Location = new System.Drawing.Point(300, 140),
+                AutoSize = true
+            };
+            linkEvents.LinkClicked += linkEvents_LinkClicked;
+
+            listBoxEvents = new ListBox()
+            {
+                Location = new System.Drawing.Point(300, 160),
+                Size = new System.Drawing.Size(150, 100)
+            };
+            listBoxEvents.SelectedIndexChanged += listBoxEvents_SelectedIndexChanged;
+
+            pictureBoxEvent = new PictureBox()
+            {
+                Location = new System.Drawing.Point(460, 160),
+                Size = new System.Drawing.Size(100, 100),
+                SizeMode = PictureBoxSizeMode.Zoom,
+                BorderStyle = BorderStyle.FixedSingle
+            };
+
+            // Groups
+            linkGroups = new LinkLabel()
+            {
+                Text = "Groups",
+                Location = new System.Drawing.Point(20, 280),
+                AutoSize = true
+            };
+            linkGroups.LinkClicked += linkGroups_LinkClicked;
+
+            listBoxGroups = new ListBox()
+            {
+                Location = new System.Drawing.Point(20, 300),
+                Size = new System.Drawing.Size(150, 100)
+            };
+            listBoxGroups.SelectedIndexChanged += listBoxGroups_SelectedIndexChanged;
+
+            pictureBoxGroup = new PictureBox()
+            {
+                Location = new System.Drawing.Point(180, 300),
+                Size = new System.Drawing.Size(100, 100),
+                SizeMode = PictureBoxSizeMode.Zoom,
+                BorderStyle = BorderStyle.FixedSingle
+            };
+
+            // Pages
+            linkPages = new LinkLabel()
+            {
+                Text = "Liked Pages",
+                Location = new System.Drawing.Point(300, 280),
+                AutoSize = true
+            };
+            linkPages.LinkClicked += linkPages_LinkClicked;
+
+            listBoxPages = new ListBox()
+            {
+                Location = new System.Drawing.Point(300, 300),
+                Size = new System.Drawing.Size(150, 100)
+            };
+            listBoxPages.SelectedIndexChanged += listBoxPages_SelectedIndexChanged;
+
+            pictureBoxPage = new PictureBox()
+            {
+                Location = new System.Drawing.Point(460, 300),
+                Size = new System.Drawing.Size(100, 100),
+                SizeMode = PictureBoxSizeMode.Zoom,
+                BorderStyle = BorderStyle.FixedSingle
+            };
+
+            tabPageLogin.Controls.AddRange(new Control[]
+            {
+                linkAlbums, listBoxAlbums, pictureBoxAlbum,
+                linkEvents, listBoxEvents, pictureBoxEvent,
+                linkGroups, listBoxGroups, pictureBoxGroup,
+                linkPages, listBoxPages, pictureBoxPage
+            });
         }
     }
 }
