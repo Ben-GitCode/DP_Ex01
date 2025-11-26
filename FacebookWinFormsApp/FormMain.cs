@@ -9,17 +9,44 @@ namespace BasicFacebookFeatures
     public partial class FormMain : Form
     {
         private LoginResult m_LoginResult;
+        private bool isDarkMode = false;
 
         public FormMain()
         {
             InitializeComponent();
             FacebookService.s_CollectionLimit = 25;
 
-            this.MinimumSize = new Size(700, 500);
-            this.MaximumSize = new Size(700, 500);
-            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+            // FRIENDS
+            linkFriends = new LinkLabel()
+            {
+                Text = "Fetch Friends",
+                Location = new Point(20, 200),
+                AutoSize = true
+            };
+            linkFriends.LinkClicked += linkFriends_LinkClicked;
+
+            listBoxFriends = new ListBox()
+            {
+                Location = new Point(20, 225),
+                Size = new Size(180, 120)
+            };
+            listBoxFriends.SelectedIndexChanged += listBoxFriends_SelectedIndexChanged;
+
+            pictureBoxFriend = new PictureBox()
+            {
+                Location = new Point(220, 225),
+                Size = new Size(120, 120),
+                SizeMode = PictureBoxSizeMode.Zoom
+            };
+
+            // Add controls to the tabPageData
+            tabPageData.Controls.AddRange(new Control[]
+            {
+                linkFriends, listBoxFriends, pictureBoxFriend
+            });
         }
 
+        // ---------------- LOGIN ----------------
         private void buttonLogin_Click(object sender, EventArgs e)
         {
             if (m_LoginResult != null)
@@ -35,7 +62,6 @@ namespace BasicFacebookFeatures
                 "user_photos",
                 "user_posts",
                 "user_likes",
-                "user_videos",
                 "user_friends"
             );
 
@@ -86,6 +112,18 @@ namespace BasicFacebookFeatures
             pictureBoxProfile.Image = null;
         }
 
+        private bool checkLogin()
+        {
+            if (m_LoginResult == null)
+            {
+                MessageBox.Show("You must login first.");
+                return false;
+            }
+
+            return true;
+        }
+
+        // ---------------- ALBUMS ----------------
         private void linkAlbums_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             if (!checkLogin()) return;
@@ -103,6 +141,48 @@ namespace BasicFacebookFeatures
                 pictureBoxAlbum.LoadAsync(album.PictureAlbumURL);
         }
 
+        private void linkPosts_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            if (!checkLogin()) return;
+
+            listBoxPosts.Items.Clear();
+            listBoxPosts.DisplayMember = "Message";
+
+            foreach (Post post in m_LoginResult.LoggedInUser.Posts)
+            {
+                if (post.Message != null)
+                {
+                    listBoxPosts.Items.Add(post);
+                }
+                else if (post.Caption != null)
+                {
+                    listBoxPosts.Items.Add(post);
+                }
+                else
+                {
+                    listBoxPosts.Items.Add("[No text] (Media Post)");
+                }
+            }
+        }
+
+        private void listBoxPosts_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (listBoxPosts.SelectedItem is Post post)
+            {
+                if (post.PictureURL != null)
+                {
+                    pictureBoxPost.LoadAsync(post.PictureURL);
+                }
+                else
+                {
+                    pictureBoxPost.Image = null;
+                }
+            }
+        }
+
+
+        
+        // ---------------- PAGES ----------------
         private void linkPages_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             if (!checkLogin()) return;
@@ -116,52 +196,85 @@ namespace BasicFacebookFeatures
 
         private void listBoxPages_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (listBoxPages.SelectedItem is Page page && !string.IsNullOrEmpty(page.PictureNormalURL))
-                pictureBoxPage.LoadAsync(page.PictureNormalURL);
-        }
-
-        private void linkEvents_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            if (!checkLogin()) return;
-
-            listBoxEvents.Items.Clear();
-            listBoxEvents.DisplayMember = "Name";
-
-            foreach (Event ev in m_LoginResult.LoggedInUser.Events)
-                listBoxEvents.Items.Add(ev);
-        }
-
-        private void listBoxEvents_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (listBoxEvents.SelectedItem is Event ev && ev.Cover != null && !string.IsNullOrEmpty(ev.Cover.SourceURL))
-                pictureBoxEvent.LoadAsync(ev.Cover.SourceURL);
-        }
-
-        private void linkGroups_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            if (!checkLogin()) return;
-
-            listBoxGroups.Items.Clear();
-            listBoxGroups.DisplayMember = "Name";
-
-            foreach (Group g in m_LoginResult.LoggedInUser.Groups)
-                listBoxGroups.Items.Add(g);
-        }
-
-        private void listBoxGroups_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (listBoxGroups.SelectedItem is Group g && !string.IsNullOrEmpty(g.PictureNormalURL))
-                pictureBoxGroup.LoadAsync(g.PictureNormalURL);
-        }
-
-        private bool checkLogin()
-        {
-            if (m_LoginResult == null)
+            if (listBoxPages.SelectedItem is Page p &&
+                !string.IsNullOrEmpty(p.PictureNormalURL))
             {
-                MessageBox.Show("You must login first.");
-                return false;
+                pictureBoxPage.LoadAsync(p.PictureNormalURL);
             }
-            return true;
+        }
+
+        // ---------------- FRIENDS ----------------
+        private void linkFriends_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            if (!checkLogin()) return;
+
+            listBoxFriends.Items.Clear();
+            listBoxFriends.DisplayMember = "Name";
+
+            foreach (User friend in m_LoginResult.LoggedInUser.Friends)
+                listBoxFriends.Items.Add(friend);
+        }
+
+        private void listBoxFriends_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (listBoxFriends.SelectedItem is User friend &&
+                !string.IsNullOrEmpty(friend.PictureNormalURL))
+            {
+                pictureBoxFriend.LoadAsync(friend.PictureNormalURL);
+            }
+        }
+
+        // ---------------- DARK MODE ----------------
+        private void toggleDarkMode_Click(object sender, EventArgs e)
+        {
+            isDarkMode = !isDarkMode;
+            applyDarkMode();
+
+            // Move toggle circle
+            toggleCircle.Left = isDarkMode ? 26 : 1;
+
+            // Change background color
+            toggleBackground.BackColor = isDarkMode ? Color.DarkGray : Color.LightGray;
+        }
+
+        private void applyDarkMode()
+        {
+            Color formColor = isDarkMode ? Color.Black : Color.White;
+            Color textColor = isDarkMode ? Color.White : Color.Black;
+            Color listBoxBackColor = isDarkMode ? Color.Black : Color.White;
+            Color listBoxForeColor = isDarkMode ? Color.White : Color.Black;
+
+            tabPageLogin.BackColor = formColor;
+            tabPageData.BackColor = formColor;
+
+            foreach (Control control in tabPageLogin.Controls)
+                applyColor(control, textColor, listBoxBackColor, listBoxForeColor);
+
+            foreach (Control control in tabPageData.Controls)
+                applyColor(control, textColor, listBoxBackColor, listBoxForeColor);
+        }
+
+        private void applyColor(Control control, Color textColor, Color listBoxBackColor, Color listBoxForeColor)
+        {
+            if (control is Button b)
+            {
+                b.BackColor = isDarkMode ? Color.FromArgb(50, 50, 50) : Color.FromArgb(66, 103, 178);
+                b.ForeColor = Color.White;
+            }
+            else if (control is LinkLabel ll)
+            {
+                ll.LinkColor = textColor;
+                ll.ForeColor = textColor;
+            }
+            else if (control is ListBox lb)
+            {
+                lb.BackColor = listBoxBackColor;
+                lb.ForeColor = listBoxForeColor;
+            }
+            else
+            {
+                control.ForeColor = textColor;
+            }
         }
     }
 }
