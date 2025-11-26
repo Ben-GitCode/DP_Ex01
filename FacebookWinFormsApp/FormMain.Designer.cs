@@ -30,7 +30,6 @@ namespace BasicFacebookFeatures
         private ListBox listBoxFriends;
 
         private PictureBox pictureBoxAlbum;
-        private PictureBox pictureBoxGroup;
         private PictureBox pictureBoxPage;
         private PictureBox pictureBoxPost;
         private PictureBox pictureBoxFriend;
@@ -52,11 +51,13 @@ namespace BasicFacebookFeatures
         private void InitializeComponent()
         {
             // ==== MAIN FORM ====
-            this.ClientSize = new System.Drawing.Size(800, 600);
             this.StartPosition = FormStartPosition.CenterScreen;
             this.Text = "Facebook Features";
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.BackColor = Color.FromArgb(66, 103, 178);
+            this.ClientSize = new Size(1250, 600); 
+            this.MinimumSize = new Size(1250, 600);
+            this.MaximumSize = new Size(1250, 600);
 
             // ==== TAB CONTROL ====
             tabControl1 = new TabControl()
@@ -175,101 +176,135 @@ namespace BasicFacebookFeatures
 
         private void createDataSection(TabPage parent)
         {
-            // Albums
+            parent.Controls.Clear();
+
+            int colWidth = 250;
+            int colGap = 40;
+
+            int col1 = 40;
+            int col2 = col1 + colWidth + colGap;      // 330
+            int col3 = col2 + colWidth + colGap;      // 620
+            int col4 = col3 + colWidth + colGap;      // 910
+
+            int labelTop = 30;
+            int listTop = 70;
+            int imageTop = 270;
+
+            Font commonFont = new Font("Segoe UI", 12, FontStyle.Bold); // Common font for titles and text
+
+            // ==== ALBUMS ====
             linkAlbums = new LinkLabel()
             {
-                Text = "Fetch Albums",
-                Location = new Point(20, 20),
-                AutoSize = true
+                Text = "Albums",
+                Location = new Point(col1, labelTop),
+                Size = new Size(200, 30), // Fixed width to prevent text from being cut
+                Font = commonFont,
+                LinkColor = Color.FromArgb(66, 103, 178),
+                AutoSize = false // Disable AutoSize to use the fixed width
             };
             linkAlbums.LinkClicked += linkAlbums_LinkClicked;
 
             listBoxAlbums = new ListBox()
             {
-                Location = new Point(20, 45),
-                Size = new Size(180, 120)
+                Location = new Point(col1, listTop),
+                Size = new Size(colWidth, 200),
+                BorderStyle = BorderStyle.FixedSingle,
+                Font = commonFont
             };
             listBoxAlbums.SelectedIndexChanged += listBoxAlbums_SelectedIndexChanged;
 
             pictureBoxAlbum = new PictureBox()
             {
-                Location = new Point(220, 45),
-                Size = new Size(120, 120),
+                Location = new Point(col1 + 40, imageTop),
+                Size = new Size(170, 170),
+                BorderStyle = BorderStyle.FixedSingle,
                 SizeMode = PictureBoxSizeMode.Zoom
             };
 
             // ==== POSTS ====
-
-            // Link to load posts
             linkPosts = new LinkLabel()
             {
-                Text = "Fetch Posts",
-                Location = new Point(300, 20),
-                AutoSize = true,
-                LinkColor = Color.FromArgb(66, 103, 178)
+                Text = "Posts",
+                Location = new Point(col2, labelTop),
+                Size = new Size(200, 30), // Fixed width to prevent text from being cut
+                Font = commonFont,
+                LinkColor = Color.FromArgb(66, 103, 178),
+                AutoSize = false // Disable AutoSize to use the fixed width
             };
             linkPosts.LinkClicked += linkPosts_LinkClicked;
 
-            // Posts list
             listBoxPosts = new ListBox()
             {
-                Location = new Point(300, 45),
-                Size = new Size(250, 120)
+                Location = new Point(col2, listTop),
+                Size = new Size(colWidth, 200),
+                BorderStyle = BorderStyle.FixedSingle,
+                Font = commonFont
             };
             listBoxPosts.SelectedIndexChanged += listBoxPosts_SelectedIndexChanged;
 
-            // Post image
             pictureBoxPost = new PictureBox()
             {
-                Location = new Point(560, 45),
-                Size = new Size(120, 120),
+                Location = new Point(col2 + 40, imageTop),
+                Size = new Size(170, 170),
+                BorderStyle = BorderStyle.FixedSingle,
                 SizeMode = PictureBoxSizeMode.Zoom
             };
 
-            // Friends
+            // ==== FRIENDS ====
             linkFriends = new LinkLabel()
             {
-                Text = "Fetch Friends",
-                Location = new Point(20, 200),
-                AutoSize = true
+                Text = "Friends",
+                Location = new Point(col3, labelTop),
+                Size = new Size(200, 30), // Fixed width to prevent text from being cut
+                Font = commonFont,
+                LinkColor = Color.FromArgb(66, 103, 178),
+                AutoSize = false // Disable AutoSize to use the fixed width
             };
             linkFriends.LinkClicked += linkFriends_LinkClicked;
 
             listBoxFriends = new ListBox()
             {
-                Location = new Point(20, 225),
-                Size = new Size(180, 120)
+                Location = new Point(col3, listTop),
+                Size = new Size(colWidth, 200),
+                BorderStyle = BorderStyle.FixedSingle,
+                Font = commonFont
             };
             listBoxFriends.SelectedIndexChanged += listBoxFriends_SelectedIndexChanged;
 
             pictureBoxFriend = new PictureBox()
             {
-                Location = new Point(220, 225),
-                Size = new Size(120, 120),
+                Location = new Point(col3 + 40, imageTop),
+                Size = new Size(170, 170),
+                BorderStyle = BorderStyle.FixedSingle,
                 SizeMode = PictureBoxSizeMode.Zoom
             };
 
-            
-            // Pages
+            // ==== PAGES ====
             linkPages = new LinkLabel()
             {
-                Text = "Fetch Liked Pages",
-                Location = new Point(380, 380),
-                AutoSize = true
+                Text = "Pages",
+                Location = new Point(col4, labelTop),
+                Size = new Size(200, 30), // Fixed width to prevent text from being cut
+                Font = commonFont,
+                LinkColor = Color.FromArgb(66, 103, 178),
+                AutoSize = false // Disable AutoSize to use the fixed width
             };
             linkPages.LinkClicked += linkPages_LinkClicked;
 
             listBoxPages = new ListBox()
             {
-                Location = new Point(380, 405),
-                Size = new Size(180, 120)
+                Location = new Point(col4, listTop),
+                Size = new Size(colWidth, 200),
+                BorderStyle = BorderStyle.FixedSingle,
+                Font = commonFont
             };
             listBoxPages.SelectedIndexChanged += listBoxPages_SelectedIndexChanged;
 
             pictureBoxPage = new PictureBox()
             {
-                Location = new Point(580, 405),
-                Size = new Size(120, 120),
+                Location = new Point(col4 + 40, imageTop),
+                Size = new Size(170, 170),
+                BorderStyle = BorderStyle.FixedSingle,
                 SizeMode = PictureBoxSizeMode.Zoom
             };
 
@@ -278,7 +313,6 @@ namespace BasicFacebookFeatures
                 linkAlbums, listBoxAlbums, pictureBoxAlbum,
                 linkPosts, listBoxPosts, pictureBoxPost,
                 linkFriends, listBoxFriends, pictureBoxFriend,
-                pictureBoxGroup,
                 linkPages, listBoxPages, pictureBoxPage
             });
         }

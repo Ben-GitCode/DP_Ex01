@@ -16,20 +16,7 @@ namespace BasicFacebookFeatures
             InitializeComponent();
             FacebookService.s_CollectionLimit = 25;
 
-            // FRIENDS
-            linkFriends = new LinkLabel()
-            {
-                Text = "Fetch Friends",
-                Location = new Point(20, 200),
-                AutoSize = true
-            };
-            linkFriends.LinkClicked += linkFriends_LinkClicked;
-
-            listBoxFriends = new ListBox()
-            {
-                Location = new Point(20, 225),
-                Size = new Size(180, 120)
-            };
+            
             listBoxFriends.SelectedIndexChanged += listBoxFriends_SelectedIndexChanged;
 
             pictureBoxFriend = new PictureBox()
@@ -169,19 +156,18 @@ namespace BasicFacebookFeatures
         {
             if (listBoxPosts.SelectedItem is Post post)
             {
-                if (post.PictureURL != null)
+                if (!string.IsNullOrEmpty(post.PictureURL))
                 {
                     pictureBoxPost.LoadAsync(post.PictureURL);
                 }
                 else
                 {
                     pictureBoxPost.Image = null;
+                    MessageBox.Show("This post does not have an associated image.");
                 }
             }
         }
 
-
-        
         // ---------------- PAGES ----------------
         private void linkPages_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
