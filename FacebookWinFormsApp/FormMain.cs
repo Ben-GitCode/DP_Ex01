@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Drawing;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using FacebookWrapper;
 using FacebookWrapper.ObjectModel;
@@ -10,6 +12,7 @@ namespace BasicFacebookFeatures
     {
         private LoginResult m_LoginResult;
         private bool isDarkMode = false;
+        private PictureBox pictureBoxFriend;
 
         public FormMain()
         {
@@ -220,13 +223,17 @@ namespace BasicFacebookFeatures
             Color listBoxForeColor = isDarkMode ? Color.White : Color.Black;
 
             tabPageLogin.BackColor = formColor;
-            tabPageData.BackColor = formColor;
 
-            foreach (Control control in tabPageLogin.Controls)
-                applyColor(control, textColor, listBoxBackColor, listBoxForeColor);
+            // Apply dark mode to all tabs
+            foreach (TabPage tabPage in tabControl1.TabPages)
+            {
+                tabPage.BackColor = formColor;
 
-            foreach (Control control in tabPageData.Controls)
-                applyColor(control, textColor, listBoxBackColor, listBoxForeColor);
+                foreach (Control control in tabPage.Controls)
+                {
+                    applyColor(control, textColor, listBoxBackColor, listBoxForeColor);
+                }
+            }
         }
 
         private void applyColor(Control control, Color textColor, Color listBoxBackColor, Color listBoxForeColor)

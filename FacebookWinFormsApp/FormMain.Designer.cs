@@ -10,7 +10,6 @@ namespace BasicFacebookFeatures
         // ==== UI CONTROLS ====
         private TabControl tabControl1;
         private TabPage tabPageLogin;
-        private TabPage tabPageData;
 
         private Button buttonLogin;
         private Button buttonLogout;
@@ -68,10 +67,16 @@ namespace BasicFacebookFeatures
             };
 
             tabPageLogin = new TabPage("Login") { BackColor = Color.White };
-            tabPageData = new TabPage("Facebook Data") { BackColor = Color.White };
+            TabPage tabPageAlbums = new TabPage("Albums") { BackColor = Color.White };
+            TabPage tabPagePosts = new TabPage("Posts") { BackColor = Color.White };
+            TabPage tabPagePhotos = new TabPage("Photos") { BackColor = Color.White };
+            TabPage tabPagePages = new TabPage("Pages") { BackColor = Color.White };
 
             tabControl1.TabPages.Add(tabPageLogin);
-            tabControl1.TabPages.Add(tabPageData);
+            tabControl1.TabPages.Add(tabPageAlbums);
+            tabControl1.TabPages.Add(tabPagePosts);
+            tabControl1.TabPages.Add(tabPagePhotos);
+            tabControl1.TabPages.Add(tabPagePages);
             this.Controls.Add(tabControl1);
 
             // ==== BOTTOM PANEL + TOGGLE ====
@@ -170,93 +175,99 @@ namespace BasicFacebookFeatures
                 textBoxAppID, pictureBoxProfile
             });
 
-            // ==== DATA PAGE ====
-            createDataSection(tabPageData);
+            // ==== ALBUMS PAGE ====
+            createAlbumsSection(tabPageAlbums);
+
+            // ==== POSTS PAGE ====
+            createPostsSection(tabPagePosts);
+
+            // ==== PHOTOS PAGE ====
+            createPhotosSection(tabPagePhotos);
+
+            // ==== PAGES PAGE ====
+            createPagesSection(tabPagePages);
         }
 
-        private void createDataSection(TabPage parent)
+        private void createAlbumsSection(TabPage parent)
         {
             parent.Controls.Clear();
 
-            int colWidth = 250;
-            int colGap = 40;
-
-            int col1 = 40;
-            int col2 = col1 + colWidth + colGap;      // 330
-            int col3 = col2 + colWidth + colGap;      // 620
-            int col4 = col3 + colWidth + colGap;      // 910
-
-            int labelTop = 30;
-            int listTop = 70;
-            int imageTop = 270;
-
-            Font commonFont = new Font("Segoe UI", 12, FontStyle.Bold); 
-
-            // ==== ALBUMS ====
             linkAlbums = new LinkLabel()
             {
                 Text = "Albums",
-                Location = new Point(col1, labelTop),
-                Size = new Size(200, 30), 
-                Font = commonFont,
+                Location = new Point(40, 30),
+                Size = new Size(200, 30),
+                Font = new Font("Segoe UI", 12, FontStyle.Bold),
                 LinkColor = Color.FromArgb(66, 103, 178),
-                AutoSize = false 
+                AutoSize = false
             };
             linkAlbums.LinkClicked += linkAlbums_LinkClicked;
 
             listBoxAlbums = new ListBox()
             {
-                Location = new Point(col1, listTop),
-                Size = new Size(colWidth, 200),
+                Location = new Point(40, 70),
+                Size = new Size(250, 200),
                 BorderStyle = BorderStyle.FixedSingle,
-                Font = commonFont
+                Font = new Font("Segoe UI", 12, FontStyle.Bold)
             };
             listBoxAlbums.SelectedIndexChanged += listBoxAlbums_SelectedIndexChanged;
 
             pictureBoxAlbum = new PictureBox()
             {
-                Location = new Point(col1 + 40, imageTop),
+                Location = new Point(90, 300),
                 Size = new Size(170, 170),
                 BorderStyle = BorderStyle.FixedSingle,
                 SizeMode = PictureBoxSizeMode.Zoom
             };
 
-            // ==== POSTS ====
+            parent.Controls.AddRange(new Control[] { linkAlbums, listBoxAlbums, pictureBoxAlbum });
+        }
+
+        private void createPostsSection(TabPage parent)
+        {
+            parent.Controls.Clear();
+
             linkPosts = new LinkLabel()
             {
                 Text = "Posts",
-                Location = new Point(col2, labelTop),
-                Size = new Size(200, 30), 
-                Font = commonFont,
+                Location = new Point(40, 30),
+                Size = new Size(200, 30),
+                Font = new Font("Segoe UI", 12, FontStyle.Bold),
                 LinkColor = Color.FromArgb(66, 103, 178),
-                AutoSize = false 
+                AutoSize = false
             };
             linkPosts.LinkClicked += linkPosts_LinkClicked;
 
             listBoxPosts = new ListBox()
             {
-                Location = new Point(col2, listTop),
-                Size = new Size(colWidth, 200),
+                Location = new Point(40, 70),
+                Size = new Size(250, 200),
                 BorderStyle = BorderStyle.FixedSingle,
-                Font = commonFont
+                Font = new Font("Segoe UI", 12, FontStyle.Bold)
             };
             listBoxPosts.SelectedIndexChanged += listBoxPosts_SelectedIndexChanged;
 
             pictureBoxPost = new PictureBox()
             {
-                Location = new Point(col2 + 40, imageTop),
+                Location = new Point(90, 300),
                 Size = new Size(170, 170),
                 BorderStyle = BorderStyle.FixedSingle,
                 SizeMode = PictureBoxSizeMode.Zoom
             };
 
-            // ==== PhotoS ====
+            parent.Controls.AddRange(new Control[] { linkPosts, listBoxPosts, pictureBoxPost });
+        }
+
+        private void createPhotosSection(TabPage parent)
+        {
+            parent.Controls.Clear();
+
             linkPhotos = new LinkLabel()
             {
                 Text = "Photos",
-                Location = new Point(col3, labelTop),
+                Location = new Point(40, 30),
                 Size = new Size(200, 30),
-                Font = commonFont,
+                Font = new Font("Segoe UI", 12, FontStyle.Bold),
                 LinkColor = Color.FromArgb(66, 103, 178),
                 AutoSize = false
             };
@@ -264,57 +275,57 @@ namespace BasicFacebookFeatures
 
             listBoxPhotos = new ListBox()
             {
-                Location = new Point(col3, listTop),
-                Size = new Size(colWidth, 200),
+                Location = new Point(40, 70),
+                Size = new Size(250, 200),
                 BorderStyle = BorderStyle.FixedSingle,
-                Font = commonFont
+                Font = new Font("Segoe UI", 12, FontStyle.Bold)
             };
             listBoxPhotos.SelectedIndexChanged += listBoxPhotos_SelectedIndexChanged;
 
             pictureBoxPhoto = new PictureBox()
             {
-                Location = new Point(col3 + 40, imageTop),
+                Location = new Point(90, 300),
                 Size = new Size(170, 170),
                 BorderStyle = BorderStyle.FixedSingle,
                 SizeMode = PictureBoxSizeMode.Zoom
             };
 
-            // ==== PAGES ====
+            parent.Controls.AddRange(new Control[] { linkPhotos, listBoxPhotos, pictureBoxPhoto });
+        }
+
+        private void createPagesSection(TabPage parent)
+        {
+            parent.Controls.Clear();
+
             linkPages = new LinkLabel()
             {
                 Text = "Pages",
-                Location = new Point(col4, labelTop),
+                Location = new Point(40, 30),
                 Size = new Size(200, 30),
-                Font = commonFont,
+                Font = new Font("Segoe UI", 12, FontStyle.Bold),
                 LinkColor = Color.FromArgb(66, 103, 178),
-                AutoSize = false 
+                AutoSize = false
             };
             linkPages.LinkClicked += linkPages_LinkClicked;
 
             listBoxPages = new ListBox()
             {
-                Location = new Point(col4, listTop),
-                Size = new Size(colWidth, 200),
+                Location = new Point(40, 70),
+                Size = new Size(250, 200),
                 BorderStyle = BorderStyle.FixedSingle,
-                Font = commonFont
+                Font = new Font("Segoe UI", 12, FontStyle.Bold)
             };
             listBoxPages.SelectedIndexChanged += listBoxPages_SelectedIndexChanged;
 
             pictureBoxPage = new PictureBox()
             {
-                Location = new Point(col4 + 40, imageTop),
+                Location = new Point(90, 300),
                 Size = new Size(170, 170),
                 BorderStyle = BorderStyle.FixedSingle,
                 SizeMode = PictureBoxSizeMode.Zoom
             };
 
-            parent.Controls.AddRange(new Control[]
-            {
-                linkAlbums, listBoxAlbums, pictureBoxAlbum,
-                linkPosts, listBoxPosts, pictureBoxPost,
-                linkPhotos, listBoxPhotos, pictureBoxPhoto,
-                linkPages, listBoxPages, pictureBoxPage
-            });
+            parent.Controls.AddRange(new Control[] { linkPages, listBoxPages, pictureBoxPage });
         }
     }
 }
