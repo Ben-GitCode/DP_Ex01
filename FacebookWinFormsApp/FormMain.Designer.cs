@@ -22,17 +22,17 @@ namespace BasicFacebookFeatures
         private LinkLabel linkAlbums;
         private LinkLabel linkPages;
         private LinkLabel linkPosts;
-        private LinkLabel linkFriends;
+        private LinkLabel linkPhotos;
 
         private ListBox listBoxAlbums;
         private ListBox listBoxPages;
         private ListBox listBoxPosts;
-        private ListBox listBoxFriends;
+        private ListBox listBoxPhotos;
 
         private PictureBox pictureBoxAlbum;
         private PictureBox pictureBoxPage;
         private PictureBox pictureBoxPost;
-        private PictureBox pictureBoxFriend;
+        private PictureBox pictureBoxPhoto;
 
         // Toggle Switch
         private Panel panelBottom;
@@ -190,17 +190,17 @@ namespace BasicFacebookFeatures
             int listTop = 70;
             int imageTop = 270;
 
-            Font commonFont = new Font("Segoe UI", 12, FontStyle.Bold); // Common font for titles and text
+            Font commonFont = new Font("Segoe UI", 12, FontStyle.Bold); 
 
             // ==== ALBUMS ====
             linkAlbums = new LinkLabel()
             {
                 Text = "Albums",
                 Location = new Point(col1, labelTop),
-                Size = new Size(200, 30), // Fixed width to prevent text from being cut
+                Size = new Size(200, 30), 
                 Font = commonFont,
                 LinkColor = Color.FromArgb(66, 103, 178),
-                AutoSize = false // Disable AutoSize to use the fixed width
+                AutoSize = false 
             };
             linkAlbums.LinkClicked += linkAlbums_LinkClicked;
 
@@ -226,10 +226,10 @@ namespace BasicFacebookFeatures
             {
                 Text = "Posts",
                 Location = new Point(col2, labelTop),
-                Size = new Size(200, 30), // Fixed width to prevent text from being cut
+                Size = new Size(200, 30), 
                 Font = commonFont,
                 LinkColor = Color.FromArgb(66, 103, 178),
-                AutoSize = false // Disable AutoSize to use the fixed width
+                AutoSize = false 
             };
             linkPosts.LinkClicked += linkPosts_LinkClicked;
 
@@ -250,28 +250,28 @@ namespace BasicFacebookFeatures
                 SizeMode = PictureBoxSizeMode.Zoom
             };
 
-            // ==== FRIENDS ====
-            linkFriends = new LinkLabel()
+            // ==== PhotoS ====
+            linkPhotos = new LinkLabel()
             {
-                Text = "Friends",
+                Text = "Photos",
                 Location = new Point(col3, labelTop),
-                Size = new Size(200, 30), // Fixed width to prevent text from being cut
+                Size = new Size(200, 30),
                 Font = commonFont,
                 LinkColor = Color.FromArgb(66, 103, 178),
-                AutoSize = false // Disable AutoSize to use the fixed width
+                AutoSize = false
             };
-            linkFriends.LinkClicked += linkFriends_LinkClicked;
+            linkPhotos.LinkClicked += linkPhotos_LinkClicked;
 
-            listBoxFriends = new ListBox()
+            listBoxPhotos = new ListBox()
             {
                 Location = new Point(col3, listTop),
                 Size = new Size(colWidth, 200),
                 BorderStyle = BorderStyle.FixedSingle,
                 Font = commonFont
             };
-            listBoxFriends.SelectedIndexChanged += listBoxFriends_SelectedIndexChanged;
+            listBoxPhotos.SelectedIndexChanged += listBoxPhotos_SelectedIndexChanged;
 
-            pictureBoxFriend = new PictureBox()
+            pictureBoxPhoto = new PictureBox()
             {
                 Location = new Point(col3 + 40, imageTop),
                 Size = new Size(170, 170),
@@ -284,10 +284,10 @@ namespace BasicFacebookFeatures
             {
                 Text = "Pages",
                 Location = new Point(col4, labelTop),
-                Size = new Size(200, 30), // Fixed width to prevent text from being cut
+                Size = new Size(200, 30),
                 Font = commonFont,
                 LinkColor = Color.FromArgb(66, 103, 178),
-                AutoSize = false // Disable AutoSize to use the fixed width
+                AutoSize = false 
             };
             linkPages.LinkClicked += linkPages_LinkClicked;
 
@@ -312,7 +312,7 @@ namespace BasicFacebookFeatures
             {
                 linkAlbums, listBoxAlbums, pictureBoxAlbum,
                 linkPosts, listBoxPosts, pictureBoxPost,
-                linkFriends, listBoxFriends, pictureBoxFriend,
+                linkPhotos, listBoxPhotos, pictureBoxPhoto,
                 linkPages, listBoxPages, pictureBoxPage
             });
         }

@@ -15,22 +15,6 @@ namespace BasicFacebookFeatures
         {
             InitializeComponent();
             FacebookService.s_CollectionLimit = 25;
-
-            
-            listBoxFriends.SelectedIndexChanged += listBoxFriends_SelectedIndexChanged;
-
-            pictureBoxFriend = new PictureBox()
-            {
-                Location = new Point(220, 225),
-                Size = new Size(120, 120),
-                SizeMode = PictureBoxSizeMode.Zoom
-            };
-
-            // Add controls to the tabPageData
-            tabPageData.Controls.AddRange(new Control[]
-            {
-                linkFriends, listBoxFriends, pictureBoxFriend
-            });
         }
 
         // ---------------- LOGIN ----------------
@@ -49,7 +33,10 @@ namespace BasicFacebookFeatures
                 "user_photos",
                 "user_posts",
                 "user_likes",
-                "user_friends"
+                "user_birthday",
+                "user_age_range",
+                "user_gender",
+                "user_link"
             );
 
             if (!string.IsNullOrEmpty(m_LoginResult.ErrorMessage))
@@ -189,24 +176,26 @@ namespace BasicFacebookFeatures
             }
         }
 
-        // ---------------- FRIENDS ----------------
-        private void linkFriends_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        
+        // ---------------- photoS ----------------
+        private void linkPhotos_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             if (!checkLogin()) return;
 
-            listBoxFriends.Items.Clear();
-            listBoxFriends.DisplayMember = "Name";
+            listBoxPhotos.Items.Clear();
+            listBoxPhotos.DisplayMember = "Name";
 
-            foreach (User friend in m_LoginResult.LoggedInUser.Friends)
-                listBoxFriends.Items.Add(friend);
+            foreach (Photo photo in m_LoginResult.LoggedInUser.PhotosTaggedIn)
+            {
+                listBoxPhotos.Items.Add(photo);
+            }
         }
 
-        private void listBoxFriends_SelectedIndexChanged(object sender, EventArgs e)
+        private void listBoxPhotos_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (listBoxFriends.SelectedItem is User friend &&
-                !string.IsNullOrEmpty(friend.PictureNormalURL))
+            if (listBoxPhotos.SelectedItem is Photo photo && !string.IsNullOrEmpty(photo.PictureNormalURL))
             {
-                pictureBoxFriend.LoadAsync(friend.PictureNormalURL);
+                pictureBoxPhoto.LoadAsync(photo.PictureNormalURL);
             }
         }
 
