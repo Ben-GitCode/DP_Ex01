@@ -125,16 +125,25 @@ namespace BasicFacebookFeatures
             }
 
             // Add the feature tab to the TabControl and switch to it
-            if (!tabControl1.TabPages.Contains(featureTab))
-            {
-                tabControl1.TabPages.Add(featureTab);
-            }
+            tabControl1.TabPages.Add(featureTab);
             tabControl1.SelectedTab = featureTab;
         }
 
         private void navigateToMenu()
         {
+            // Remove the current tab if it is not the Login or Menu tab
+            if (tabControl1.SelectedTab != null && tabControl1.SelectedTab != tabPageLogin && tabControl1.SelectedTab.Name != "Menu")
+            {
+                tabControl1.TabPages.Remove(tabControl1.SelectedTab);
+            }
+
+            // Switch back to the Menu tab
             tabControl1.SelectedTab = tabControl1.TabPages["Menu"];
+        }
+
+        private void navigateToLogin()
+        {
+            tabControl1.SelectedTab = tabPageLogin;
         }
 
         // ---------------- ALBUMS ----------------
