@@ -67,16 +67,10 @@ namespace BasicFacebookFeatures
             };
 
             tabPageLogin = new TabPage("Login") { BackColor = Color.White };
-            TabPage tabPageAlbums = new TabPage("Albums") { BackColor = Color.White };
-            TabPage tabPagePosts = new TabPage("Posts") { BackColor = Color.White };
-            TabPage tabPagePhotos = new TabPage("Photos") { BackColor = Color.White };
-            TabPage tabPagePages = new TabPage("Pages") { BackColor = Color.White };
+            TabPage tabPageMenu = new TabPage("Menu") { BackColor = Color.White, Name = "Menu" };
 
             tabControl1.TabPages.Add(tabPageLogin);
-            tabControl1.TabPages.Add(tabPageAlbums);
-            tabControl1.TabPages.Add(tabPagePosts);
-            tabControl1.TabPages.Add(tabPagePhotos);
-            tabControl1.TabPages.Add(tabPagePages);
+            tabControl1.TabPages.Add(tabPageMenu);
             this.Controls.Add(tabControl1);
 
             // ==== BOTTOM PANEL + TOGGLE ====
@@ -175,27 +169,76 @@ namespace BasicFacebookFeatures
                 textBoxAppID, pictureBoxProfile
             });
 
-            // ==== ALBUMS PAGE ====
-            createAlbumsSection(tabPageAlbums);
+            // ==== MENU PAGE ====
+            Button buttonAlbums = new Button()
+            {
+                Text = "Albums",
+                Location = new Point(20, 20),
+                Size = new Size(200, 50),
+                BackColor = Color.FromArgb(66, 103, 178),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat
+            };
+            buttonAlbums.Click += (sender, e) => navigateToFeature("Albums");
 
-            // ==== POSTS PAGE ====
-            createPostsSection(tabPagePosts);
+            Button buttonPosts = new Button()
+            {
+                Text = "Posts",
+                Location = new Point(20, 90),
+                Size = new Size(200, 50),
+                BackColor = Color.FromArgb(66, 103, 178),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat
+            };
+            buttonPosts.Click += (sender, e) => navigateToFeature("Posts");
 
-            // ==== PHOTOS PAGE ====
-            createPhotosSection(tabPagePhotos);
+            Button buttonPhotos = new Button()
+            {
+                Text = "Photos",
+                Location = new Point(20, 160),
+                Size = new Size(200, 50),
+                BackColor = Color.FromArgb(66, 103, 178),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat
+            };
+            buttonPhotos.Click += (sender, e) => navigateToFeature("Photos");
 
-            // ==== PAGES PAGE ====
-            createPagesSection(tabPagePages);
+            Button buttonPages = new Button()
+            {
+                Text = "Pages",
+                Location = new Point(20, 230),
+                Size = new Size(200, 50),
+                BackColor = Color.FromArgb(66, 103, 178),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat
+            };
+            buttonPages.Click += (sender, e) => navigateToFeature("Pages");
+
+            tabPageMenu.Controls.AddRange(new Control[]
+            {
+                buttonAlbums, buttonPosts, buttonPhotos, buttonPages
+            });
         }
 
         private void createAlbumsSection(TabPage parent)
         {
             parent.Controls.Clear();
 
+            Button buttonBack = new Button()
+            {
+                Text = "Back",
+                Location = new Point(20, 20),
+                Size = new Size(100, 35),
+                BackColor = Color.FromArgb(66, 103, 178),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat
+            };
+            buttonBack.Click += (sender, e) => navigateToMenu();
+
             linkAlbums = new LinkLabel()
             {
                 Text = "Albums",
-                Location = new Point(40, 30),
+                Location = new Point(40, 70),
                 Size = new Size(200, 30),
                 Font = new Font("Segoe UI", 12, FontStyle.Bold),
                 LinkColor = Color.FromArgb(66, 103, 178),
@@ -205,7 +248,7 @@ namespace BasicFacebookFeatures
 
             listBoxAlbums = new ListBox()
             {
-                Location = new Point(40, 70),
+                Location = new Point(40, 110),
                 Size = new Size(250, 200),
                 BorderStyle = BorderStyle.FixedSingle,
                 Font = new Font("Segoe UI", 12, FontStyle.Bold)
@@ -214,23 +257,34 @@ namespace BasicFacebookFeatures
 
             pictureBoxAlbum = new PictureBox()
             {
-                Location = new Point(90, 300),
+                Location = new Point(90, 330),
                 Size = new Size(170, 170),
                 BorderStyle = BorderStyle.FixedSingle,
                 SizeMode = PictureBoxSizeMode.Zoom
             };
 
-            parent.Controls.AddRange(new Control[] { linkAlbums, listBoxAlbums, pictureBoxAlbum });
+            parent.Controls.AddRange(new Control[] { buttonBack, linkAlbums, listBoxAlbums, pictureBoxAlbum });
         }
 
         private void createPostsSection(TabPage parent)
         {
             parent.Controls.Clear();
 
+            Button buttonBack = new Button()
+            {
+                Text = "Back",
+                Location = new Point(20, 20),
+                Size = new Size(100, 35),
+                BackColor = Color.FromArgb(66, 103, 178),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat
+            };
+            buttonBack.Click += (sender, e) => navigateToMenu();
+
             linkPosts = new LinkLabel()
             {
                 Text = "Posts",
-                Location = new Point(40, 30),
+                Location = new Point(40, 70),
                 Size = new Size(200, 30),
                 Font = new Font("Segoe UI", 12, FontStyle.Bold),
                 LinkColor = Color.FromArgb(66, 103, 178),
@@ -240,7 +294,7 @@ namespace BasicFacebookFeatures
 
             listBoxPosts = new ListBox()
             {
-                Location = new Point(40, 70),
+                Location = new Point(40, 110),
                 Size = new Size(250, 200),
                 BorderStyle = BorderStyle.FixedSingle,
                 Font = new Font("Segoe UI", 12, FontStyle.Bold)
@@ -249,23 +303,34 @@ namespace BasicFacebookFeatures
 
             pictureBoxPost = new PictureBox()
             {
-                Location = new Point(90, 300),
+                Location = new Point(90, 330),
                 Size = new Size(170, 170),
                 BorderStyle = BorderStyle.FixedSingle,
                 SizeMode = PictureBoxSizeMode.Zoom
             };
 
-            parent.Controls.AddRange(new Control[] { linkPosts, listBoxPosts, pictureBoxPost });
+            parent.Controls.AddRange(new Control[] { buttonBack, linkPosts, listBoxPosts, pictureBoxPost });
         }
 
         private void createPhotosSection(TabPage parent)
         {
             parent.Controls.Clear();
 
+            Button buttonBack = new Button()
+            {
+                Text = "Back",
+                Location = new Point(20, 20),
+                Size = new Size(100, 35),
+                BackColor = Color.FromArgb(66, 103, 178),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat
+            };
+            buttonBack.Click += (sender, e) => navigateToMenu();
+
             linkPhotos = new LinkLabel()
             {
                 Text = "Photos",
-                Location = new Point(40, 30),
+                Location = new Point(40, 70),
                 Size = new Size(200, 30),
                 Font = new Font("Segoe UI", 12, FontStyle.Bold),
                 LinkColor = Color.FromArgb(66, 103, 178),
@@ -275,7 +340,7 @@ namespace BasicFacebookFeatures
 
             listBoxPhotos = new ListBox()
             {
-                Location = new Point(40, 70),
+                Location = new Point(40, 110),
                 Size = new Size(250, 200),
                 BorderStyle = BorderStyle.FixedSingle,
                 Font = new Font("Segoe UI", 12, FontStyle.Bold)
@@ -284,23 +349,34 @@ namespace BasicFacebookFeatures
 
             pictureBoxPhoto = new PictureBox()
             {
-                Location = new Point(90, 300),
+                Location = new Point(90, 330),
                 Size = new Size(170, 170),
                 BorderStyle = BorderStyle.FixedSingle,
                 SizeMode = PictureBoxSizeMode.Zoom
             };
 
-            parent.Controls.AddRange(new Control[] { linkPhotos, listBoxPhotos, pictureBoxPhoto });
+            parent.Controls.AddRange(new Control[] { buttonBack, linkPhotos, listBoxPhotos, pictureBoxPhoto });
         }
 
         private void createPagesSection(TabPage parent)
         {
             parent.Controls.Clear();
 
+            Button buttonBack = new Button()
+            {
+                Text = "Back",
+                Location = new Point(20, 20),
+                Size = new Size(100, 35),
+                BackColor = Color.FromArgb(66, 103, 178),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat
+            };
+            buttonBack.Click += (sender, e) => navigateToMenu();
+
             linkPages = new LinkLabel()
             {
                 Text = "Pages",
-                Location = new Point(40, 30),
+                Location = new Point(40, 70),
                 Size = new Size(200, 30),
                 Font = new Font("Segoe UI", 12, FontStyle.Bold),
                 LinkColor = Color.FromArgb(66, 103, 178),
@@ -310,7 +386,7 @@ namespace BasicFacebookFeatures
 
             listBoxPages = new ListBox()
             {
-                Location = new Point(40, 70),
+                Location = new Point(40, 110),
                 Size = new Size(250, 200),
                 BorderStyle = BorderStyle.FixedSingle,
                 Font = new Font("Segoe UI", 12, FontStyle.Bold)
@@ -319,13 +395,13 @@ namespace BasicFacebookFeatures
 
             pictureBoxPage = new PictureBox()
             {
-                Location = new Point(90, 300),
+                Location = new Point(90, 330),
                 Size = new Size(170, 170),
                 BorderStyle = BorderStyle.FixedSingle,
                 SizeMode = PictureBoxSizeMode.Zoom
             };
 
-            parent.Controls.AddRange(new Control[] { linkPages, listBoxPages, pictureBoxPage });
+            parent.Controls.AddRange(new Control[] { buttonBack, linkPages, listBoxPages, pictureBoxPage });
         }
     }
 }

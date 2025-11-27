@@ -100,6 +100,43 @@ namespace BasicFacebookFeatures
             return true;
         }
 
+        // ---------------- MENU NAVIGATION ----------------
+        private void navigateToFeature(string featureName)
+        {
+            TabPage featureTab = new TabPage(featureName) { BackColor = Color.White };
+
+            switch (featureName)
+            {
+                case "Albums":
+                    createAlbumsSection(featureTab);
+                    break;
+                case "Posts":
+                    createPostsSection(featureTab);
+                    break;
+                case "Photos":
+                    createPhotosSection(featureTab);
+                    break;
+                case "Pages":
+                    createPagesSection(featureTab);
+                    break;
+                default:
+                    MessageBox.Show("Feature not found.");
+                    return;
+            }
+
+            // Add the feature tab to the TabControl and switch to it
+            if (!tabControl1.TabPages.Contains(featureTab))
+            {
+                tabControl1.TabPages.Add(featureTab);
+            }
+            tabControl1.SelectedTab = featureTab;
+        }
+
+        private void navigateToMenu()
+        {
+            tabControl1.SelectedTab = tabControl1.TabPages["Menu"];
+        }
+
         // ---------------- ALBUMS ----------------
         private void linkAlbums_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
