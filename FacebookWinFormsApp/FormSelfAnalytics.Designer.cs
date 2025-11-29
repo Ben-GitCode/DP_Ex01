@@ -9,6 +9,10 @@ namespace BasicFacebookFeatures
     {
         private IContainer components = null;
 
+        private Label labelTitle;
+        private TextBox textBoxAnalytics;
+        private Button buttonBack;
+
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -22,17 +26,9 @@ namespace BasicFacebookFeatures
         {
             this.components = new Container();
             this.SuspendLayout();
-            // 
-            // FormSelfAnalytics
-            // 
-            this.AutoScaleMode = AutoScaleMode.Font;
-            this.ClientSize = new Size(800, 600);
-            this.StartPosition = FormStartPosition.CenterScreen;
-            this.Text = "Self Analytics";
-            this.Name = "FormSelfAnalytics";
 
-            // Title label
-            Label labelTitle = new Label()
+            // labelTitle
+            labelTitle = new Label()
             {
                 Text = "Self Analytics Summary",
                 Font = new Font("Segoe UI", 16, FontStyle.Bold),
@@ -41,18 +37,21 @@ namespace BasicFacebookFeatures
             };
             this.Controls.Add(labelTitle);
 
-            // Analytics placeholder
-            Label labelAnalytics = new Label()
+            // textBoxAnalytics
+            textBoxAnalytics = new TextBox()
             {
-                Text = "Analytics data will be displayed here.",
-                Font = new Font("Segoe UI", 12, FontStyle.Regular),
-                AutoSize = true,
-                Location = new Point(20, 60)
+                Location = new Point(20, 60),
+                Size = new Size(740, 420),
+                Multiline = true,
+                ReadOnly = true,
+                ScrollBars = ScrollBars.Vertical,
+                Font = new Font("Consolas", 10F),
+                BackColor = Color.White
             };
-            this.Controls.Add(labelAnalytics);
+            this.Controls.Add(textBoxAnalytics);
 
-            // Back button
-            Button buttonBack = new Button()
+            // buttonBack
+            buttonBack = new Button()
             {
                 Text = "Back to Menu",
                 Location = new Point(20, 500),
@@ -64,6 +63,13 @@ namespace BasicFacebookFeatures
             };
             buttonBack.Click += (sender, e) => this.Close();
             this.Controls.Add(buttonBack);
+
+            // FormSelfAnalytics
+            this.AutoScaleMode = AutoScaleMode.Font;
+            this.ClientSize = new Size(800, 600);
+            this.StartPosition = FormStartPosition.CenterScreen;
+            this.Text = "Self Analytics";
+            this.Name = "FormSelfAnalytics";
 
             this.ResumeLayout(false);
             this.PerformLayout();
