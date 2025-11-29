@@ -9,6 +9,24 @@ namespace BasicFacebookFeatures
     {
         private IContainer components = null;
 
+        private TabControl tabControl1;
+        private TabPage tabPageAlbums;
+        private TabPage tabPagePosts;
+        private TabPage tabPagePhotos;
+
+        private LinkLabel linkAlbums;
+        private ListBox listBoxAlbums;
+        private PictureBox pictureBoxAlbum;
+
+        private LinkLabel linkPosts;
+        private ListBox listBoxPosts;
+        private PictureBox pictureBoxPost;
+
+        private LinkLabel linkPhotos;
+        private ListBox listBoxPhotos;
+        private PictureBox pictureBoxPhoto;
+
+        private Button buttonClose;
 
         protected override void Dispose(bool disposing)
         {
@@ -16,22 +34,136 @@ namespace BasicFacebookFeatures
             {
                 components.Dispose();
             }
+
             base.Dispose(disposing);
         }
 
         private void InitializeComponent()
         {
             this.components = new Container();
+
+            // Form
             this.SuspendLayout();
-            // 
-            // FormMedia
-            // 
-            this.AutoScaleMode = AutoScaleMode.Font;
-            this.ClientSize = new Size(800, 600);
             this.StartPosition = FormStartPosition.CenterScreen;
-            this.Text = "Media Viewer";
+            this.ClientSize = new Size(800, 600);
             this.Name = "FormMedia";
+            this.Text = "Media Viewer";
+
+            // TabControl
+            tabControl1 = new TabControl()
+            {
+                Dock = DockStyle.Fill
+            };
+
+            // Albums Tab
+            tabPageAlbums = new TabPage("Albums") { BackColor = Color.White };
+            linkAlbums = new LinkLabel()
+            {
+                Text = "Albums",
+                Location = new Point(20, 10),
+                AutoSize = true,
+                LinkColor = Color.FromArgb(66, 103, 178)
+            };
+            linkAlbums.LinkClicked += linkAlbums_LinkClicked;
+
+            listBoxAlbums = new ListBox()
+            {
+                Location = new Point(20, 40),
+                Size = new Size(320, 440),
+                BorderStyle = BorderStyle.FixedSingle,
+                Font = new Font("Segoe UI", 10F)
+            };
+            listBoxAlbums.SelectedIndexChanged += listBoxAlbums_SelectedIndexChanged;
+
+            pictureBoxAlbum = new PictureBox()
+            {
+                Location = new Point(360, 40),
+                Size = new Size(400, 400),
+                BorderStyle = BorderStyle.FixedSingle,
+                SizeMode = PictureBoxSizeMode.Zoom
+            };
+
+            tabPageAlbums.Controls.AddRange(new Control[] { linkAlbums, listBoxAlbums, pictureBoxAlbum });
+
+            // Posts Tab
+            tabPagePosts = new TabPage("Posts") { BackColor = Color.White };
+            linkPosts = new LinkLabel()
+            {
+                Text = "Posts",
+                Location = new Point(20, 10),
+                AutoSize = true,
+                LinkColor = Color.FromArgb(66, 103, 178)
+            };
+            linkPosts.LinkClicked += linkPosts_LinkClicked;
+
+            listBoxPosts = new ListBox()
+            {
+                Location = new Point(20, 40),
+                Size = new Size(320, 440),
+                BorderStyle = BorderStyle.FixedSingle,
+                Font = new Font("Segoe UI", 10F)
+            };
+            listBoxPosts.SelectedIndexChanged += listBoxPosts_SelectedIndexChanged;
+
+            pictureBoxPost = new PictureBox()
+            {
+                Location = new Point(360, 40),
+                Size = new Size(400, 400),
+                BorderStyle = BorderStyle.FixedSingle,
+                SizeMode = PictureBoxSizeMode.Zoom
+            };
+
+            tabPagePosts.Controls.AddRange(new Control[] { linkPosts, listBoxPosts, pictureBoxPost });
+
+            // Photos Tab
+            tabPagePhotos = new TabPage("Photos") { BackColor = Color.White };
+            linkPhotos = new LinkLabel()
+            {
+                Text = "Photos",
+                Location = new Point(20, 10),
+                AutoSize = true,
+                LinkColor = Color.FromArgb(66, 103, 178)
+            };
+            linkPhotos.LinkClicked += linkPhotos_LinkClicked;
+
+            listBoxPhotos = new ListBox()
+            {
+                Location = new Point(20, 40),
+                Size = new Size(320, 440),
+                BorderStyle = BorderStyle.FixedSingle,
+                Font = new Font("Segoe UI", 10F)
+            };
+            listBoxPhotos.SelectedIndexChanged += listBoxPhotos_SelectedIndexChanged;
+
+            pictureBoxPhoto = new PictureBox()
+            {
+                Location = new Point(360, 40),
+                Size = new Size(400, 400),
+                BorderStyle = BorderStyle.FixedSingle,
+                SizeMode = PictureBoxSizeMode.Zoom
+            };
+
+            tabPagePhotos.Controls.AddRange(new Control[] { linkPhotos, listBoxPhotos, pictureBoxPhoto });
+
+            // Close button
+            buttonClose = new Button()
+            {
+                Text = "Close",
+                Size = new Size(100, 36),
+                Location = new Point(680, 520),
+                BackColor = Color.FromArgb(66, 103, 178),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat
+            };
+            buttonClose.Click += (s, e) => this.Close();
+
+            tabControl1.TabPages.AddRange(new TabPage[] { tabPageAlbums, tabPagePosts, tabPagePhotos });
+
+            this.Controls.Add(tabControl1);
+            this.Controls.Add(buttonClose);
+
             this.ResumeLayout(false);
+            this.PerformLayout();
         }
     }
 }

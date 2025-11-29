@@ -131,25 +131,21 @@ namespace BasicFacebookFeatures
 
         private void navigateToFeature(string featureName)
         {
-            Form featureForm = null;
+            if (m_LoginResult == null)
+            {
+                MessageBox.Show("Please login first.");
+                return;
+            }
+
+            Form featureForm;
 
             switch (featureName)
             {
                 case "Albums":
-                    //featureForm = new FormAlbums(m_LoginResult, isDarkMode);
-                    featureForm = new FormMedia();
-                    break;
                 case "Posts":
-                    //featureForm = new FormPosts(m_LoginResult, isDarkMode);
-                    featureForm = new FormMedia();
-                    break;
                 case "Photos":
-                    //featureForm = new FormPhotos(m_LoginResult, isDarkMode);
-                    featureForm = new FormMedia();
-                    break;
                 case "Pages":
-                    //featureForm = new FormPages(m_LoginResult, isDarkMode);
-                    featureForm = new FormMedia();
+                    featureForm = new FormMedia(m_LoginResult, isDarkMode);
                     break;
                 default:
                     MessageBox.Show("Feature not found.");
