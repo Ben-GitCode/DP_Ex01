@@ -182,53 +182,76 @@ namespace BasicFacebookFeatures
             });
 
             // ==== MENU PAGE ====
-            Button buttonAlbums = new Button()
+            Button buttonMedia = new Button()
             {
-                Text = "Albums",
+                Text = "Media Features",
                 Location = new Point(20, 20),
                 Size = new Size(200, 50),
                 BackColor = Color.FromArgb(66, 103, 178),
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat
             };
-            buttonAlbums.Click += (sender, e) => navigateToFeature("Albums");
+            buttonMedia.Click += (sender, e) => navigateToMediaForm();
 
-            Button buttonPosts = new Button()
+            Button buttonAnalytics = new Button()
             {
-                Text = "Posts",
+                Text = "Self Analytics",
                 Location = new Point(20, 90),
                 Size = new Size(200, 50),
                 BackColor = Color.FromArgb(66, 103, 178),
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat
             };
-            buttonPosts.Click += (sender, e) => navigateToFeature("Posts");
+            buttonAnalytics.Click += (sender, e) => navigateToAnalyticsForm();
 
-            Button buttonPhotos = new Button()
-            {
-                Text = "Photos",
-                Location = new Point(20, 160),
-                Size = new Size(200, 50),
-                BackColor = Color.FromArgb(66, 103, 178),
-                ForeColor = Color.White,
-                FlatStyle = FlatStyle.Flat
-            };
-            buttonPhotos.Click += (sender, e) => navigateToFeature("Photos");
+            //Button buttonAlbums = new Button()
+            //{
+            //    Text = "Albums",
+            //    Location = new Point(20, 20),
+            //    Size = new Size(200, 50),
+            //    BackColor = Color.FromArgb(66, 103, 178),
+            //    ForeColor = Color.White,
+            //    FlatStyle = FlatStyle.Flat
+            //};
+            //buttonAlbums.Click += (sender, e) => navigateToFeature("Albums");
 
-            Button buttonPages = new Button()
-            {
-                Text = "Pages",
-                Location = new Point(20, 230),
-                Size = new Size(200, 50),
-                BackColor = Color.FromArgb(66, 103, 178),
-                ForeColor = Color.White,
-                FlatStyle = FlatStyle.Flat
-            };
-            buttonPages.Click += (sender, e) => navigateToFeature("Pages");
+            //Button buttonPosts = new Button()
+            //{
+            //    Text = "Posts",
+            //    Location = new Point(20, 90),
+            //    Size = new Size(200, 50),
+            //    BackColor = Color.FromArgb(66, 103, 178),
+            //    ForeColor = Color.White,
+            //    FlatStyle = FlatStyle.Flat
+            //};
+            //buttonPosts.Click += (sender, e) => navigateToFeature("Posts");
+
+            //Button buttonPhotos = new Button()
+            //{
+            //    Text = "Photos",
+            //    Location = new Point(20, 160),
+            //    Size = new Size(200, 50),
+            //    BackColor = Color.FromArgb(66, 103, 178),
+            //    ForeColor = Color.White,
+            //    FlatStyle = FlatStyle.Flat
+            //};
+            //buttonPhotos.Click += (sender, e) => navigateToFeature("Photos");
+
+            //Button buttonPages = new Button()
+            //{
+            //    Text = "Pages",
+            //    Location = new Point(20, 230),
+            //    Size = new Size(200, 50),
+            //    BackColor = Color.FromArgb(66, 103, 178),
+            //    ForeColor = Color.White,
+            //    FlatStyle = FlatStyle.Flat
+            //};
+            //buttonPages.Click += (sender, e) => navigateToFeature("Pages");
 
             tabPageMenu.Controls.AddRange(new Control[]
             {
-                buttonAlbums, buttonPosts, buttonPhotos, buttonPages
+                buttonMedia, buttonAnalytics
+                //buttonAlbums, buttonPosts, buttonPhotos, buttonPages
             });
         }
 

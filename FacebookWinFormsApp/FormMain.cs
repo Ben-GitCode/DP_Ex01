@@ -129,12 +129,28 @@ namespace BasicFacebookFeatures
         //    tabControl1.SelectedTab = featureTab;
         //}
 
+        private void navigateToMediaForm()
+        {
+            FormMedia mediaForm = new FormMedia();
+            mediaForm.Show();
+        }
+
+        private void navigateToAnalyticsForm()
+        {
+            FormSelfAnalytics mediaForm = new FormSelfAnalytics();
+            mediaForm.Show();
+        }
+
         private void navigateToFeature(string featureName)
         {
             Form featureForm = null;
 
             switch (featureName)
             {
+                case "Media":
+                    //featureForm = new FormAlbums(m_LoginResult, isDarkMode);
+                    featureForm = new FormMedia();
+                    break;
                 case "Albums":
                     //featureForm = new FormAlbums(m_LoginResult, isDarkMode);
                     featureForm = new FormMedia();
