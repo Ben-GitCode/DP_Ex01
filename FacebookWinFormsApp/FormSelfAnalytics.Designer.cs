@@ -5,11 +5,10 @@ using System.Windows.Forms;
 
 namespace BasicFacebookFeatures
 {
-    partial class FormSelfAnalytics
+    public partial class FormSelfAnalytics : Form
     {
         private IContainer components = null;
 
-        private Label labelTitle;
         private TextBox textBoxAnalytics;
         private Button buttonBack;
 
@@ -19,57 +18,47 @@ namespace BasicFacebookFeatures
             {
                 components.Dispose();
             }
+
             base.Dispose(disposing);
         }
 
         private void InitializeComponent()
         {
             this.components = new Container();
+
+            // Form
             this.SuspendLayout();
+            this.StartPosition = FormStartPosition.CenterScreen;
+            this.ClientSize = new Size(800, 600);
+            this.Name = "FormSelfAnalytics";
+            this.Text = "Self Analytics";
 
-            labelTitle = new Label()
-            {
-                Text = "Self Analytics Summary",
-                Font = new Font("Segoe UI", 16, FontStyle.Bold),
-                AutoSize = true,
-                Location = new Point(20, 20),
-                Anchor = AnchorStyles.Top
-            };
-            this.Controls.Add(labelTitle);
-
+            // Analytics TextBox
             textBoxAnalytics = new TextBox()
             {
-                Location = new Point(20, 60),
-                Size = new Size(760, 420),
+                Location = new Point(20, 20),
+                Size = new Size(760, 500),
                 Multiline = true,
                 ReadOnly = true,
                 ScrollBars = ScrollBars.Vertical,
-                Font = new Font("Consolas", 10F),
-                BackColor = Color.White,
-                Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
-                Name = "textBoxAnalytics"
+                Font = new Font("Segoe UI", 10F),
+                BorderStyle = BorderStyle.FixedSingle
             };
-            this.Controls.Add(textBoxAnalytics);
 
+            // Back button
             buttonBack = new Button()
             {
-                Text = "Back to Menu",
-                Location = new Point(20, 500),
-                Size = new Size(120, 40),
+                Text = "Back",
+                Size = new Size(100, 36),
+                Location = new Point(560, 540),
                 BackColor = Color.FromArgb(66, 103, 178),
                 ForeColor = Color.White,
-                FlatStyle = FlatStyle.Flat,
-                Name = "buttonBack",
-                Anchor = AnchorStyles.Bottom
+                FlatStyle = FlatStyle.Flat
             };
             buttonBack.Click += buttonBack_Click;
-            this.Controls.Add(buttonBack);
 
-            this.AutoScaleMode = AutoScaleMode.Font;
-            this.ClientSize = new Size(800, 600);
-            this.StartPosition = FormStartPosition.CenterScreen;
-            this.Text = "Self Analytics";
-            this.Name = "FormSelfAnalytics";
+            this.Controls.Add(textBoxAnalytics);
+            this.Controls.Add(buttonBack);
 
             this.ResumeLayout(false);
             this.PerformLayout();

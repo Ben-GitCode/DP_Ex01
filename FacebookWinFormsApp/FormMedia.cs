@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Forms;
 using FacebookWrapper;
 using FacebookWrapper.ObjectModel;
@@ -120,6 +121,35 @@ namespace BasicFacebookFeatures
             }
 
             return true;
+        }
+
+        // Back button handler: brings main form back to front or invokes its internal navigation to show the menu.
+        private void buttonBack_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var main = Application.OpenForms.OfType<FormMain>().FirstOrDefault();
+                if (main != null)
+                {
+                    var mi = main.GetType().GetMethod(
+                        "navigateToMenu",
+                        System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public);
+
+                    if (mi != null)
+                    {
+                        mi.Invoke(main, null);
+                        this.Close();
+                        return;
+                    }
+
+                    main.Invoke(new Action(() => main.BringToFront()));
+                }
+            }
+            catch
+            {
+            }
+
+            this.Close();
         }
 
         public void LoadImageIntoPhotoBox(string url)

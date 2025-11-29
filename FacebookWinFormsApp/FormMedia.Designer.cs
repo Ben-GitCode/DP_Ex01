@@ -26,7 +26,7 @@ namespace BasicFacebookFeatures
         private ListBox listBoxPhotos;
         private PictureBox pictureBoxPhoto;
 
-        private Button buttonClose;
+        private Button buttonBack;
 
         protected override void Dispose(bool disposing)
         {
@@ -145,22 +145,27 @@ namespace BasicFacebookFeatures
 
             tabPagePhotos.Controls.AddRange(new Control[] { linkPhotos, listBoxPhotos, pictureBoxPhoto });
 
-            // Close button
-            buttonClose = new Button()
+            // Back button
+            buttonBack = new Button()
             {
-                Text = "Close",
+                Text = "Back",
                 Size = new Size(100, 36),
-                Location = new Point(680, 520),
+                Location = new Point(560, 520),
                 BackColor = Color.FromArgb(66, 103, 178),
                 ForeColor = Color.White,
-                FlatStyle = FlatStyle.Flat
+                FlatStyle = FlatStyle.Flat,
+                Anchor = AnchorStyles.Bottom | AnchorStyles.Right
             };
-            buttonClose.Click += (s, e) => this.Close();
+            buttonBack.Click += buttonBack_Click;
+
 
             tabControl1.TabPages.AddRange(new TabPage[] { tabPageAlbums, tabPagePosts, tabPagePhotos });
 
+            // Add controls: tabControl first, then buttons so buttons are on top
             this.Controls.Add(tabControl1);
-            this.Controls.Add(buttonClose);
+            this.Controls.Add(buttonBack);
+
+            buttonBack.BringToFront();
 
             this.ResumeLayout(false);
             this.PerformLayout();

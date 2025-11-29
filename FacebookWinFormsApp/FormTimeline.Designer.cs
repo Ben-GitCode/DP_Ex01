@@ -14,6 +14,7 @@ namespace BasicFacebookFeatures
         private ComboBox comboBoxContent;
         private ComboBox comboBoxGranularity;
         private Button buttonRefresh;
+        private Button buttonBack; // <-- Added buttonBack here
 
         // Replaced SplitContainer with simple panels
         private Panel leftPanel;
@@ -126,6 +127,19 @@ namespace BasicFacebookFeatures
             this.rightPanel.Controls.Add(this.pictureBoxPreview);
             this.rightPanel.Controls.Add(this.webBrowserPreview);
             this.rightPanel.Controls.Add(this.placeholderLabel);
+
+            // buttonBack - ensure instance is created before use
+            this.buttonBack = new Button();
+
+            // buttonBack
+            this.buttonBack.Text = "Back";
+            this.buttonBack.Size = new Size(100, 36);
+            this.buttonBack.Location = new Point(560, 520);
+            this.buttonBack.BackColor = Color.FromArgb(66, 103, 178);
+            this.buttonBack.ForeColor = Color.White;
+            this.buttonBack.FlatStyle = FlatStyle.Flat;
+            this.buttonBack.Click += new EventHandler(this.buttonBack_Click);
+            this.Controls.Add(this.buttonBack); // <-- Added buttonBack to Controls
 
             // FormTimeline
             this.AutoScaleDimensions = new SizeF(96F, 96F);

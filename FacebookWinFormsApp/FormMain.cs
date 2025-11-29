@@ -132,12 +132,31 @@ namespace BasicFacebookFeatures
 
             if (featureForm != null)
             {
+                this.Hide();
+
+                // Ensure menu/tab reappears when the feature form is closed by any means.
+                featureForm.FormClosed += (s, e) =>
+                {
+                    try
+                    {
+                        if (!this.IsDisposed && this.IsHandleCreated)
+                        {
+                            this.BeginInvoke(new Action(() => navigateToMenu()));
+                        }
+                    }
+                    catch
+                    {
+                    }
+                };
+
                 featureForm.Show();
             }
         }
 
         private void navigateToMenu()
         {
+            this.Show();
+
             // Remove the current tab if it is not the Login or Menu tab
             if (tabControl1.SelectedTab != null && tabControl1.SelectedTab != tabPageLogin && tabControl1.SelectedTab.Name != "Menu")
             {
@@ -145,12 +164,10 @@ namespace BasicFacebookFeatures
             }
 
             // Switch back to the Menu tab
-            tabControl1.SelectedTab = tabControl1.TabPages["Menu"];
-        }
-
-        private void navigateToLogin()
-        {
-            tabControl1.SelectedTab = tabPageLogin;
+            if (tabControl1.TabPages["Menu"] != null)
+            {
+                tabControl1.SelectedTab = tabControl1.TabPages["Menu"];
+            }
         }
 
         // ---------------- ALBUMS ----------------

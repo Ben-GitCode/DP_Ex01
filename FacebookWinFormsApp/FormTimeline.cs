@@ -559,6 +559,35 @@ namespace BasicFacebookFeatures
             return "Post";
         }
 
+        // Back button handler: show main menu or bring main form forward then close timeline.
+        private void buttonBack_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var main = Application.OpenForms.OfType<FormMain>().FirstOrDefault();
+                if (main != null)
+                {
+                    var mi = main.GetType().GetMethod(
+                        "navigateToMenu",
+                        System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public);
+
+                    if (mi != null)
+                    {
+                        mi.Invoke(main, null);
+                        this.Close();
+                        return;
+                    }
+
+                    main.Invoke(new Action(() => main.BringToFront()));
+                }
+            }
+            catch
+            {
+            }
+
+            this.Close();
+        }
+
         private class TimelineItem
         {
             public DateTime Created { get; set; }
