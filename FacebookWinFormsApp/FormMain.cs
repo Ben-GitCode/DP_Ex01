@@ -101,32 +101,62 @@ namespace BasicFacebookFeatures
         }
 
         // ---------------- MENU NAVIGATION ----------------
+        //private void navigateToFeature(string featureName)
+        //{
+        //    TabPage featureTab = new TabPage(featureName) { BackColor = Color.White };
+
+        //    switch (featureName)
+        //    {
+        //        case "Albums":
+        //            createAlbumsSection(featureTab);
+        //            break;
+        //        case "Posts":
+        //            createPostsSection(featureTab);
+        //            break;
+        //        case "Photos":
+        //            createPhotosSection(featureTab);
+        //            break;
+        //        case "Pages":
+        //            createPagesSection(featureTab);
+        //            break;
+        //        default:
+        //            MessageBox.Show("Feature not found.");
+        //            return;
+        //    }
+
+        //    // Add the feature tab to the TabControl and switch to it
+        //    tabControl1.TabPages.Add(featureTab);
+        //    tabControl1.SelectedTab = featureTab;
+        //}
+
         private void navigateToFeature(string featureName)
         {
-            TabPage featureTab = new TabPage(featureName) { BackColor = Color.White };
+            Form featureForm = null;
 
             switch (featureName)
             {
                 case "Albums":
-                    createAlbumsSection(featureTab);
+                    //featureForm = new FormAlbums(m_LoginResult, isDarkMode);
+                    featureForm = new FormMedia();
                     break;
                 case "Posts":
-                    createPostsSection(featureTab);
+                    //featureForm = new FormPosts(m_LoginResult, isDarkMode);
+                    featureForm = new FormMedia();
                     break;
                 case "Photos":
-                    createPhotosSection(featureTab);
+                    //featureForm = new FormPhotos(m_LoginResult, isDarkMode);
+                    featureForm = new FormMedia();
                     break;
                 case "Pages":
-                    createPagesSection(featureTab);
+                    //featureForm = new FormPages(m_LoginResult, isDarkMode);
+                    featureForm = new FormMedia();
                     break;
                 default:
                     MessageBox.Show("Feature not found.");
                     return;
             }
 
-            // Add the feature tab to the TabControl and switch to it
-            tabControl1.TabPages.Add(featureTab);
-            tabControl1.SelectedTab = featureTab;
+            featureForm.Show();
         }
 
         private void navigateToMenu()
