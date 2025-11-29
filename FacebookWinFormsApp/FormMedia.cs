@@ -10,11 +10,5 @@ namespace BasicFacebookFeatures
             InitializeComponent();
         }
 
-        private void InitializeComponent()
-        {
-            this.Text = "Media Viewer";
-            this.StartPosition = FormStartPosition.CenterScreen;
-            this.ClientSize = new System.Drawing.Size(800, 600);
-        }
     }
 }

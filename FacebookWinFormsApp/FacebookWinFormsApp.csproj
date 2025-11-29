@@ -86,8 +86,17 @@
     <Compile Include="FormMedia.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="FormMedia.Designer.cs">
+      <DependentUpon>FormMedia.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormSelfAnalytics.Designer.cs">
+      <DependentUpon>FormSelfAnalytics.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormTimeline.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormTimeline.Designer.cs">
+      <DependentUpon>FormTimeline.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
