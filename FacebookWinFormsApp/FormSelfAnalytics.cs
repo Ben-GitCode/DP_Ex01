@@ -16,7 +16,6 @@ namespace BasicFacebookFeatures
             InitializeComponent();
         }
 
-        // Runtime constructor that receives login state
         public FormSelfAnalytics(LoginResult i_LoginResult) : this()
         {
             m_LoginResult = i_LoginResult;
@@ -47,11 +46,9 @@ namespace BasicFacebookFeatures
             var user = m_LoginResult.LoggedInUser;
             var sb = new StringBuilder();
 
-            // Basic info
             sb.AppendLine($"Name: {user.Name}");
             sb.AppendLine();
 
-            // Birthday and age
             DateTime birthday;
             if (!string.IsNullOrEmpty(user.Birthday) && DateTime.TryParse(user.Birthday, out birthday))
             {
@@ -63,15 +60,10 @@ namespace BasicFacebookFeatures
                 sb.AppendLine("Birthday: (not available)");
             }
 
-            // Age range (official)
             sb.AppendLine("Official age range: (not available)");
-
-            // Gender
             sb.AppendLine($"Gender: {user.Gender?.ToString() ?? "(not available)"}");
-
             sb.AppendLine();
 
-            // Counts
             int albumsCount = user.Albums?.Count() ?? 0;
             int postsCount = user.Posts?.Count() ?? 0;
             int photosCount = user.PhotosTaggedIn?.Count() ?? 0;
@@ -80,7 +72,6 @@ namespace BasicFacebookFeatures
             sb.AppendLine($"Tagged Photos: {photosCount}");
             sb.AppendLine();
 
-            // Year joined Facebook - use earliest post creation if available
             DateTime? earliestPostDate = null;
             try
             {
@@ -93,7 +84,6 @@ namespace BasicFacebookFeatures
             }
             catch
             {
-                // ignore if CreatedTime isn't accessible
                 earliestPostDate = null;
             }
 
@@ -107,8 +97,6 @@ namespace BasicFacebookFeatures
             }
 
             sb.AppendLine();
-
-            // Posts per decade of age
             sb.AppendLine("Posts by decade of age (approx.):");
             if (user.Posts == null || !user.Posts.Any())
             {
@@ -143,7 +131,6 @@ namespace BasicFacebookFeatures
             sb.AppendLine();
             sb.AppendLine("Note: analytics depend on available profile data and permissions (user_birthday, user_posts, user_photos).");
 
-            // Write to UI
             textBoxAnalytics.Text = sb.ToString();
         }
 
@@ -159,7 +146,6 @@ namespace BasicFacebookFeatures
 
         private void buttonBack_Click(object sender, EventArgs e)
         {
-            // Try to call FormMain.navigateToMenu if a FormMain instance is open.
             try
             {
                 var main = Application.OpenForms.OfType<FormMain>().FirstOrDefault();
@@ -173,16 +159,13 @@ namespace BasicFacebookFeatures
                         return;
                     }
 
-                    // If navigateToMenu is not available, bring main to front as fallback.
                     main.Invoke(new Action(() => main.BringToFront()));
                 }
             }
             catch
             {
-                // ignore reflection or invoke errors
             }
 
-            // Last-resort fallback
             this.Close();
         }
     }

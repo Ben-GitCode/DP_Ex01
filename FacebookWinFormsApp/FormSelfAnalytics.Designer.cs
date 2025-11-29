@@ -12,7 +12,6 @@ namespace BasicFacebookFeatures
         private Label labelTitle;
         private TextBox textBoxAnalytics;
         private Button buttonBack;
-        private PictureBox pictureBoxAnalytics;
 
         protected override void Dispose(bool disposing)
         {
@@ -28,45 +27,30 @@ namespace BasicFacebookFeatures
             this.components = new Container();
             this.SuspendLayout();
 
-            // labelTitle
             labelTitle = new Label()
             {
                 Text = "Self Analytics Summary",
                 Font = new Font("Segoe UI", 16, FontStyle.Bold),
                 AutoSize = true,
                 Location = new Point(20, 20),
-                Anchor = AnchorStyles.Top | AnchorStyles.Left
+                Anchor = AnchorStyles.Top
             };
             this.Controls.Add(labelTitle);
 
-            // pictureBoxAnalytics (wider)
-            pictureBoxAnalytics = new PictureBox()
-            {
-                Location = new Point(400, 60),
-                Size = new Size(360, 420),
-                SizeMode = PictureBoxSizeMode.Zoom,
-                BorderStyle = BorderStyle.FixedSingle,
-                BackColor = Color.White,
-                Anchor = AnchorStyles.Top | AnchorStyles.Right,
-                Name = "pictureBoxAnalytics"
-            };
-            this.Controls.Add(pictureBoxAnalytics);
-
-            // textBoxAnalytics (adjusted width to accommodate wider picturebox)
             textBoxAnalytics = new TextBox()
             {
                 Location = new Point(20, 60),
-                Size = new Size(360, 420),
+                Size = new Size(760, 420),
                 Multiline = true,
                 ReadOnly = true,
                 ScrollBars = ScrollBars.Vertical,
                 Font = new Font("Consolas", 10F),
                 BackColor = Color.White,
-                Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left
+                Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
+                Name = "textBoxAnalytics"
             };
             this.Controls.Add(textBoxAnalytics);
 
-            // buttonBack
             buttonBack = new Button()
             {
                 Text = "Back to Menu",
@@ -76,12 +60,11 @@ namespace BasicFacebookFeatures
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat,
                 Name = "buttonBack",
-                Anchor = AnchorStyles.Bottom | AnchorStyles.Left
+                Anchor = AnchorStyles.Bottom
             };
             buttonBack.Click += buttonBack_Click;
             this.Controls.Add(buttonBack);
 
-            // FormSelfAnalytics
             this.AutoScaleMode = AutoScaleMode.Font;
             this.ClientSize = new Size(800, 600);
             this.StartPosition = FormStartPosition.CenterScreen;

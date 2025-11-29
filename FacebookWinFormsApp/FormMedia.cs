@@ -10,13 +10,11 @@ namespace BasicFacebookFeatures
         private LoginResult m_LoginResult;
         private bool m_IsDarkMode;
 
-        // Designer-friendly parameterless ctor
         public FormMedia()
         {
             InitializeComponent();
         }
 
-        // Runtime ctor to receive login state
         public FormMedia(LoginResult i_LoginResult, bool i_IsDarkMode) : this()
         {
             m_LoginResult = i_LoginResult;
@@ -33,13 +31,11 @@ namespace BasicFacebookFeatures
                 return;
             }
 
-            // populate UI once form is shown (safe place)
             LoadAlbums();
             LoadPosts();
             LoadPhotos();
         }
 
-        // refactored loaders so they can be called from code and from link handlers
         private void LoadAlbums()
         {
             listBoxAlbums.Items.Clear();
@@ -49,9 +45,7 @@ namespace BasicFacebookFeatures
                 return;
 
             foreach (Album album in m_LoginResult.LoggedInUser.Albums)
-            {
                 listBoxAlbums.Items.Add(album);
-            }
         }
 
         private void LoadPosts()
@@ -65,17 +59,11 @@ namespace BasicFacebookFeatures
             foreach (Post post in m_LoginResult.LoggedInUser.Posts)
             {
                 if (!string.IsNullOrEmpty(post.Message))
-                {
                     listBoxPosts.Items.Add(post);
-                }
                 else if (!string.IsNullOrEmpty(post.Caption))
-                {
                     listBoxPosts.Items.Add(post);
-                }
                 else
-                {
                     listBoxPosts.Items.Add("[No text] (Media Post)");
-                }
             }
         }
 
@@ -88,13 +76,11 @@ namespace BasicFacebookFeatures
                 return;
 
             foreach (Photo photo in m_LoginResult.LoggedInUser.PhotosTaggedIn)
-            {
                 listBoxPhotos.Items.Add(photo);
-            }
         }
 
-        // Update existing handlers to call the new loaders
         private void linkAlbums_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) => LoadAlbums();
+
         private void listBoxAlbums_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (listBoxAlbums.SelectedItem is Album album && album.PictureAlbumURL != null)
@@ -102,6 +88,7 @@ namespace BasicFacebookFeatures
         }
 
         private void linkPosts_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) => LoadPosts();
+
         private void listBoxPosts_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (listBoxPosts.SelectedItem is Post post)
@@ -117,13 +104,13 @@ namespace BasicFacebookFeatures
         }
 
         private void linkPhotos_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) => LoadPhotos();
+
         private void listBoxPhotos_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (listBoxPhotos.SelectedItem is Photo photo && !string.IsNullOrEmpty(photo.PictureNormalURL))
                 pictureBoxPhoto.LoadAsync(photo.PictureNormalURL);
         }
 
-        // ---------------- HELPERS ----------------
         private bool checkLogin()
         {
             if (m_LoginResult == null)
@@ -135,20 +122,17 @@ namespace BasicFacebookFeatures
             return true;
         }
 
-        // Add this public helper method to FormMedia (place it before checkLogin or alongside helpers)
         public void LoadImageIntoPhotoBox(string url)
         {
             if (string.IsNullOrEmpty(url)) return;
 
             try
             {
-                // ensure pictureBoxPhoto exists in the designer; LoadAsync will fetch without blocking UI
                 pictureBoxPhoto.Image = null;
                 pictureBoxPhoto.LoadAsync(url);
             }
             catch (Exception)
             {
-                // fallback: clear image on failure; caller can show a message if needed
                 try { pictureBoxPhoto.Image = null; } catch { }
             }
         }
