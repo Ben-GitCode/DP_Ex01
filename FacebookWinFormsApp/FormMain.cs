@@ -11,7 +11,7 @@ namespace BasicFacebookFeatures
     public partial class FormMain : Form
     {
         private LoginResult m_LoginResult;
-        private bool isDarkMode = false;
+        private bool m_isDarkMode = false;
         private PictureBox pictureBoxFriend;
 
         public FormMain()
@@ -131,7 +131,7 @@ namespace BasicFacebookFeatures
 
         private void navigateToMediaForm()
         {
-            FormMedia mediaForm = new FormMedia();
+            FormMedia mediaForm = new FormMedia(m_LoginResult, m_isDarkMode);
             mediaForm.Show();
         }
 
@@ -149,23 +149,18 @@ namespace BasicFacebookFeatures
             {
                 case "Media":
                     //featureForm = new FormAlbums(m_LoginResult, isDarkMode);
-                    featureForm = new FormMedia();
                     break;
                 case "Albums":
                     //featureForm = new FormAlbums(m_LoginResult, isDarkMode);
-                    featureForm = new FormMedia();
                     break;
                 case "Posts":
                     //featureForm = new FormPosts(m_LoginResult, isDarkMode);
-                    featureForm = new FormMedia();
                     break;
                 case "Photos":
                     //featureForm = new FormPhotos(m_LoginResult, isDarkMode);
-                    featureForm = new FormMedia();
                     break;
                 case "Pages":
                     //featureForm = new FormPages(m_LoginResult, isDarkMode);
-                    featureForm = new FormMedia();
                     break;
                 default:
                     MessageBox.Show("Feature not found.");
@@ -297,22 +292,22 @@ namespace BasicFacebookFeatures
         // ---------------- DARK MODE ----------------
         private void toggleDarkMode_Click(object sender, EventArgs e)
         {
-            isDarkMode = !isDarkMode;
+            m_isDarkMode = !m_isDarkMode;
             applyDarkMode();
 
             // Move toggle circle
-            toggleCircle.Left = isDarkMode ? 26 : 1;
+            toggleCircle.Left = m_isDarkMode ? 26 : 1;
 
             // Change background color
-            toggleBackground.BackColor = isDarkMode ? Color.DarkGray : Color.LightGray;
+            toggleBackground.BackColor = m_isDarkMode ? Color.DarkGray : Color.LightGray;
         }
 
         private void applyDarkMode()
         {
-            Color formColor = isDarkMode ? Color.Black : Color.White;
-            Color textColor = isDarkMode ? Color.White : Color.Black;
-            Color listBoxBackColor = isDarkMode ? Color.Black : Color.White;
-            Color listBoxForeColor = isDarkMode ? Color.White : Color.Black;
+            Color formColor = m_isDarkMode ? Color.Black : Color.White;
+            Color textColor = m_isDarkMode ? Color.White : Color.Black;
+            Color listBoxBackColor = m_isDarkMode ? Color.Black : Color.White;
+            Color listBoxForeColor = m_isDarkMode ? Color.White : Color.Black;
 
             tabPageLogin.BackColor = formColor;
 
@@ -332,7 +327,7 @@ namespace BasicFacebookFeatures
         {
             if (control is Button b)
             {
-                b.BackColor = isDarkMode ? Color.FromArgb(50, 50, 50) : Color.FromArgb(66, 103, 178);
+                b.BackColor = m_isDarkMode ? Color.FromArgb(50, 50, 50) : Color.FromArgb(66, 103, 178);
                 b.ForeColor = Color.White;
             }
             else if (control is LinkLabel ll)
