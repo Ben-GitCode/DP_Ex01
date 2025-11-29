@@ -64,7 +64,6 @@ namespace BasicFacebookFeatures
             }
 
             // Age range (official)
-            // The FacebookWrapper.User type used in this project does not expose an AgeRange property.
             sb.AppendLine("Official age range: (not available)");
 
             // Gender
@@ -87,7 +86,7 @@ namespace BasicFacebookFeatures
             {
                 earliestPostDate = user.Posts?
                     .Where(p => p != null)
-                    .Select(p => p.CreatedTime)
+                    .Select(p => (DateTime?)p.CreatedTime)
                     .Where(d => d.HasValue)
                     .OrderBy(d => d.Value)
                     .FirstOrDefault();
@@ -156,6 +155,35 @@ namespace BasicFacebookFeatures
                 age--;
             }
             return age;
+        }
+
+        private void buttonBack_Click(object sender, EventArgs e)
+        {
+            // Try to call FormMain.navigateToMenu if a FormMain instance is open.
+            try
+            {
+                var main = Application.OpenForms.OfType<FormMain>().FirstOrDefault();
+                if (main != null)
+                {
+                    var mi = main.GetType().GetMethod("navigateToMenu", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public);
+                    if (mi != null)
+                    {
+                        mi.Invoke(main, null);
+                        this.Close();
+                        return;
+                    }
+
+                    // If navigateToMenu is not available, bring main to front as fallback.
+                    main.Invoke(new Action(() => main.BringToFront()));
+                }
+            }
+            catch
+            {
+                // ignore reflection or invoke errors
+            }
+
+            // Last-resort fallback
+            this.Close();
         }
     }
 }

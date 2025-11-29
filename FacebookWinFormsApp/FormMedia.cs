@@ -9,7 +9,6 @@ namespace BasicFacebookFeatures
     {
         private LoginResult m_LoginResult;
         private bool m_IsDarkMode;
-        private bool m_IsLightMode;
 
         // Designer-friendly parameterless ctor
         public FormMedia()
@@ -134,6 +133,24 @@ namespace BasicFacebookFeatures
             }
 
             return true;
+        }
+
+        // Add this public helper method to FormMedia (place it before checkLogin or alongside helpers)
+        public void LoadImageIntoPhotoBox(string url)
+        {
+            if (string.IsNullOrEmpty(url)) return;
+
+            try
+            {
+                // ensure pictureBoxPhoto exists in the designer; LoadAsync will fetch without blocking UI
+                pictureBoxPhoto.Image = null;
+                pictureBoxPhoto.LoadAsync(url);
+            }
+            catch (Exception)
+            {
+                // fallback: clear image on failure; caller can show a message if needed
+                try { pictureBoxPhoto.Image = null; } catch { }
+            }
         }
     }
 }

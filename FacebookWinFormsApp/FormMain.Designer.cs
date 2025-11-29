@@ -181,54 +181,43 @@ namespace BasicFacebookFeatures
                 textBoxAppID, pictureBoxProfile
             });
 
-            // ==== MENU PAGE ====
-            Button buttonAlbums = new Button()
+            // ==== MENU PAGE: 3 Buttons (Media, Self Analytics, Timeline) ====
+            Button buttonMedia = new Button()
             {
-                Text = "Albums",
+                Text = "Media",
                 Location = new Point(20, 20),
                 Size = new Size(200, 50),
                 BackColor = Color.FromArgb(66, 103, 178),
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat
             };
-            buttonAlbums.Click += (sender, e) => navigateToFeature("Albums");
+            buttonMedia.Click += (sender, e) => navigateToFeature("Media");
 
-            Button buttonPosts = new Button()
+            Button buttonSelfAnalytics = new Button()
             {
-                Text = "Posts",
+                Text = "Self Analytics",
                 Location = new Point(20, 90),
                 Size = new Size(200, 50),
                 BackColor = Color.FromArgb(66, 103, 178),
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat
             };
-            buttonPosts.Click += (sender, e) => navigateToFeature("Posts");
+            buttonSelfAnalytics.Click += (sender, e) => navigateToFeature("Self Analytics");
 
-            Button buttonPhotos = new Button()
+            Button buttonTimeline = new Button()
             {
-                Text = "Photos",
+                Text = "Timeline",
                 Location = new Point(20, 160),
                 Size = new Size(200, 50),
                 BackColor = Color.FromArgb(66, 103, 178),
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat
             };
-            buttonPhotos.Click += (sender, e) => navigateToFeature("Photos");
-
-            Button buttonPages = new Button()
-            {
-                Text = "Pages",
-                Location = new Point(20, 230),
-                Size = new Size(200, 50),
-                BackColor = Color.FromArgb(66, 103, 178),
-                ForeColor = Color.White,
-                FlatStyle = FlatStyle.Flat
-            };
-            buttonPages.Click += (sender, e) => navigateToFeature("Pages");
+            buttonTimeline.Click += (sender, e) => navigateToFeature("Timeline");
 
             tabPageMenu.Controls.AddRange(new Control[]
             {
-                buttonAlbums, buttonPosts, buttonPhotos, buttonPages
+                buttonMedia, buttonSelfAnalytics, buttonTimeline
             });
         }
 

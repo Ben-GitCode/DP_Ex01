@@ -12,7 +12,6 @@ namespace BasicFacebookFeatures
     {
         private LoginResult m_LoginResult;
         private bool isDarkMode = false;
-        private PictureBox pictureBoxFriend;
 
         public FormMain()
         {
@@ -101,34 +100,6 @@ namespace BasicFacebookFeatures
         }
 
         // ---------------- MENU NAVIGATION ----------------
-        //private void navigateToFeature(string featureName)
-        //{
-        //    TabPage featureTab = new TabPage(featureName) { BackColor = Color.White };
-
-        //    switch (featureName)
-        //    {
-        //        case "Albums":
-        //            createAlbumsSection(featureTab);
-        //            break;
-        //        case "Posts":
-        //            createPostsSection(featureTab);
-        //            break;
-        //        case "Photos":
-        //            createPhotosSection(featureTab);
-        //            break;
-        //        case "Pages":
-        //            createPagesSection(featureTab);
-        //            break;
-        //        default:
-        //            MessageBox.Show("Feature not found.");
-        //            return;
-        //    }
-
-        //    // Add the feature tab to the TabControl and switch to it
-        //    tabControl1.TabPages.Add(featureTab);
-        //    tabControl1.SelectedTab = featureTab;
-        //}
-
         private void navigateToFeature(string featureName)
         {
             if (m_LoginResult == null)
@@ -137,10 +108,19 @@ namespace BasicFacebookFeatures
                 return;
             }
 
-            Form featureForm;
+            Form featureForm = null;
 
             switch (featureName)
             {
+                case "Media":
+                    featureForm = new FormMedia(m_LoginResult, isDarkMode);
+                    break;
+                case "Self Analytics":
+                    featureForm = new FormSelfAnalytics(m_LoginResult);
+                    break;
+                case "Timeline":
+                    featureForm = new FormTimeline(m_LoginResult);
+                    break;
                 case "Albums":
                 case "Posts":
                 case "Photos":
@@ -152,7 +132,10 @@ namespace BasicFacebookFeatures
                     return;
             }
 
-            featureForm.Show();
+            if (featureForm != null)
+            {
+                featureForm.Show();
+            }
         }
 
         private void navigateToMenu()
