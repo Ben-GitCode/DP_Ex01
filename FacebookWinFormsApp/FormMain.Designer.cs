@@ -14,6 +14,7 @@ namespace BasicFacebookFeatures
         private Button buttonLogin;
         private Button buttonLogout;
         private Button buttonConnectAsDesig;
+        private Button buttonGoToMenu;
 
         private TextBox textBoxAppID;
         private PictureBox pictureBoxProfile;
@@ -50,6 +51,7 @@ namespace BasicFacebookFeatures
         private void InitializeComponent()
         {
             // ==== MAIN FORM ====
+            
             this.StartPosition = FormStartPosition.CenterScreen;
             this.Text = "Facebook Features";
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
@@ -144,7 +146,8 @@ namespace BasicFacebookFeatures
                 BackColor = Color.FromArgb(66, 103, 178),
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat,
-                Enabled = false
+                Enabled = false,
+                Visible = false
             };
             buttonLogout.Click += buttonLogout_Click;
 
@@ -163,14 +166,16 @@ namespace BasicFacebookFeatures
                 BorderStyle = BorderStyle.FixedSingle
             };
 
-            Button buttonGoToMenu = new Button()
+            buttonGoToMenu = new Button()
             {
                 Text = "Go to Menu",
                 Location = new Point(20, 120),
                 Size = new Size(200, 50),
                 BackColor = Color.FromArgb(66, 103, 178),
                 ForeColor = Color.White,
-                FlatStyle = FlatStyle.Flat
+                FlatStyle = FlatStyle.Flat,
+                Enabled = false,
+                Visible = false
             };
             buttonGoToMenu.Click += (sender, e) => navigateToMenu();
             tabPageLogin.Controls.Add(buttonGoToMenu);
@@ -181,7 +186,6 @@ namespace BasicFacebookFeatures
                 textBoxAppID, pictureBoxProfile
             });
 
-            // ==== MENU PAGE: 3 Buttons (Media, Self Analytics, Timeline) ====
             Button buttonMedia = new Button()
             {
                 Text = "Media",

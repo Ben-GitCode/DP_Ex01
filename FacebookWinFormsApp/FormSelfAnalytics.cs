@@ -33,7 +33,7 @@ namespace BasicFacebookFeatures
 
             try
             {
-                PopulateAnalytics();
+                populateAnalytics();
             }
             catch (Exception ex)
             {
@@ -41,7 +41,7 @@ namespace BasicFacebookFeatures
             }
         }
 
-        private void PopulateAnalytics()
+        private void populateAnalytics()
         {
             var user = m_LoginResult.LoggedInUser;
             var sb = new StringBuilder();
@@ -52,7 +52,7 @@ namespace BasicFacebookFeatures
             DateTime birthday;
             if (!string.IsNullOrEmpty(user.Birthday) && DateTime.TryParse(user.Birthday, out birthday))
             {
-                int age = CalculateAge(birthday, DateTime.Today);
+                int age = calculateAge(birthday, DateTime.Today);
                 sb.AppendLine($"Birthday: {birthday:d}    Age: {age}");
             }
             else
@@ -113,7 +113,7 @@ namespace BasicFacebookFeatures
                     .Select(p =>
                     {
                         DateTime created = p.CreatedTime.Value;
-                        int ageAtPost = CalculateAge(birthday, created);
+                        int ageAtPost = calculateAge(birthday, created);
                         int decadeFloor = (ageAtPost / 10) * 10;
                         string decadeLabel = decadeFloor < 0 ? "Unknown" : $"{decadeFloor}s";
                         return new { Decade = decadeLabel };
@@ -134,7 +134,7 @@ namespace BasicFacebookFeatures
             textBoxAnalytics.Text = sb.ToString();
         }
 
-        private int CalculateAge(DateTime birthday, DateTime atDate)
+        private int calculateAge(DateTime birthday, DateTime atDate)
         {
             int age = atDate.Year - birthday.Year;
             if (atDate < birthday.AddYears(age))
