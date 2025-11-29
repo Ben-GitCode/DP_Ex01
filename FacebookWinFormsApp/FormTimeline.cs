@@ -26,7 +26,6 @@ namespace BasicFacebookFeatures
             }
         }
 
-        // For designer
         public FormTimeline()
         {
             InitializeComponent();
@@ -220,15 +219,6 @@ namespace BasicFacebookFeatures
                     .ThenByDescending(i => i.Created);
             }
 
-            if (granularity.Contains("Day"))
-            {
-                return items
-                    .OrderByDescending(i => i.Created.Year)
-                    .ThenByDescending(i => i.Created.Month)
-                    .ThenByDescending(i => i.Created.Day)
-                    .ThenByDescending(i => i.Created);
-            }
-
             DateTime birth;
             if (granularity.Contains("Age") && TryParseBirthday(out birth))
             {
@@ -284,10 +274,6 @@ namespace BasicFacebookFeatures
                 else if (granularity.Contains("Month"))
                 {
                     dateText = item.Created.ToString("MMM yyyy");
-                }
-                else if (granularity.Contains("Day"))
-                {
-                    dateText = item.Created.ToString("d");
                 }
                 else if (granularity.Contains("Age") && hasBirthday)
                 {

@@ -68,7 +68,7 @@ namespace BasicFacebookFeatures
             this.comboBoxGranularity.Width = 140;
             this.comboBoxGranularity.Location = new Point(176, 8);
             this.comboBoxGranularity.Items.AddRange(new object[] {
-                "Timeline by date", "By Year", "By Month", "By Day", "By Age at time of item" });
+                "Timeline by date", "By Year", "By Month", "By Age at time of item" });
             this.comboBoxGranularity.SelectedIndex = 0;
 
             // buttonRefresh
