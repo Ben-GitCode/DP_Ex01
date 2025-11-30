@@ -17,7 +17,6 @@ namespace BasicFacebookFeatures
 			FacebookService.s_CollectionLimit = 25;
 		}
 
-		// ---------------- LOGIN ----------------
 		private void buttonLogin_Click(object sender, EventArgs e)
 		{
 			if (m_LoginResult != null)
@@ -122,12 +121,6 @@ namespace BasicFacebookFeatures
 				case "Timeline":
 					featureForm = new FormTimeline(m_LoginResult);
 					break;
-				case "Albums":
-				case "Posts":
-				case "Photos":
-				case "Pages":
-					featureForm = new FormMedia(m_LoginResult, m_IsDarkMode);
-					break;
 				default:
 					MessageBox.Show("Feature not found.");
 					return;
@@ -137,7 +130,6 @@ namespace BasicFacebookFeatures
 			{
 				this.Hide();
 
-				// Ensure menu/tab reappears when the feature form is closed by any means.
 				featureForm.FormClosed += (s, e) =>
 				{
 					try
@@ -297,7 +289,6 @@ namespace BasicFacebookFeatures
 
 			tabPageLogin.BackColor = formColor;
 
-			// Apply dark mode to all tabs
 			foreach (TabPage tabPage in tabControl1.TabPages)
 			{
 				tabPage.BackColor = formColor;
