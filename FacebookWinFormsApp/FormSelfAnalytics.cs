@@ -12,6 +12,7 @@ namespace BasicFacebookFeatures
     public partial class FormSelfAnalytics : Form
     {
         private LoginResult m_LoginResult;
+        private bool m_IsDarkMode; // dark mode flag
 
         public FormSelfAnalytics(LoginResult i_LoginResult)
             : this()
@@ -19,9 +20,18 @@ namespace BasicFacebookFeatures
             m_LoginResult = i_LoginResult;
         }
 
+        public FormSelfAnalytics(LoginResult i_LoginResult, bool i_IsDarkMode)
+            : this(i_LoginResult)
+        {
+            m_IsDarkMode = i_IsDarkMode;
+        }
+
         protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
+
+            // Apply theme first so controls render correctly
+            applyDarkMode();
 
             if (m_LoginResult == null || m_LoginResult.LoggedInUser == null)
             {
@@ -36,6 +46,60 @@ namespace BasicFacebookFeatures
             catch (Exception ex)
             {
                 MessageBox.Show("Failed to compute analytics: " + ex.Message);
+            }
+        }
+
+        // Allow toggling after construction if needed
+        public void SetDarkMode(bool i_IsDarkMode)
+        {
+            m_IsDarkMode = i_IsDarkMode;
+            applyDarkMode();
+        }
+
+        private void applyDarkMode()
+        {
+            Color formBack = m_IsDarkMode ? Color.FromArgb(24, 25, 26) : SystemColors.Control;
+            Color primaryText = m_IsDarkMode ? Color.White : Color.FromArgb(12, 36, 86);
+            Color secondaryText = m_IsDarkMode ? Color.Gainsboro : Color.FromArgb(34, 34, 34);
+            Color mutedText = m_IsDarkMode ? Color.Silver : Color.FromArgb(90, 90, 110);
+            Color listBack = m_IsDarkMode ? Color.FromArgb(36, 37, 38) : Color.WhiteSmoke;
+            Color listFore = m_IsDarkMode ? Color.White : Color.Black;
+
+            this.BackColor = formBack;
+
+            // Labels and list colors
+            if (labelName != null) labelName.ForeColor = primaryText;
+            if (labelSubtitle != null) labelSubtitle.ForeColor = mutedText;
+            if (labelBirthday != null) labelBirthday.ForeColor = secondaryText;
+            if (labelGender != null) labelGender.ForeColor = secondaryText;
+            if (labelStats != null) labelStats.ForeColor = m_IsDarkMode ? Color.Gainsboro : Color.FromArgb(40, 40, 40);
+
+            if (listBoxFriends != null)
+            {
+                listBoxFriends.BackColor = listBack;
+                listBoxFriends.ForeColor = listFore;
+            }
+
+            if (pictureBoxProfile != null)
+            {
+                pictureBoxProfile.BackColor = m_IsDarkMode ? Color.FromArgb(36, 37, 38) : Color.White;
+            }
+
+            // Keep button style readable
+            if (buttonBack != null)
+            {
+                buttonBack.ForeColor = Color.White;
+                if (buttonBack.BackColor == SystemColors.Control || buttonBack.BackColor.A == 0)
+                {
+                    buttonBack.BackColor = Color.FromArgb(66, 103, 178);
+                }
+                buttonBack.FlatStyle = FlatStyle.Flat;
+            }
+
+            // Repaint the card using dark palette if needed
+            if (panelCard != null)
+            {
+                panelCard.Invalidate();
             }
         }
 
@@ -208,6 +272,17 @@ namespace BasicFacebookFeatures
             var rect = panelCard.ClientRectangle;
             rect.Inflate(-2, -2);
 
+            // Dark/light palettes
+            Color outerStart = m_IsDarkMode ? Color.FromArgb(30, 40, 60) : Color.FromArgb(40, 83, 155);
+            Color outerEnd = m_IsDarkMode ? Color.FromArgb(16, 22, 33) : Color.FromArgb(14, 36, 86);
+
+            Color innerTop = m_IsDarkMode ? Color.FromArgb(44, 47, 51) : Color.FromArgb(255, 255, 255, 255);
+            Color innerBottom = m_IsDarkMode ? Color.FromArgb(36, 37, 38) : Color.FromArgb(240, 240, 246);
+            Color innerBorder = m_IsDarkMode ? Color.FromArgb(80, 80, 80) : Color.FromArgb(200, 200, 200);
+
+            Color shineStart = m_IsDarkMode ? Color.FromArgb(30, 255, 255, 255) : Color.FromArgb(60, 255, 255, 255);
+            Color shineEnd = m_IsDarkMode ? Color.FromArgb(5, 255, 255, 255) : Color.FromArgb(10, 255, 255, 255);
+
             int radius = 18;
             using (var path = new GraphicsPath())
             {
@@ -218,7 +293,7 @@ namespace BasicFacebookFeatures
                 path.AddArc(rect.Left, rect.Bottom - d, d, d, 90, 90);
                 path.CloseFigure();
 
-                using (var br = new LinearGradientBrush(rect, Color.FromArgb(40, 83, 155), Color.FromArgb(14, 36, 86), LinearGradientMode.Vertical))
+                using (var br = new LinearGradientBrush(rect, outerStart, outerEnd, LinearGradientMode.Vertical))
                 {
                     g.FillPath(br, path);
                 }
@@ -226,17 +301,17 @@ namespace BasicFacebookFeatures
                 // Inner panel overlay
                 var innerRect = Rectangle.Inflate(rect, -8, -8);
                 using (var innerPath = RoundedRect(innerRect, 12))
-                using (var br2 = new LinearGradientBrush(innerRect, Color.FromArgb(255, 255, 255, 255), Color.FromArgb(240, 240, 246), LinearGradientMode.Vertical))
+                using (var br2 = new LinearGradientBrush(innerRect, innerTop, innerBottom, LinearGradientMode.Vertical))
                 {
                     g.FillPath(br2, innerPath);
-                    using (var pen = new Pen(Color.FromArgb(200, 200, 200)))
+                    using (var pen = new Pen(innerBorder))
                     {
                         g.DrawPath(pen, innerPath);
                     }
                 }
 
                 // subtle shine
-                using (var shine = new LinearGradientBrush(new Rectangle(rect.Left, rect.Top, rect.Width, rect.Height / 3), Color.FromArgb(60, 255, 255, 255), Color.FromArgb(10, 255, 255, 255), LinearGradientMode.Vertical))
+                using (var shine = new LinearGradientBrush(new Rectangle(rect.Left, rect.Top, rect.Width, rect.Height / 3), shineStart, shineEnd, LinearGradientMode.Vertical))
                 {
                     g.FillPath(shine, path);
                 }

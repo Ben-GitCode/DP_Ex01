@@ -89,6 +89,8 @@ namespace BasicFacebookFeatures
             this.ClientSize = formClientSize;
             this.Name = "FormSelfAnalytics";
             this.Text = "Self Analytics - ID Card";
+            this.BackColor = SystemColors.Control;
+            this.DoubleBuffered = true;
 
             // Panel - ID card container
             panelCard = new Panel()
@@ -117,7 +119,8 @@ namespace BasicFacebookFeatures
                 Font = new Font("Segoe UI Semibold", labelNameFontSize, FontStyle.Bold),
                 ForeColor = Color.FromArgb(12, 36, 86),
                 Text = "(name)",
-                AutoEllipsis = true
+                AutoEllipsis = true,
+                BackColor = Color.Transparent
             };
 
             // Subtitle / title
@@ -128,6 +131,7 @@ namespace BasicFacebookFeatures
                 Font = new Font("Segoe UI", labelSubtitleFontSize, FontStyle.Italic),
                 ForeColor = Color.FromArgb(90, 90, 110),
                 Text = "Personal ID Card",
+                BackColor = Color.Transparent
             };
 
             // Birthday and age
@@ -137,7 +141,8 @@ namespace BasicFacebookFeatures
                 Size = labelBirthdaySize,
                 Font = new Font("Segoe UI", labelBirthdayFontSize),
                 ForeColor = Color.FromArgb(34, 34, 34),
-                Text = "(birthday)"
+                Text = "(birthday)",
+                BackColor = Color.Transparent
             };
 
             // Gender
@@ -147,7 +152,8 @@ namespace BasicFacebookFeatures
                 Size = labelGenderSize,
                 Font = new Font("Segoe UI", labelGenderFontSize),
                 ForeColor = Color.FromArgb(34, 34, 34),
-                Text = "(gender)"
+                Text = "(gender)",
+                BackColor = Color.Transparent
             };
 
             // Stats block (multiline label)
@@ -158,7 +164,8 @@ namespace BasicFacebookFeatures
                 Font = new Font("Consolas", labelStatsFontSize),
                 ForeColor = Color.FromArgb(40, 40, 40),
                 Text = "",
-                AutoSize = false
+                AutoSize = false,
+                BackColor = Color.Transparent
             };
 
             // Friends list box

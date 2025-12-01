@@ -116,10 +116,10 @@ namespace BasicFacebookFeatures
 					featureForm = new FormMedia(m_LoginResult, m_IsDarkMode);
 					break;
 				case "Self Analytics":
-					featureForm = new FormSelfAnalytics(m_LoginResult);
+					featureForm = new FormSelfAnalytics(m_LoginResult, m_IsDarkMode);
 					break;
 				case "Timeline":
-					featureForm = new FormTimeline(m_LoginResult);
+					featureForm = new FormTimeline(m_LoginResult, m_IsDarkMode);
 					break;
 				default:
 					MessageBox.Show("Feature not found.");

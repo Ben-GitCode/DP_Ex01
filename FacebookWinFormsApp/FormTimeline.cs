@@ -13,6 +13,7 @@ namespace BasicFacebookFeatures
     public partial class FormTimeline : Form
     {
         private LoginResult m_LoginResult;
+        private bool m_IsDarkMode;
 
         public FormTimeline(LoginResult loginResult)
         {
@@ -24,6 +25,12 @@ namespace BasicFacebookFeatures
                 listViewTimeline.SelectedIndexChanged += ListViewTimeline_SelectedIndexChanged;
                 listViewTimeline.DoubleClick += ListViewTimeline_DoubleClick;
             }
+        }
+
+        public FormTimeline(LoginResult loginResult, bool isDarkMode)
+            : this(loginResult)
+        {
+            m_IsDarkMode = isDarkMode;
         }
 
         public FormTimeline()
@@ -46,12 +53,115 @@ namespace BasicFacebookFeatures
             }
         }
 
+        public void SetDarkMode(bool isDarkMode)
+        {
+            m_IsDarkMode = isDarkMode;
+            applyDarkMode();
+        }
+
         private void FormTimeline_Load(object sender, EventArgs e)
         {
+            applyDarkMode();
             AdjustColumns();
             if (m_LoginResult != null && m_LoginResult.LoggedInUser != null)
             {
                 populateTimeline();
+            }
+        }
+
+        private void applyDarkMode()
+        {
+            Color formBack = m_IsDarkMode ? Color.FromArgb(24, 25, 26) : SystemColors.Control;
+            Color panelBack = m_IsDarkMode ? Color.FromArgb(36, 37, 38) : SystemColors.Control;
+            Color text = m_IsDarkMode ? Color.White : Color.Black;
+            Color listBack = m_IsDarkMode ? Color.FromArgb(24, 25, 26) : Color.White;
+            Color listFore = text;
+            Color headerBack = m_IsDarkMode ? Color.FromArgb(45, 60, 100) : Color.FromArgb(59, 89, 152);
+
+            this.BackColor = formBack;
+
+            if (topPanel != null)
+            {
+                topPanel.BackColor = headerBack;
+                foreach (Control c in topPanel.Controls)
+                {
+                    if (c is Label || c is LinkLabel)
+                    {
+                        c.ForeColor = Color.White;
+                    }
+                    else
+                    {
+                        c.ForeColor = text;
+                    }
+                }
+            }
+
+            if (leftPanel != null)
+            {
+                leftPanel.BackColor = panelBack;
+                leftPanel.ForeColor = text;
+            }
+
+            if (rightPanel != null)
+            {
+                rightPanel.BackColor = panelBack;
+                rightPanel.ForeColor = text;
+            }
+
+            if (listViewTimeline != null)
+            {
+                listViewTimeline.BackColor = listBack;
+                listViewTimeline.ForeColor = listFore;
+            }
+
+            if (placeholderLabel != null)
+            {
+                placeholderLabel.ForeColor = m_IsDarkMode ? Color.Gainsboro : Color.DimGray;
+                placeholderLabel.BackColor = Color.Transparent;
+            }
+
+            if (pictureBoxPreview != null)
+            {
+                pictureBoxPreview.BackColor = m_IsDarkMode ? Color.Black : SystemColors.ControlDark;
+            }
+
+            if (webBrowserPreview != null)
+            {
+                webBrowserPreview.BackColor = panelBack;
+            }
+
+            if (buttonBack != null)
+            {
+                buttonBack.ForeColor = Color.White;
+                if (buttonBack.BackColor == SystemColors.Control || buttonBack.BackColor.A == 0)
+                {
+                    buttonBack.BackColor = Color.FromArgb(66, 103, 178);
+                }
+                buttonBack.FlatStyle = FlatStyle.Flat;
+            }
+
+            if (buttonRefresh != null)
+            {
+                buttonRefresh.ForeColor = Color.White;
+                if (buttonRefresh.BackColor == SystemColors.Control || buttonRefresh.BackColor.A == 0)
+                {
+                    buttonRefresh.BackColor = Color.FromArgb(66, 103, 178);
+                }
+                buttonRefresh.FlatStyle = FlatStyle.Flat;
+            }
+
+            if (comboBoxContent != null)
+            {
+                comboBoxContent.BackColor = listBack;
+                comboBoxContent.ForeColor = listFore;
+                comboBoxContent.FlatStyle = FlatStyle.Standard;
+            }
+
+            if (comboBoxGranularity != null)
+            {
+                comboBoxGranularity.BackColor = listBack;
+                comboBoxGranularity.ForeColor = listFore;
+                comboBoxGranularity.FlatStyle = FlatStyle.Standard;
             }
         }
 

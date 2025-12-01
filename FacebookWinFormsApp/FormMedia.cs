@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows.Forms;
 using FacebookWrapper;
 using FacebookWrapper.ObjectModel;
+using System.Drawing;
 
 namespace BasicFacebookFeatures
 {
@@ -26,6 +27,9 @@ namespace BasicFacebookFeatures
 		{
 			base.OnShown(e);
 
+			// Apply theme before loading data so lists render correctly
+			applyDarkMode();
+
 			if (m_LoginResult == null)
 			{
 				MessageBox.Show("FormMedia did not receive a LoginResult. Make sure you open it with new FormMedia(m_LoginResult, isDarkMode).");
@@ -35,6 +39,79 @@ namespace BasicFacebookFeatures
 			loadAlbums();
 			loadPosts();
 			loadPhotos();
+		}
+
+		// Allow toggling dark mode at runtime if needed
+		public void SetDarkMode(bool i_IsDarkMode)
+		{
+			m_IsDarkMode = i_IsDarkMode;
+			applyDarkMode();
+		}
+
+		private void applyDarkMode()
+		{
+			// Palette inspired by Facebook dark mode
+			Color formBack = m_IsDarkMode ? Color.FromArgb(24, 25, 26) : Color.FromArgb(235, 236, 237);
+			Color pageBack = m_IsDarkMode ? Color.FromArgb(36, 37, 38) : Color.White;
+			Color text = m_IsDarkMode ? Color.White : Color.Black;
+			Color listBack = m_IsDarkMode ? Color.FromArgb(24, 25, 26) : Color.White;
+			Color listFore = text;
+
+			this.BackColor = formBack;
+
+			Action<Control> walk = null;
+			walk = c =>
+			{
+				// Tab control + pages
+				if (c is TabControl tc)
+				{
+					tc.BackColor = formBack;
+					foreach (TabPage p in tc.TabPages)
+					{
+						p.BackColor = pageBack;
+						walk(p);
+					}
+					return;
+				}
+
+				// Lists
+				if (c is ListBox lb)
+				{
+					lb.BackColor = listBack;
+					lb.ForeColor = listFore;
+				}
+				// Links and labels
+				else if (c is LinkLabel ll)
+				{
+					ll.LinkColor = text;
+					ll.ActiveLinkColor = m_IsDarkMode ? Color.DeepSkyBlue : Color.Blue;
+					ll.VisitedLinkColor = ll.LinkColor;
+					ll.ForeColor = text;
+				}
+				else if (c is Label lbl)
+				{
+					lbl.ForeColor = text;
+				}
+				// Buttons
+				else if (c is Button btn)
+				{
+					btn.ForeColor = Color.White;
+					// Keep existing blue if set; otherwise ensure readable button color
+					if (btn.BackColor == SystemColors.Control || btn.BackColor.A == 0)
+					{
+						btn.BackColor = Color.FromArgb(66, 103, 178);
+					}
+					btn.FlatStyle = FlatStyle.Flat;
+				}
+
+				// Preserve specialized backgrounds (e.g., black preview panels/picture boxes)
+				foreach (Control child in c.Controls)
+				{
+					walk(child);
+				}
+			};
+
+			walk(this);
 		}
 
 		private void loadAlbums()
@@ -111,7 +188,6 @@ namespace BasicFacebookFeatures
 			if (listBoxPhotos.SelectedItem is Photo photo && !string.IsNullOrEmpty(photo.PictureNormalURL))
 				pictureBoxPhoto.LoadAsync(photo.PictureNormalURL);
 		}
-
 
 		private void buttonBack_Click(object sender, EventArgs e)
 		{
