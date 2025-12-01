@@ -170,29 +170,9 @@ namespace BasicFacebookFeatures
             populateTimeline();
         }
 
-        private void leftPanel_Resize(object sender, EventArgs e)
-        {
-            AdjustColumns();
-        }
+        
 
-        private void AdjustColumns()
-        {
-            if (leftPanel == null || listViewTimeline == null)
-            {
-                return;
-            }
-
-            int dateWidth = 160;
-            int typeWidth = 90;
-            int summaryWidth = Math.Max(120, leftPanel.ClientSize.Width - dateWidth - typeWidth - 12);
-
-            if (listViewTimeline.Columns.Count == 3)
-            {
-                listViewTimeline.Columns[0].Width = dateWidth;
-                listViewTimeline.Columns[1].Width = typeWidth;
-                listViewTimeline.Columns[2].Width = summaryWidth;
-            }
-        }
+        
 
         private void populateTimeline()
         {
