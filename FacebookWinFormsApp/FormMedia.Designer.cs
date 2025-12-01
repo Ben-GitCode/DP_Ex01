@@ -28,6 +28,12 @@ namespace BasicFacebookFeatures
 
         private Button buttonBack;
 
+        // Shared preview UI elements (exposed so code-behind can update caption/meta if needed)
+        private Label labelPreviewCaption;
+        private Label labelPreviewMeta;
+        private Button buttonPrev;
+        private Button buttonNext;
+
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -48,6 +54,35 @@ namespace BasicFacebookFeatures
             this.ClientSize = new Size(800, 600);
             this.Name = "FormMedia";
             this.Text = "Media Viewer";
+            this.BackColor = Color.FromArgb(235, 236, 237);
+
+            // Header (facebook-like bar)
+            Panel headerPanel = new Panel
+            {
+                Dock = DockStyle.Top,
+                Height = 72,
+                BackColor = Color.FromArgb(59, 89, 152)
+            };
+            Label headerTitle = new Label
+            {
+                Text = "Media",
+                ForeColor = Color.White,
+                Font = new Font("Segoe UI", 14F, FontStyle.Bold),
+                AutoSize = true,
+                Location = new Point(14, 12),
+                BackColor = Color.Transparent
+            };
+            Label headerSub = new Label
+            {
+                Text = "Albums • Posts • Photos",
+                ForeColor = Color.FromArgb(220, 220, 220),
+                Font = new Font("Segoe UI", 9F),
+                AutoSize = true,
+                Location = new Point(16, 50),
+                BackColor = Color.Transparent
+            };
+            headerPanel.Controls.Add(headerTitle);
+            headerPanel.Controls.Add(headerSub);
 
             // TabControl
             tabControl1 = new TabControl()
@@ -55,102 +90,213 @@ namespace BasicFacebookFeatures
                 Dock = DockStyle.Fill
             };
 
-            // Albums Tab
-            tabPageAlbums = new TabPage("Albums") { BackColor = Color.White };
+            // Albums Tab (left list, right dark preview with caption/meta)
+            tabPageAlbums = new TabPage("Albums") { BackColor = Color.FromArgb(250, 250, 250) };
+            Panel albumsLeft = new Panel { Dock = DockStyle.Left, Width = 300, BackColor = Color.White, Padding = new Padding(12) };
+            Panel albumsRight = new Panel { Dock = DockStyle.Fill, BackColor = Color.Black, Padding = new Padding(12, 12, 12, 70) };
+
             linkAlbums = new LinkLabel()
             {
                 Text = "Albums",
-                Location = new Point(20, 10),
+                Dock = DockStyle.Top,
                 AutoSize = true,
-                LinkColor = Color.FromArgb(66, 103, 178)
+                LinkColor = Color.FromArgb(66, 103, 178),
+                Font = new Font("Segoe UI", 10F, FontStyle.Bold)
             };
             linkAlbums.LinkClicked += linkAlbums_LinkClicked;
 
             listBoxAlbums = new ListBox()
             {
-                Location = new Point(20, 40),
-                Size = new Size(320, 440),
-                BorderStyle = BorderStyle.FixedSingle,
-                Font = new Font("Segoe UI", 10F)
+                Dock = DockStyle.Fill,
+                BorderStyle = BorderStyle.None,
+                Font = new Font("Segoe UI", 10F),
+                BackColor = Color.White
             };
             listBoxAlbums.SelectedIndexChanged += listBoxAlbums_SelectedIndexChanged;
 
             pictureBoxAlbum = new PictureBox()
             {
-                Location = new Point(360, 40),
-                Size = new Size(400, 400),
-                BorderStyle = BorderStyle.FixedSingle,
-                SizeMode = PictureBoxSizeMode.Zoom
+                Dock = DockStyle.Fill,
+                BorderStyle = BorderStyle.None,
+                SizeMode = PictureBoxSizeMode.Zoom,
+                BackColor = Color.Black
             };
 
-            tabPageAlbums.Controls.AddRange(new Control[] { linkAlbums, listBoxAlbums, pictureBoxAlbum });
+            Panel albumsBottom = new Panel
+            {
+                Dock = DockStyle.Bottom,
+                Height = 58,
+                BackColor = Color.FromArgb(245, 247, 250),
+                Padding = new Padding(8, 6, 8, 6)
+            };
+            Label albumsCaption = new Label
+            {
+                Dock = DockStyle.Top,
+                Height = 30,
+                Font = new Font("Segoe UI", 10F),
+                ForeColor = Color.FromArgb(40, 40, 40),
+                AutoEllipsis = true,
+                Text = ""
+            };
+            Label albumsMeta = new Label
+            {
+                Dock = DockStyle.Fill,
+                Font = new Font("Segoe UI", 8F, FontStyle.Italic),
+                ForeColor = Color.FromArgb(110, 110, 110),
+                AutoEllipsis = true,
+                Text = ""
+            };
+            albumsBottom.Controls.Add(albumsMeta);
+            albumsBottom.Controls.Add(albumsCaption);
+
+            albumsLeft.Controls.Add(listBoxAlbums);
+            albumsLeft.Controls.Add(linkAlbums);
+            albumsRight.Controls.Add(pictureBoxAlbum);
+            albumsRight.Controls.Add(albumsBottom);
+            tabPageAlbums.Controls.Add(albumsRight);
+            tabPageAlbums.Controls.Add(albumsLeft);
 
             // Posts Tab
-            tabPagePosts = new TabPage("Posts") { BackColor = Color.White };
+            tabPagePosts = new TabPage("Posts") { BackColor = Color.FromArgb(250, 250, 250) };
+            Panel postsLeft = new Panel { Dock = DockStyle.Left, Width = 300, BackColor = Color.White, Padding = new Padding(12) };
+            Panel postsRight = new Panel { Dock = DockStyle.Fill, BackColor = Color.Black, Padding = new Padding(12, 12, 12, 70) };
+
             linkPosts = new LinkLabel()
             {
                 Text = "Posts",
-                Location = new Point(20, 10),
+                Dock = DockStyle.Top,
                 AutoSize = true,
-                LinkColor = Color.FromArgb(66, 103, 178)
+                LinkColor = Color.FromArgb(66, 103, 178),
+                Font = new Font("Segoe UI", 10F, FontStyle.Bold)
             };
             linkPosts.LinkClicked += linkPosts_LinkClicked;
 
             listBoxPosts = new ListBox()
             {
-                Location = new Point(20, 40),
-                Size = new Size(320, 440),
-                BorderStyle = BorderStyle.FixedSingle,
-                Font = new Font("Segoe UI", 10F)
+                Dock = DockStyle.Fill,
+                BorderStyle = BorderStyle.None,
+                Font = new Font("Segoe UI", 10F),
+                BackColor = Color.White
             };
             listBoxPosts.SelectedIndexChanged += listBoxPosts_SelectedIndexChanged;
 
             pictureBoxPost = new PictureBox()
             {
-                Location = new Point(360, 40),
-                Size = new Size(400, 400),
-                BorderStyle = BorderStyle.FixedSingle,
-                SizeMode = PictureBoxSizeMode.Zoom
+                Dock = DockStyle.Fill,
+                BorderStyle = BorderStyle.None,
+                SizeMode = PictureBoxSizeMode.Zoom,
+                BackColor = Color.Black
             };
 
-            tabPagePosts.Controls.AddRange(new Control[] { linkPosts, listBoxPosts, pictureBoxPost });
+            Panel postsBottom = new Panel
+            {
+                Dock = DockStyle.Bottom,
+                Height = 58,
+                BackColor = Color.FromArgb(245, 247, 250),
+                Padding = new Padding(8, 6, 8, 6)
+            };
+            Label postsCaption = new Label
+            {
+                Dock = DockStyle.Top,
+                Height = 30,
+                Font = new Font("Segoe UI", 10F),
+                ForeColor = Color.FromArgb(40, 40, 40),
+                AutoEllipsis = true,
+                Text = ""
+            };
+            Label postsMeta = new Label
+            {
+                Dock = DockStyle.Fill,
+                Font = new Font("Segoe UI", 8F, FontStyle.Italic),
+                ForeColor = Color.FromArgb(110, 110, 110),
+                AutoEllipsis = true,
+                Text = ""
+            };
+            postsBottom.Controls.Add(postsMeta);
+            postsBottom.Controls.Add(postsCaption);
+
+            postsLeft.Controls.Add(listBoxPosts);
+            postsLeft.Controls.Add(linkPosts);
+            postsRight.Controls.Add(pictureBoxPost);
+            postsRight.Controls.Add(postsBottom);
+            tabPagePosts.Controls.Add(postsRight);
+            tabPagePosts.Controls.Add(postsLeft);
 
             // Photos Tab
-            tabPagePhotos = new TabPage("Photos") { BackColor = Color.White };
+            tabPagePhotos = new TabPage("Photos") { BackColor = Color.FromArgb(250, 250, 250) };
+            Panel photosLeft = new Panel { Dock = DockStyle.Left, Width = 300, BackColor = Color.White, Padding = new Padding(12) };
+            Panel photosRight = new Panel { Dock = DockStyle.Fill, BackColor = Color.Black, Padding = new Padding(12, 12, 12, 70) };
+
             linkPhotos = new LinkLabel()
             {
                 Text = "Photos",
-                Location = new Point(20, 10),
+                Dock = DockStyle.Top,
                 AutoSize = true,
-                LinkColor = Color.FromArgb(66, 103, 178)
+                LinkColor = Color.FromArgb(66, 103, 178),
+                Font = new Font("Segoe UI", 10F, FontStyle.Bold)
             };
             linkPhotos.LinkClicked += linkPhotos_LinkClicked;
 
             listBoxPhotos = new ListBox()
             {
-                Location = new Point(20, 40),
-                Size = new Size(320, 440),
-                BorderStyle = BorderStyle.FixedSingle,
-                Font = new Font("Segoe UI", 10F)
+                Dock = DockStyle.Fill,
+                BorderStyle = BorderStyle.None,
+                Font = new Font("Segoe UI", 10F),
+                BackColor = Color.White
             };
             listBoxPhotos.SelectedIndexChanged += listBoxPhotos_SelectedIndexChanged;
 
             pictureBoxPhoto = new PictureBox()
             {
-                Location = new Point(360, 40),
-                Size = new Size(400, 400),
-                BorderStyle = BorderStyle.FixedSingle,
-                SizeMode = PictureBoxSizeMode.Zoom
+                Dock = DockStyle.Fill,
+                BorderStyle = BorderStyle.None,
+                SizeMode = PictureBoxSizeMode.Zoom,
+                BackColor = Color.Black
             };
 
-            tabPagePhotos.Controls.AddRange(new Control[] { linkPhotos, listBoxPhotos, pictureBoxPhoto });
+            Panel photosBottom = new Panel
+            {
+                Dock = DockStyle.Bottom,
+                Height = 58,
+                BackColor = Color.FromArgb(245, 247, 250),
+                Padding = new Padding(8, 6, 8, 6)
+            };
+            Label photosCaption = new Label
+            {
+                Dock = DockStyle.Top,
+                Height = 30,
+                Font = new Font("Segoe UI", 10F),
+                ForeColor = Color.FromArgb(40, 40, 40),
+                AutoEllipsis = true,
+                Text = ""
+            };
+            Label photosMeta = new Label
+            {
+                Dock = DockStyle.Fill,
+                Font = new Font("Segoe UI", 8F, FontStyle.Italic),
+                ForeColor = Color.FromArgb(110, 110, 110),
+                AutoEllipsis = true,
+                Text = ""
+            };
+            photosBottom.Controls.Add(photosMeta);
+            photosBottom.Controls.Add(photosCaption);
 
-            // Back button
+            photosLeft.Controls.Add(listBoxPhotos);
+            photosLeft.Controls.Add(linkPhotos);
+            photosRight.Controls.Add(pictureBoxPhoto);
+            photosRight.Controls.Add(photosBottom);
+            tabPagePhotos.Controls.Add(photosRight);
+            tabPagePhotos.Controls.Add(photosLeft);
+
+            // Add tabs
+            tabControl1.TabPages.AddRange(new TabPage[] { tabPageAlbums, tabPagePosts, tabPagePhotos });
+
+            // Back button (kept visible and on top)
             buttonBack = new Button()
             {
                 Text = "Back",
                 Size = new Size(100, 36),
-                Location = new Point(560, 520),
+                Location = new Point(this.ClientSize.Width - 100 - 16, this.ClientSize.Height - 36 - 12),
                 BackColor = Color.FromArgb(66, 103, 178),
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat,
@@ -158,11 +304,9 @@ namespace BasicFacebookFeatures
             };
             buttonBack.Click += buttonBack_Click;
 
-
-            tabControl1.TabPages.AddRange(new TabPage[] { tabPageAlbums, tabPagePosts, tabPagePhotos });
-
-            // Add controls: tabControl first, then buttons so buttons are on top
+            // Add controls: header first, then tabControl, then back so it's visible
             this.Controls.Add(tabControl1);
+            this.Controls.Add(headerPanel);
             this.Controls.Add(buttonBack);
 
             buttonBack.BringToFront();
