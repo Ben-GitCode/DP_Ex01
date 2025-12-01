@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using FacebookWrapper;
@@ -11,8 +12,8 @@ namespace BasicFacebookFeatures
 {
     public partial class FormSelfAnalytics : Form
     {
-        private LoginResult m_LoginResult;
-        private bool m_IsDarkMode; // dark mode flag
+        private readonly LoginResult m_LoginResult;
+        private bool m_IsDarkMode;
 
         public FormSelfAnalytics(LoginResult i_LoginResult)
             : this()
@@ -30,10 +31,9 @@ namespace BasicFacebookFeatures
         {
             base.OnShown(e);
 
-            // Apply theme first so controls render correctly
             applyDarkMode();
 
-            if (!isLoggedIn())
+            if(!isLoggedIn())
             {
                 MessageBox.Show("No logged-in user. Open this form with new FormSelfAnalytics(m_LoginResult).");
                 return;
@@ -43,13 +43,12 @@ namespace BasicFacebookFeatures
             {
                 populateAnalytics();
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 MessageBox.Show("Failed to compute analytics: " + ex.Message);
             }
         }
 
-        // Allow toggling after construction if needed
         public void SetDarkMode(bool i_IsDarkMode)
         {
             m_IsDarkMode = i_IsDarkMode;
@@ -70,36 +69,56 @@ namespace BasicFacebookFeatures
             Color listBack = m_IsDarkMode ? Color.FromArgb(36, 37, 38) : Color.WhiteSmoke;
             Color listFore = m_IsDarkMode ? Color.White : Color.Black;
 
-            this.BackColor = formBack;
+            BackColor = formBack;
 
-            if (labelName != null) labelName.ForeColor = primaryText;
-            if (labelSubtitle != null) labelSubtitle.ForeColor = mutedText;
-            if (labelBirthday != null) labelBirthday.ForeColor = secondaryText;
-            if (labelGender != null) labelGender.ForeColor = secondaryText;
-            if (labelStats != null) labelStats.ForeColor = m_IsDarkMode ? Color.Gainsboro : Color.FromArgb(40, 40, 40);
+            if(labelName != null)
+            {
+                labelName.ForeColor = primaryText;
+            }
 
-            if (listBoxFriends != null)
+            if(labelSubtitle != null)
+            {
+                labelSubtitle.ForeColor = mutedText;
+            }
+
+            if(labelBirthday != null)
+            {
+                labelBirthday.ForeColor = secondaryText;
+            }
+
+            if(labelGender != null)
+            {
+                labelGender.ForeColor = secondaryText;
+            }
+
+            if(labelStats != null)
+            {
+                labelStats.ForeColor = m_IsDarkMode ? Color.Gainsboro : Color.FromArgb(40, 40, 40);
+            }
+
+            if(listBoxFriends != null)
             {
                 listBoxFriends.BackColor = listBack;
                 listBoxFriends.ForeColor = listFore;
             }
 
-            if (pictureBoxProfile != null)
+            if(pictureBoxProfile != null)
             {
                 pictureBoxProfile.BackColor = m_IsDarkMode ? Color.FromArgb(36, 37, 38) : Color.White;
             }
 
-            if (buttonBack != null)
+            if(buttonBack != null)
             {
                 buttonBack.ForeColor = Color.White;
-                if (buttonBack.BackColor == SystemColors.Control || buttonBack.BackColor.A == 0)
+                if(buttonBack.BackColor == SystemColors.Control || buttonBack.BackColor.A == 0)
                 {
                     buttonBack.BackColor = Color.FromArgb(66, 103, 178);
                 }
+
                 buttonBack.FlatStyle = FlatStyle.Flat;
             }
 
-            if (panelCard != null)
+            if(panelCard != null)
             {
                 panelCard.Invalidate();
             }
@@ -107,23 +126,21 @@ namespace BasicFacebookFeatures
 
         private void populateAnalytics()
         {
-            var user = m_LoginResult.LoggedInUser;
+            User user = m_LoginResult.LoggedInUser;
 
             loadProfilePicture(user);
             setMainLabels(user);
             setStatsBlock(user);
             fillFriendsList(user);
 
-            // Force card redraw (so gradient/highlight updates)
             panelCard.Invalidate();
         }
 
         private void loadProfilePicture(User user)
         {
-            // Profile picture
             try
             {
-                if (!string.IsNullOrEmpty(user.PictureNormalURL))
+                if(!string.IsNullOrEmpty(user.PictureNormalURL))
                 {
                     pictureBoxProfile.LoadAsync(user.PictureNormalURL);
                 }
@@ -140,11 +157,10 @@ namespace BasicFacebookFeatures
 
         private void setMainLabels(User user)
         {
-            // Main labels
             labelName.Text = user.Name ?? "(name unavailable)";
 
             DateTime birthday;
-            if (!string.IsNullOrEmpty(user.Birthday) && DateTime.TryParse(user.Birthday, out birthday))
+            if(!string.IsNullOrEmpty(user.Birthday) && DateTime.TryParse(user.Birthday, out birthday))
             {
                 int age = calculateAge(birthday, DateTime.Today);
                 labelBirthday.Text = $"{birthday:d}  •  Age: {age}";
@@ -159,16 +175,13 @@ namespace BasicFacebookFeatures
 
         private void setStatsBlock(User user)
         {
-            // Stats panel
             string stats = buildStatsText(user);
-            // Increase spacing between lines by doubling newlines (minimal, no other UI changes)
-            // Adjust the Environment.NewLine duplication if you prefer tighter/looser spacing.
             labelStats.Text = stats.Replace(Environment.NewLine, Environment.NewLine + Environment.NewLine);
         }
 
         private string buildStatsText(User user)
         {
-            var statsSb = new StringBuilder();
+            StringBuilder statsSb = new StringBuilder();
 
             int albumsCount = user.Albums?.Count() ?? 0;
             int postsCount = user.Posts?.Count() ?? 0;
@@ -179,7 +192,7 @@ namespace BasicFacebookFeatures
             statsSb.AppendLine($"Tagged Photos: {photosCount}");
 
             int? earliestYear = getEarliestPostYear(user);
-            if (earliestYear.HasValue)
+            if(earliestYear.HasValue)
             {
                 statsSb.AppendLine($"Joined (approx): {earliestYear.Value}");
             }
@@ -188,16 +201,16 @@ namespace BasicFacebookFeatures
                 statsSb.AppendLine("Joined (approx): (not available)");
             }
 
-            // Posts by decade (short summary)
             DateTime birthday;
-            if (user.Posts != null && user.Posts.Any() && !string.IsNullOrEmpty(user.Birthday) && DateTime.TryParse(user.Birthday, out birthday))
+            if(user.Posts != null && user.Posts.Any() && !string.IsNullOrEmpty(user.Birthday)
+               && DateTime.TryParse(user.Birthday, out birthday))
             {
-                var decadeGroups = getPostsByDecade(user, birthday);
-                if (decadeGroups.Length > 0)
+                string[] decadeGroups = getPostsByDecade(user, birthday);
+                if(decadeGroups.Length > 0)
                 {
                     statsSb.AppendLine();
                     statsSb.AppendLine("Posts by decade:");
-                    foreach (var item in decadeGroups)
+                    foreach(string item in decadeGroups)
                     {
                         statsSb.AppendLine(item);
                     }
@@ -212,11 +225,8 @@ namespace BasicFacebookFeatures
             DateTime? earliestPostDate = null;
             try
             {
-                earliestPostDate = user.Posts?
-                    .Where(p => p != null && p.CreatedTime.HasValue)
-                    .Select(p => (DateTime?)p.CreatedTime)
-                    .OrderBy(d => d.Value)
-                    .FirstOrDefault();
+                earliestPostDate = user.Posts?.Where(p => p != null && p.CreatedTime.HasValue)
+                    .Select(p => p.CreatedTime).OrderBy(d => d.Value).FirstOrDefault();
             }
             catch
             {
@@ -228,55 +238,43 @@ namespace BasicFacebookFeatures
 
         private string[] getPostsByDecade(User user, DateTime birthday)
         {
-            return user.Posts
-                .Where(p => p != null && p.CreatedTime.HasValue)
-                .Select(p =>
+            return user.Posts.Where(p => p != null && p.CreatedTime.HasValue).Select(p =>
                 {
-                    var created = p.CreatedTime.Value;
+                    DateTime created = p.CreatedTime.Value;
                     int ageAtPost = calculateAge(birthday, created);
-                    int decadeFloor = (ageAtPost / 10) * 10;
+                    int decadeFloor = ageAtPost / 10 * 10;
                     string decadeLabel = decadeFloor < 0 ? "Unknown" : $"{decadeFloor}s";
                     return decadeLabel;
-                })
-                .GroupBy(d => d)
-                .OrderBy(g => g.Key)
-                .Select(g => $"{g.Key}: {g.Count()}")
-                .ToArray();
+                }).GroupBy(d => d).OrderBy(g => g.Key).Select(g => $"{g.Key}: {g.Count()}").ToArray();
         }
 
         private void fillFriendsList(User user)
         {
-            // Friends list (show up to 12)
             listBoxFriends.BeginUpdate();
             listBoxFriends.Items.Clear();
             try
             {
-                var friendNames = user.Friends?
-                    .Where(f => f != null)
-                    .Select(f => f.Name)
-                    .Where(n => !string.IsNullOrEmpty(n))
-                    .OrderBy(n => n)
-                    .Take(12)
-                    .ToArray();
+                string[] friendNames = user.Friends?.Where(f => f != null).Select(f => f.Name)
+                    .Where(n => !string.IsNullOrEmpty(n)).OrderBy(n => n).Take(12).ToArray();
 
-                if (friendNames == null)
+                if(friendNames == null)
                 {
                     listBoxFriends.Items.Add("(friends not available - check permission)");
                 }
-                else if (friendNames.Length == 0)
+                else if(friendNames.Length == 0)
                 {
                     listBoxFriends.Items.Add("(no friend names available)");
                 }
                 else
                 {
-                    foreach (var fn in friendNames)
+                    foreach(string fn in friendNames)
                     {
                         listBoxFriends.Items.Add(fn);
                     }
 
-                    if ((user.Friends?.Count() ?? 0) > friendNames.Length)
+                    if((user.Friends?.Count() ?? 0) > friendNames.Length)
                     {
-                        listBoxFriends.Items.Add($"...and {(user.Friends.Count() - friendNames.Length)} more");
+                        listBoxFriends.Items.Add($"...and {user.Friends.Count() - friendNames.Length} more");
                     }
                 }
             }
@@ -293,19 +291,20 @@ namespace BasicFacebookFeatures
         private int calculateAge(DateTime birthday, DateTime atDate)
         {
             int age = atDate.Year - birthday.Year;
-            if (atDate < birthday.AddYears(age))
+            if(atDate < birthday.AddYears(age))
             {
                 age--;
             }
+
             return age;
         }
 
         private void panelCard_Paint(object sender, PaintEventArgs e)
         {
-            var g = e.Graphics;
+            Graphics g = e.Graphics;
             g.SmoothingMode = SmoothingMode.AntiAlias;
 
-            var rect = panelCard.ClientRectangle;
+            Rectangle rect = panelCard.ClientRectangle;
             rect.Inflate(-2, -2);
 
             Color outerStart = m_IsDarkMode ? Color.FromArgb(30, 40, 60) : Color.FromArgb(40, 83, 155);
@@ -319,7 +318,7 @@ namespace BasicFacebookFeatures
             Color shineEnd = m_IsDarkMode ? Color.FromArgb(5, 255, 255, 255) : Color.FromArgb(10, 255, 255, 255);
 
             int radius = 18;
-            using (var path = new GraphicsPath())
+            using(GraphicsPath path = new GraphicsPath())
             {
                 int d = radius * 2;
                 path.AddArc(rect.Left, rect.Top, d, d, 180, 90);
@@ -328,23 +327,35 @@ namespace BasicFacebookFeatures
                 path.AddArc(rect.Left, rect.Bottom - d, d, d, 90, 90);
                 path.CloseFigure();
 
-                using (var br = new System.Drawing.Drawing2D.LinearGradientBrush(rect, outerStart, outerEnd, System.Drawing.Drawing2D.LinearGradientMode.Vertical))
+                using(LinearGradientBrush br = new LinearGradientBrush(
+                          rect,
+                          outerStart,
+                          outerEnd,
+                          LinearGradientMode.Vertical))
                 {
                     g.FillPath(br, path);
                 }
 
-                var innerRect = Rectangle.Inflate(rect, -8, -8);
-                using (var innerPath = RoundedRect(innerRect, 12))
-                using (var br2 = new System.Drawing.Drawing2D.LinearGradientBrush(innerRect, innerTop, innerBottom, System.Drawing.Drawing2D.LinearGradientMode.Vertical))
+                Rectangle innerRect = Rectangle.Inflate(rect, -8, -8);
+                using(GraphicsPath innerPath = RoundedRect(innerRect, 12))
+                using(LinearGradientBrush br2 = new LinearGradientBrush(
+                          innerRect,
+                          innerTop,
+                          innerBottom,
+                          LinearGradientMode.Vertical))
                 {
                     g.FillPath(br2, innerPath);
-                    using (var pen = new Pen(innerBorder))
+                    using(Pen pen = new Pen(innerBorder))
                     {
                         g.DrawPath(pen, innerPath);
                     }
                 }
 
-                using (var shine = new System.Drawing.Drawing2D.LinearGradientBrush(new Rectangle(rect.Left, rect.Top, rect.Width, rect.Height / 3), shineStart, shineEnd, System.Drawing.Drawing2D.LinearGradientMode.Vertical))
+                using(LinearGradientBrush shine = new LinearGradientBrush(
+                          new Rectangle(rect.Left, rect.Top, rect.Width, rect.Height / 3),
+                          shineStart,
+                          shineEnd,
+                          LinearGradientMode.Vertical))
                 {
                     g.FillPath(shine, path);
                 }
@@ -353,7 +364,7 @@ namespace BasicFacebookFeatures
 
         private GraphicsPath RoundedRect(Rectangle r, int radius)
         {
-            var gp = new GraphicsPath();
+            GraphicsPath gp = new GraphicsPath();
             int d = radius * 2;
             gp.AddArc(r.Left, r.Top, d, d, 180, 90);
             gp.AddArc(r.Right - d, r.Top, d, d, 270, 90);
@@ -367,14 +378,16 @@ namespace BasicFacebookFeatures
         {
             try
             {
-                var main = Application.OpenForms.OfType<FormMain>().FirstOrDefault();
-                if (main != null)
+                FormMain main = Application.OpenForms.OfType<FormMain>().FirstOrDefault();
+                if(main != null)
                 {
-                    var mi = main.GetType().GetMethod("navigateToMenu", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public);
-                    if (mi != null)
+                    MethodInfo mi = main.GetType().GetMethod(
+                        "navigateToMenu",
+                        BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+                    if(mi != null)
                     {
                         mi.Invoke(main, null);
-                        this.Close();
+                        Close();
                         return;
                     }
 
@@ -385,7 +398,7 @@ namespace BasicFacebookFeatures
             {
             }
 
-            this.Close();
+            Close();
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿// Designer file - FormTimeline.Designer.cs
-using System;
+﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -9,14 +8,12 @@ namespace BasicFacebookFeatures
     {
         private System.ComponentModel.IContainer components = null;
 
-        // Designer-managed UI controls
         private Panel topPanel;
         private ComboBox comboBoxContent;
         private ComboBox comboBoxGranularity;
         private Button buttonRefresh;
-        private Button buttonBack; // <-- Added buttonBack here
+        private Button buttonBack;
 
-        // Replaced SplitContainer with simple panels
         private Panel leftPanel;
         private Panel rightPanel;
         private ListView listViewTimeline;
@@ -37,13 +34,11 @@ namespace BasicFacebookFeatures
         {
             this.components = new System.ComponentModel.Container();
 
-            // Top panel
             this.topPanel = new Panel();
             this.comboBoxContent = new ComboBox();
             this.comboBoxGranularity = new ComboBox();
             this.buttonRefresh = new Button();
 
-            // Panels and inner controls
             this.leftPanel = new Panel();
             this.rightPanel = new Panel();
             this.listViewTimeline = new ListView();
@@ -53,14 +48,10 @@ namespace BasicFacebookFeatures
 
             this.SuspendLayout();
 
-            //
-            // topPanel - repurposed to show cover + profile area like a timeline header
-            //
             this.topPanel.Dock = DockStyle.Top;
             this.topPanel.Height = 160;
-            this.topPanel.BackColor = Color.FromArgb(59, 89, 152); // facebook-like blue
+            this.topPanel.BackColor = Color.FromArgb(59, 89, 152);
 
-            // local cover area inside topPanel (no field stored)
             Panel coverPanel = new Panel()
             {
                 BackColor = Color.FromArgb(59, 89, 152),
@@ -69,7 +60,6 @@ namespace BasicFacebookFeatures
                 Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
             };
 
-            // local profile picture (overlaps cover)
             PictureBox profilePic = new PictureBox()
             {
                 Location = new Point(16, 70),
@@ -79,7 +69,6 @@ namespace BasicFacebookFeatures
                 BackColor = Color.White
             };
 
-            // user name/title label
             Label headerNameLabel = new Label()
             {
                 Location = new Point(110, 60),
@@ -90,7 +79,6 @@ namespace BasicFacebookFeatures
                 BackColor = Color.Transparent
             };
 
-            // sub header / info
             Label headerSubLabel = new Label()
             {
                 Location = new Point(110, 116),
@@ -101,7 +89,6 @@ namespace BasicFacebookFeatures
                 BackColor = Color.Transparent
             };
 
-            // filters strip (placed below cover inside topPanel)
             Panel filtersPanel = new Panel()
             {
                 Location = new Point(8, 132),
@@ -109,7 +96,6 @@ namespace BasicFacebookFeatures
                 BackColor = Color.Transparent
             };
 
-            // comboBoxContent
             this.comboBoxContent.DropDownStyle = ComboBoxStyle.DropDownList;
             this.comboBoxContent.Width = 160;
             this.comboBoxContent.Location = new Point(0, 0);
@@ -117,7 +103,6 @@ namespace BasicFacebookFeatures
             this.comboBoxContent.Items.AddRange(new object[] { "All", "Posts", "Photos" });
             this.comboBoxContent.SelectedIndex = 0;
 
-            // comboBoxGranularity
             this.comboBoxGranularity.DropDownStyle = ComboBoxStyle.DropDownList;
             this.comboBoxGranularity.Width = 220;
             this.comboBoxGranularity.Location = new Point(170, 0);
@@ -126,7 +111,6 @@ namespace BasicFacebookFeatures
                 "Timeline by date", "By Year", "By Month", "By Age at time of item" });
             this.comboBoxGranularity.SelectedIndex = 0;
 
-            // buttonRefresh
             this.buttonRefresh.Text = "Refresh";
             this.buttonRefresh.Location = new Point(400, 0);
             this.buttonRefresh.Width = 80;
@@ -134,29 +118,23 @@ namespace BasicFacebookFeatures
             this.buttonRefresh.FlatStyle = FlatStyle.System;
             this.buttonRefresh.Click += new EventHandler(this.buttonRefresh_Click);
 
-            // assemble filters
             filtersPanel.Controls.Add(this.comboBoxContent);
             filtersPanel.Controls.Add(this.comboBoxGranularity);
             filtersPanel.Controls.Add(this.buttonRefresh);
 
-            // add header elements to topPanel
             coverPanel.Controls.Add(profilePic);
             coverPanel.Controls.Add(headerNameLabel);
             coverPanel.Controls.Add(headerSubLabel);
             this.topPanel.Controls.Add(coverPanel);
             this.topPanel.Controls.Add(filtersPanel);
 
-            //
-            // leftPanel acts like former Panel1 - feed area
-            //
             this.leftPanel.Dock = DockStyle.Left;
             this.leftPanel.Width = 420;
             this.leftPanel.MinimumSize = new Size(320, 0);
             this.leftPanel.Resize += new EventHandler(this.leftPanel_Resize);
             this.leftPanel.Padding = new Padding(12);
-            this.leftPanel.BackColor = Color.FromArgb(245, 247, 250); // subtle background for feed column
+            this.leftPanel.BackColor = Color.FromArgb(245, 247, 250);
 
-            // listViewTimeline - styled to look like feed cards (simple approach)
             this.listViewTimeline.Dock = DockStyle.Fill;
             this.listViewTimeline.View = View.Details;
             this.listViewTimeline.FullRowSelect = true;
@@ -172,15 +150,11 @@ namespace BasicFacebookFeatures
             this.listViewTimeline.DoubleClick += new EventHandler(this.ListViewTimeline_DoubleClick);
             this.leftPanel.Controls.Add(this.listViewTimeline);
 
-            //
-            // rightPanel acts like former Panel2 - preview and sidebar
-            //
             this.rightPanel.Dock = DockStyle.Fill;
             this.rightPanel.MinimumSize = new Size(360, 0);
             this.rightPanel.Padding = new Padding(8);
             this.rightPanel.BackColor = Color.FromArgb(250, 250, 250);
 
-            // pictureBoxPreview - right panel
             this.pictureBoxPreview.Dock = DockStyle.Fill;
             this.pictureBoxPreview.SizeMode = PictureBoxSizeMode.Zoom;
             this.pictureBoxPreview.BackColor = SystemColors.ControlDark;
@@ -188,12 +162,10 @@ namespace BasicFacebookFeatures
             this.pictureBoxPreview.Name = "pictureBoxPreview";
             this.pictureBoxPreview.Visible = false;
 
-            // webBrowserPreview
             this.webBrowserPreview.Dock = DockStyle.Fill;
             this.webBrowserPreview.Visible = false;
             this.webBrowserPreview.ScriptErrorsSuppressed = true;
 
-            // placeholder label (now used as preview header and info)
             this.placeholderLabel.Text = "Select a timeline item to preview image here.";
             this.placeholderLabel.Dock = DockStyle.Top;
             this.placeholderLabel.Height = 28;
@@ -203,17 +175,12 @@ namespace BasicFacebookFeatures
             this.placeholderLabel.BackColor = Color.Transparent;
             this.placeholderLabel.ForeColor = Color.FromArgb(90, 90, 90);
 
-            // add preview and placeholder to rightPanel (placeholder on top)
             this.rightPanel.Controls.Add(this.pictureBoxPreview);
             this.rightPanel.Controls.Add(this.webBrowserPreview);
             this.rightPanel.Controls.Add(this.placeholderLabel);
 
-            //
-            // buttonBack - ensure instance is created before use
-            //
             this.buttonBack = new Button();
 
-            // buttonBack
             this.buttonBack.Text = "Back";
             this.buttonBack.Size = new Size(100, 36);
             this.buttonBack.Location = new Point(660, 520);
@@ -221,18 +188,16 @@ namespace BasicFacebookFeatures
             this.buttonBack.ForeColor = Color.White;
             this.buttonBack.FlatStyle = FlatStyle.Flat;
             this.buttonBack.Click += new EventHandler(this.buttonBack_Click);
-            this.Controls.Add(this.buttonBack); // <-- Added buttonBack to Controls
+            this.Controls.Add(this.buttonBack);
 
-            // FormTimeline
             this.AutoScaleDimensions = new SizeF(96F, 96F);
             this.AutoScaleMode = AutoScaleMode.Dpi;
             this.ClientSize = new Size(900, 620);
             this.StartPosition = FormStartPosition.CenterScreen;
             this.Text = "Timeline";
             this.Name = "FormTimeline";
-            this.BackColor = Color.FromArgb(235, 236, 237); // app background similar to fb
+            this.BackColor = Color.FromArgb(235, 236, 237);
 
-            // add controls to form - topPanel first so panels fill remaining space
             this.Controls.Add(this.rightPanel);
             this.Controls.Add(this.leftPanel);
             this.Controls.Add(this.topPanel);
@@ -240,7 +205,6 @@ namespace BasicFacebookFeatures
             this.PerformLayout();
         }
 
-        // UI-only handlers/utilities (must be OUTSIDE InitializeComponent)
         private void leftPanel_Resize(object sender, EventArgs e)
         {
             AdjustColumns();

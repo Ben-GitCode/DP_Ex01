@@ -28,7 +28,6 @@ namespace BasicFacebookFeatures
 
         private Button buttonBack;
 
-        // Shared preview UI elements (exposed so code-behind can update caption/meta if needed)
         private Label labelPreviewCaption;
         private Label labelPreviewMeta;
         private Button buttonPrev;
@@ -48,7 +47,6 @@ namespace BasicFacebookFeatures
         {
             this.components = new Container();
 
-            // Form
             this.SuspendLayout();
             this.StartPosition = FormStartPosition.CenterScreen;
             this.ClientSize = new Size(800, 600);
@@ -56,7 +54,6 @@ namespace BasicFacebookFeatures
             this.Text = "Media Viewer";
             this.BackColor = Color.FromArgb(235, 236, 237);
 
-            // Header (facebook-like bar)
             Panel headerPanel = new Panel
             {
                 Dock = DockStyle.Top,
@@ -84,13 +81,11 @@ namespace BasicFacebookFeatures
             headerPanel.Controls.Add(headerTitle);
             headerPanel.Controls.Add(headerSub);
 
-            // TabControl
             tabControl1 = new TabControl()
             {
                 Dock = DockStyle.Fill
             };
 
-            // Albums Tab (left list, right dark preview with caption/meta)
             tabPageAlbums = new TabPage("Albums") { BackColor = Color.FromArgb(250, 250, 250) };
             Panel albumsLeft = new Panel { Dock = DockStyle.Left, Width = 300, BackColor = Color.White, Padding = new Padding(12) };
             Panel albumsRight = new Panel { Dock = DockStyle.Fill, BackColor = Color.Black, Padding = new Padding(12, 12, 12, 70) };
@@ -156,7 +151,6 @@ namespace BasicFacebookFeatures
             tabPageAlbums.Controls.Add(albumsRight);
             tabPageAlbums.Controls.Add(albumsLeft);
 
-            // Posts Tab
             tabPagePosts = new TabPage("Posts") { BackColor = Color.FromArgb(250, 250, 250) };
             Panel postsLeft = new Panel { Dock = DockStyle.Left, Width = 300, BackColor = Color.White, Padding = new Padding(12) };
             Panel postsRight = new Panel { Dock = DockStyle.Fill, BackColor = Color.Black, Padding = new Padding(12, 12, 12, 70) };
@@ -222,7 +216,6 @@ namespace BasicFacebookFeatures
             tabPagePosts.Controls.Add(postsRight);
             tabPagePosts.Controls.Add(postsLeft);
 
-            // Photos Tab
             tabPagePhotos = new TabPage("Photos") { BackColor = Color.FromArgb(250, 250, 250) };
             Panel photosLeft = new Panel { Dock = DockStyle.Left, Width = 300, BackColor = Color.White, Padding = new Padding(12) };
             Panel photosRight = new Panel { Dock = DockStyle.Fill, BackColor = Color.Black, Padding = new Padding(12, 12, 12, 70) };
@@ -288,10 +281,8 @@ namespace BasicFacebookFeatures
             tabPagePhotos.Controls.Add(photosRight);
             tabPagePhotos.Controls.Add(photosLeft);
 
-            // Add tabs
             tabControl1.TabPages.AddRange(new TabPage[] { tabPageAlbums, tabPagePosts, tabPagePhotos });
 
-            // Back button (kept visible and on top)
             buttonBack = new Button()
             {
                 Text = "Back",
@@ -304,7 +295,6 @@ namespace BasicFacebookFeatures
             };
             buttonBack.Click += buttonBack_Click;
 
-            // Add controls: header first, then tabControl, then back so it's visible
             this.Controls.Add(tabControl1);
             this.Controls.Add(headerPanel);
             this.Controls.Add(buttonBack);

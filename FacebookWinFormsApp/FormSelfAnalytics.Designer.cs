@@ -19,7 +19,6 @@ namespace BasicFacebookFeatures
         private ListBox listBoxFriends;
         private Button buttonBack;
 
-        // Numeric layout / sizing values extracted to variables
         private readonly Size formClientSize = new Size(820, 620);
 
         private readonly Point panelCardLocation = new Point(60, 40);
@@ -32,7 +31,6 @@ namespace BasicFacebookFeatures
         private readonly Size labelNameSize = new Size(440, 60);
         private readonly float labelNameFontSize = 20F;
 
-        // spacing used to position labels relative to labelName
         private readonly int labelVerticalGap = 30;
 
         private readonly Size labelSubtitleSize = new Size(440, 30);
@@ -60,7 +58,6 @@ namespace BasicFacebookFeatures
 
         public FormSelfAnalytics()
         {
-            // compute dependent locations after the base values are initialized
             labelSubtitleLocation = new Point(labelNameLocation.X, labelNameLocation.Y + labelNameSize.Height + labelVerticalGap);
             labelBirthdayLocation = new Point(labelNameLocation.X, labelSubtitleLocation.Y + labelSubtitleSize.Height + labelVerticalGap);
             labelGenderLocation = new Point(labelNameLocation.X, labelBirthdayLocation.Y + labelBirthdaySize.Height + labelVerticalGap);
@@ -84,7 +81,6 @@ namespace BasicFacebookFeatures
 
             this.SuspendLayout();
 
-            // Form
             this.StartPosition = FormStartPosition.CenterScreen;
             this.ClientSize = formClientSize;
             this.Name = "FormSelfAnalytics";
@@ -92,7 +88,6 @@ namespace BasicFacebookFeatures
             this.BackColor = SystemColors.Control;
             this.DoubleBuffered = true;
 
-            // Panel - ID card container
             panelCard = new Panel()
             {
                 Location = panelCardLocation,
@@ -101,7 +96,6 @@ namespace BasicFacebookFeatures
             };
             panelCard.Paint += panelCard_Paint;
 
-            // Profile picture (rounded by container Paint, but ensure size)
             pictureBoxProfile = new PictureBox()
             {
                 Location = pictureBoxProfileLocation,
@@ -111,7 +105,6 @@ namespace BasicFacebookFeatures
                 BackColor = Color.White
             };
 
-            // Name label
             labelName = new Label()
             {
                 Location = labelNameLocation,
@@ -123,7 +116,6 @@ namespace BasicFacebookFeatures
                 BackColor = Color.Transparent
             };
 
-            // Subtitle / title
             labelSubtitle = new Label()
             {
                 Location = labelSubtitleLocation,
@@ -134,7 +126,6 @@ namespace BasicFacebookFeatures
                 BackColor = Color.Transparent
             };
 
-            // Birthday and age
             labelBirthday = new Label()
             {
                 Location = labelBirthdayLocation,
@@ -145,7 +136,6 @@ namespace BasicFacebookFeatures
                 BackColor = Color.Transparent
             };
 
-            // Gender
             labelGender = new Label()
             {
                 Location = labelGenderLocation,
@@ -156,7 +146,6 @@ namespace BasicFacebookFeatures
                 BackColor = Color.Transparent
             };
 
-            // Stats block (multiline label)
             labelStats = new Label()
             {
                 Location = labelStatsLocation,
@@ -168,7 +157,6 @@ namespace BasicFacebookFeatures
                 BackColor = Color.Transparent
             };
 
-            // Friends list box
             listBoxFriends = new ListBox()
             {
                 Location = listBoxFriendsLocation,
@@ -177,7 +165,6 @@ namespace BasicFacebookFeatures
                 BackColor = Color.WhiteSmoke
             };
 
-            // Back button
             buttonBack = new Button()
             {
                 Text = "Back",
@@ -189,7 +176,6 @@ namespace BasicFacebookFeatures
             };
             buttonBack.Click += buttonBack_Click;
 
-            // Add controls to panel
             panelCard.Controls.Add(pictureBoxProfile);
             panelCard.Controls.Add(labelName);
             panelCard.Controls.Add(labelSubtitle);
@@ -198,7 +184,6 @@ namespace BasicFacebookFeatures
             panelCard.Controls.Add(labelStats);
             panelCard.Controls.Add(listBoxFriends);
 
-            // Add to form
             this.Controls.Add(panelCard);
             this.Controls.Add(buttonBack);
 

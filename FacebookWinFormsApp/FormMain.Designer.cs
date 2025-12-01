@@ -7,7 +7,6 @@ namespace BasicFacebookFeatures
     {
         private System.ComponentModel.IContainer components = null;
 
-        // ==== UI CONTROLS ====
         private TabControl tabControl1;
         private TabPage tabPageLogin;
 
@@ -34,7 +33,6 @@ namespace BasicFacebookFeatures
         private PictureBox pictureBoxPost;
         private PictureBox pictureBoxPhoto;
 
-        // Toggle Switch
         private Panel panelBottom;
         private Panel toggleBackground;
         private Panel toggleCircle;
@@ -50,7 +48,6 @@ namespace BasicFacebookFeatures
 
         private void InitializeComponent()
         {
-            // ==== MAIN FORM ====
             
             this.StartPosition = FormStartPosition.CenterScreen;
             this.Text = "Facebook Features";
@@ -60,7 +57,6 @@ namespace BasicFacebookFeatures
             this.MinimumSize = new Size(1250, 600);
             this.MaximumSize = new Size(1250, 600);
 
-            // ==== TAB CONTROL ====
             tabControl1 = new TabControl()
             {
                 Dock = DockStyle.Fill,
@@ -75,7 +71,6 @@ namespace BasicFacebookFeatures
             tabControl1.TabPages.Add(tabPageMenu);
             this.Controls.Add(tabControl1);
 
-            // ==== BOTTOM PANEL + TOGGLE ====
             panelBottom = new Panel()
             {
                 Dock = DockStyle.Bottom,
@@ -115,7 +110,6 @@ namespace BasicFacebookFeatures
 
             this.Controls.Add(panelBottom);
 
-            // ==== LOGIN PAGE ====
             buttonLogin = new Button()
             {
                 Text = "Login",

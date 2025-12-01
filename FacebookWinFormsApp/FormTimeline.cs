@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Windows.Forms;
 using FacebookWrapper;
 using FacebookWrapper.ObjectModel;
@@ -12,15 +14,15 @@ namespace BasicFacebookFeatures
 {
     public partial class FormTimeline : Form
     {
-        private LoginResult m_LoginResult;
         private bool m_IsDarkMode;
+        private LoginResult m_LoginResult;
 
         public FormTimeline(LoginResult loginResult)
         {
             InitializeComponent();
             m_LoginResult = loginResult;
-            this.Load += FormTimeline_Load;
-            if (listViewTimeline != null)
+            Load += FormTimeline_Load;
+            if(listViewTimeline != null)
             {
                 listViewTimeline.SelectedIndexChanged += ListViewTimeline_SelectedIndexChanged;
                 listViewTimeline.DoubleClick += ListViewTimeline_DoubleClick;
@@ -36,8 +38,8 @@ namespace BasicFacebookFeatures
         public FormTimeline()
         {
             InitializeComponent();
-            this.Load += FormTimeline_Load;
-            if (listViewTimeline != null)
+            Load += FormTimeline_Load;
+            if(listViewTimeline != null)
             {
                 listViewTimeline.SelectedIndexChanged += ListViewTimeline_SelectedIndexChanged;
                 listViewTimeline.DoubleClick += ListViewTimeline_DoubleClick;
@@ -47,7 +49,7 @@ namespace BasicFacebookFeatures
         public void SetLoginResult(LoginResult loginResult)
         {
             m_LoginResult = loginResult;
-            if (IsHandleCreated && Visible)
+            if(IsHandleCreated && Visible)
             {
                 populateTimeline();
             }
@@ -63,7 +65,7 @@ namespace BasicFacebookFeatures
         {
             applyDarkMode();
             AdjustColumns();
-            if (m_LoginResult != null && m_LoginResult.LoggedInUser != null)
+            if(m_LoginResult != null && m_LoginResult.LoggedInUser != null)
             {
                 populateTimeline();
             }
@@ -79,7 +81,7 @@ namespace BasicFacebookFeatures
             Color headerBack = m_IsDarkMode ? Color.FromArgb(45, 60, 100) : Color.FromArgb(59, 89, 152);
             Color buttonBack = Color.FromArgb(66, 103, 178);
 
-            this.BackColor = formBack;
+            BackColor = formBack;
 
             applyHeaderTheme(headerBack, text);
             applyPanelsTheme(panelBack, text);
@@ -91,16 +93,16 @@ namespace BasicFacebookFeatures
 
         private void applyHeaderTheme(Color headerBack, Color text)
         {
-            if (topPanel == null)
+            if(topPanel == null)
             {
                 return;
             }
 
             topPanel.BackColor = headerBack;
 
-            foreach (Control c in topPanel.Controls)
+            foreach(Control c in topPanel.Controls)
             {
-                if (c is Label || c is LinkLabel)
+                if(c is Label || c is LinkLabel)
                 {
                     c.ForeColor = Color.White;
                 }
@@ -113,13 +115,13 @@ namespace BasicFacebookFeatures
 
         private void applyPanelsTheme(Color panelBack, Color text)
         {
-            if (leftPanel != null)
+            if(leftPanel != null)
             {
                 leftPanel.BackColor = panelBack;
                 leftPanel.ForeColor = text;
             }
 
-            if (rightPanel != null)
+            if(rightPanel != null)
             {
                 rightPanel.BackColor = panelBack;
                 rightPanel.ForeColor = text;
@@ -128,7 +130,7 @@ namespace BasicFacebookFeatures
 
         private void applyListTheme(Color listBack, Color listFore)
         {
-            if (listViewTimeline != null)
+            if(listViewTimeline != null)
             {
                 listViewTimeline.BackColor = listBack;
                 listViewTimeline.ForeColor = listFore;
@@ -137,18 +139,18 @@ namespace BasicFacebookFeatures
 
         private void applyPreviewTheme(Color panelBack)
         {
-            if (placeholderLabel != null)
+            if(placeholderLabel != null)
             {
                 placeholderLabel.ForeColor = m_IsDarkMode ? Color.Gainsboro : Color.DimGray;
                 placeholderLabel.BackColor = Color.Transparent;
             }
 
-            if (pictureBoxPreview != null)
+            if(pictureBoxPreview != null)
             {
                 pictureBoxPreview.BackColor = m_IsDarkMode ? Color.Black : SystemColors.ControlDark;
             }
 
-            if (webBrowserPreview != null)
+            if(webBrowserPreview != null)
             {
                 webBrowserPreview.BackColor = panelBack;
             }
@@ -156,25 +158,27 @@ namespace BasicFacebookFeatures
 
         private void applyButtonsTheme(Color buttonBack)
         {
-            if (buttonBack != null)
+            if(buttonBack != null)
             {
-                if (this.buttonBack != null)
+                if(this.buttonBack != null)
                 {
                     this.buttonBack.ForeColor = Color.White;
-                    if (this.buttonBack.BackColor == SystemColors.Control || this.buttonBack.BackColor.A == 0)
+                    if(this.buttonBack.BackColor == SystemColors.Control || this.buttonBack.BackColor.A == 0)
                     {
                         this.buttonBack.BackColor = buttonBack;
                     }
+
                     this.buttonBack.FlatStyle = FlatStyle.Flat;
                 }
 
-                if (buttonRefresh != null)
+                if(buttonRefresh != null)
                 {
                     buttonRefresh.ForeColor = Color.White;
-                    if (buttonRefresh.BackColor == SystemColors.Control || buttonRefresh.BackColor.A == 0)
+                    if(buttonRefresh.BackColor == SystemColors.Control || buttonRefresh.BackColor.A == 0)
                     {
                         buttonRefresh.BackColor = buttonBack;
                     }
+
                     buttonRefresh.FlatStyle = FlatStyle.Flat;
                 }
             }
@@ -182,14 +186,14 @@ namespace BasicFacebookFeatures
 
         private void applyCombosTheme(Color listBack, Color listFore)
         {
-            if (comboBoxContent != null)
+            if(comboBoxContent != null)
             {
                 comboBoxContent.BackColor = listBack;
                 comboBoxContent.ForeColor = listFore;
                 comboBoxContent.FlatStyle = FlatStyle.Standard;
             }
 
-            if (comboBoxGranularity != null)
+            if(comboBoxGranularity != null)
             {
                 comboBoxGranularity.BackColor = listBack;
                 comboBoxGranularity.ForeColor = listFore;
@@ -202,32 +206,32 @@ namespace BasicFacebookFeatures
             populateTimeline();
         }
 
-            private void populateTimeline()
+        private void populateTimeline()
         {
-            if (listViewTimeline == null)
+            if(listViewTimeline == null)
             {
                 return;
             }
 
             withListViewUpdate(() =>
-            {
-                listViewTimeline.Items.Clear();
-
-                User user = m_LoginResult != null ? m_LoginResult.LoggedInUser : null;
-                if (user == null)
                 {
-                    return;
-                }
+                    listViewTimeline.Items.Clear();
 
-                List<TimelineItem> items = getTimelineItems(user);
-                IEnumerable<TimelineItem> orderedItems = getSortedItems(items);
-                fillListView(orderedItems);
-            });
+                    User user = m_LoginResult != null ? m_LoginResult.LoggedInUser : null;
+                    if(user == null)
+                    {
+                        return;
+                    }
+
+                    List<TimelineItem> items = getTimelineItems(user);
+                    IEnumerable<TimelineItem> orderedItems = getSortedItems(items);
+                    fillListView(orderedItems);
+                });
         }
 
         private void withListViewUpdate(Action action)
         {
-            if (listViewTimeline == null)
+            if(listViewTimeline == null)
             {
                 return;
             }
@@ -248,12 +252,12 @@ namespace BasicFacebookFeatures
             List<TimelineItem> items = new List<TimelineItem>();
             string filter = getSelectedFilter();
 
-            if (filter == "All" || filter == "Posts")
+            if(filter == "All" || filter == "Posts")
             {
                 addPosts(user, items);
             }
 
-            if (filter == "All" || filter == "Photos")
+            if(filter == "All" || filter == "Photos")
             {
                 addPhotos(user, items);
             }
@@ -264,26 +268,27 @@ namespace BasicFacebookFeatures
         private string getSelectedFilter()
         {
             return comboBoxContent != null && comboBoxContent.SelectedItem != null
-                ? comboBoxContent.SelectedItem.ToString()
-                : "All";
+                       ? comboBoxContent.SelectedItem.ToString()
+                       : "All";
         }
 
         private void addPosts(User user, List<TimelineItem> items)
         {
             try
             {
-                foreach (Post post in user.Posts)
+                foreach(Post post in user.Posts)
                 {
                     DateTime? created = tryGetCreatedTime(post);
-                    if (created.HasValue)
+                    if(created.HasValue)
                     {
-                        items.Add(new TimelineItem
-                        {
-                            Created = created.Value,
-                            Type = "Post",
-                            Summary = tryGetSummary(post),
-                            SourceObject = post
-                        });
+                        items.Add(
+                            new TimelineItem
+                                {
+                                    Created = created.Value,
+                                    Type = "Post",
+                                    Summary = tryGetSummary(post),
+                                    SourceObject = post
+                                });
                     }
                 }
             }
@@ -302,18 +307,19 @@ namespace BasicFacebookFeatures
         {
             try
             {
-                foreach (Photo photo in user.PhotosTaggedIn)
+                foreach(Photo photo in user.PhotosTaggedIn)
                 {
                     DateTime? created = tryGetCreatedTime(photo);
-                    if (created.HasValue)
+                    if(created.HasValue)
                     {
-                        items.Add(new TimelineItem
-                        {
-                            Created = created.Value,
-                            Type = "Photo",
-                            Summary = tryGetSummary(photo),
-                            SourceObject = photo
-                        });
+                        items.Add(
+                            new TimelineItem
+                                {
+                                    Created = created.Value,
+                                    Type = "Photo",
+                                    Summary = tryGetSummary(photo),
+                                    SourceObject = photo
+                                });
                     }
                 }
             }
@@ -326,20 +332,21 @@ namespace BasicFacebookFeatures
         {
             try
             {
-                foreach (Album album in user.Albums)
+                foreach(Album album in user.Albums)
                 {
-                    foreach (Photo photo in album.Photos)
+                    foreach(Photo photo in album.Photos)
                     {
                         DateTime? created = tryGetCreatedTime(photo);
-                        if (created.HasValue)
+                        if(created.HasValue)
                         {
-                            items.Add(new TimelineItem
-                            {
-                                Created = created.Value,
-                                Type = "Photo",
-                                Summary = tryGetSummary(photo),
-                                SourceObject = photo
-                            });
+                            items.Add(
+                                new TimelineItem
+                                    {
+                                        Created = created.Value,
+                                        Type = "Photo",
+                                        Summary = tryGetSummary(photo),
+                                        SourceObject = photo
+                                    });
                         }
                     }
                 }
@@ -353,27 +360,21 @@ namespace BasicFacebookFeatures
         {
             string granularity = getGranularity();
 
-            if (granularity.Contains("Year"))
+            if(granularity.Contains("Year"))
             {
-                return items
-                    .OrderByDescending(i => i.Created.Year)
-                    .ThenByDescending(i => i.Created);
+                return items.OrderByDescending(i => i.Created.Year).ThenByDescending(i => i.Created);
             }
 
-            if (granularity.Contains("Month"))
+            if(granularity.Contains("Month"))
             {
-                return items
-                    .OrderByDescending(i => i.Created.Year)
-                    .ThenByDescending(i => i.Created.Month)
+                return items.OrderByDescending(i => i.Created.Year).ThenByDescending(i => i.Created.Month)
                     .ThenByDescending(i => i.Created);
             }
 
             DateTime birth;
-            if (granularity.Contains("Age") && tryParseBirthday(out birth))
+            if(granularity.Contains("Age") && tryParseBirthday(out birth))
             {
-                return items
-                    .OrderByDescending(i => getAge(i.Created, birth))
-                    .ThenByDescending(i => i.Created);
+                return items.OrderByDescending(i => getAge(i.Created, birth)).ThenByDescending(i => i.Created);
             }
 
             return items.OrderByDescending(i => i.Created);
@@ -382,18 +383,18 @@ namespace BasicFacebookFeatures
         private string getGranularity()
         {
             return comboBoxGranularity != null && comboBoxGranularity.SelectedItem != null
-                ? comboBoxGranularity.SelectedItem.ToString()
-                : "Timeline by date";
+                       ? comboBoxGranularity.SelectedItem.ToString()
+                       : "Timeline by date";
         }
 
         private bool tryParseBirthday(out DateTime birth)
         {
             birth = DateTime.MinValue;
             string birthday = m_LoginResult != null && m_LoginResult.LoggedInUser != null
-                ? m_LoginResult.LoggedInUser.Birthday
-                : null;
+                                  ? m_LoginResult.LoggedInUser.Birthday
+                                  : null;
 
-            if (string.IsNullOrEmpty(birthday))
+            if(string.IsNullOrEmpty(birthday))
             {
                 return false;
             }
@@ -404,7 +405,7 @@ namespace BasicFacebookFeatures
         private int getAge(DateTime created, DateTime birth)
         {
             int age = created.Year - birth.Year;
-            if (created < birth.AddYears(age))
+            if(created < birth.AddYears(age))
             {
                 age--;
             }
@@ -417,7 +418,7 @@ namespace BasicFacebookFeatures
             bool hasBirthday = tryParseBirthday(out DateTime birthDate);
             string granularity = getGranularity();
 
-            foreach (TimelineItem item in items)
+            foreach(TimelineItem item in items)
             {
                 string dateText = formatDateText(item, granularity, hasBirthday, birthDate);
                 string summary = formatSummary(item.Summary);
@@ -428,17 +429,17 @@ namespace BasicFacebookFeatures
 
         private string formatDateText(TimelineItem item, string granularity, bool hasBirthday, DateTime birthDate)
         {
-            if (granularity.Contains("Year"))
+            if(granularity.Contains("Year"))
             {
                 return item.Created.Year.ToString();
             }
 
-            if (granularity.Contains("Month"))
+            if(granularity.Contains("Month"))
             {
                 return item.Created.ToString("MMM yyyy");
             }
 
-            if (granularity.Contains("Age") && hasBirthday)
+            if(granularity.Contains("Age") && hasBirthday)
             {
                 int age = getAge(item.Created, birthDate);
                 return age >= 0 ? age + "y" : "Unknown";
@@ -449,7 +450,7 @@ namespace BasicFacebookFeatures
 
         private string formatSummary(string summary)
         {
-            if (string.IsNullOrEmpty(summary))
+            if(string.IsNullOrEmpty(summary))
             {
                 return string.Empty;
             }
@@ -468,7 +469,7 @@ namespace BasicFacebookFeatures
 
         private void ListViewTimeline_DoubleClick(object sender, EventArgs e)
         {
-            if (listViewTimeline.SelectedItems.Count == 0)
+            if(listViewTimeline.SelectedItems.Count == 0)
             {
                 return;
             }
@@ -477,22 +478,23 @@ namespace BasicFacebookFeatures
             object item = selected.Tag;
 
             string mediaUrl = getMediaUrl(item);
-            if (!string.IsNullOrEmpty(mediaUrl))
+            if(!string.IsNullOrEmpty(mediaUrl))
             {
                 showMedia(mediaUrl);
                 return;
             }
 
             string link = getLink(item);
-            if (!string.IsNullOrEmpty(link))
+            if(!string.IsNullOrEmpty(link))
             {
                 try
                 {
-                    System.Diagnostics.Process.Start(link);
+                    Process.Start(link);
                 }
                 catch
                 {
                 }
+
                 return;
             }
 
@@ -501,20 +503,20 @@ namespace BasicFacebookFeatures
 
         private void ListViewTimeline_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (listViewTimeline.SelectedItems.Count == 0)
+            if(listViewTimeline.SelectedItems.Count == 0)
             {
                 return;
             }
 
             ListViewItem selected = listViewTimeline.SelectedItems[0];
-            if (selected.SubItems.Count < 2 || selected.SubItems[1].Text != "Photo")
+            if(selected.SubItems.Count < 2 || selected.SubItems[1].Text != "Photo")
             {
                 clearPreview();
                 return;
             }
 
             string mediaUrl = getMediaUrl(selected.Tag);
-            if (!string.IsNullOrEmpty(mediaUrl))
+            if(!string.IsNullOrEmpty(mediaUrl))
             {
                 showMedia(mediaUrl);
             }
@@ -526,7 +528,7 @@ namespace BasicFacebookFeatures
 
         private string getMediaUrl(object item)
         {
-            if (item == null)
+            if(item == null)
             {
                 return null;
             }
@@ -534,13 +536,13 @@ namespace BasicFacebookFeatures
             string[] props = { "PictureNormalURL", "FullPicture", "PictureURL", "Picture", "Source", "Image" };
             Type t = item.GetType();
 
-            foreach (string propName in props)
+            foreach(string propName in props)
             {
-                var prop = t.GetProperty(propName);
-                if (prop != null)
+                PropertyInfo prop = t.GetProperty(propName);
+                if(prop != null)
                 {
                     string value = prop.GetValue(item) as string;
-                    if (!string.IsNullOrEmpty(value))
+                    if(!string.IsNullOrEmpty(value))
                     {
                         return value;
                     }
@@ -552,14 +554,14 @@ namespace BasicFacebookFeatures
 
         private string getLink(object item)
         {
-            if (item == null)
+            if(item == null)
             {
                 return null;
             }
 
             Type t = item.GetType();
-            var prop = t.GetProperty("Link");
-            if (prop == null)
+            PropertyInfo prop = t.GetProperty("Link");
+            if(prop == null)
             {
                 return null;
             }
@@ -569,21 +571,23 @@ namespace BasicFacebookFeatures
 
         private void clearPreview()
         {
-            if (pictureBoxPreview != null && pictureBoxPreview.Image != null)
+            if(pictureBoxPreview != null && pictureBoxPreview.Image != null)
             {
                 pictureBoxPreview.Image.Dispose();
                 pictureBoxPreview.Image = null;
             }
 
-            if (pictureBoxPreview != null)
+            if(pictureBoxPreview != null)
             {
                 pictureBoxPreview.Visible = false;
             }
-            if (placeholderLabel != null)
+
+            if(placeholderLabel != null)
             {
                 placeholderLabel.Visible = true;
             }
-            if (webBrowserPreview != null)
+
+            if(webBrowserPreview != null)
             {
                 webBrowserPreview.Visible = false;
             }
@@ -591,13 +595,13 @@ namespace BasicFacebookFeatures
 
         private void showMedia(string url)
         {
-            if (string.IsNullOrEmpty(url))
+            if(string.IsNullOrEmpty(url))
             {
                 clearPreview();
                 return;
             }
 
-            if (!isImageUrl(url))
+            if(!isImageUrl(url))
             {
                 showNonImageMedia(url);
                 return;
@@ -609,15 +613,17 @@ namespace BasicFacebookFeatures
 
         private void showNonImageMedia(string url)
         {
-            if (pictureBoxPreview != null)
+            if(pictureBoxPreview != null)
             {
                 pictureBoxPreview.Visible = false;
             }
-            if (placeholderLabel != null)
+
+            if(placeholderLabel != null)
             {
                 placeholderLabel.Visible = false;
             }
-            if (webBrowserPreview != null)
+
+            if(webBrowserPreview != null)
             {
                 webBrowserPreview.Navigate(url);
                 webBrowserPreview.Visible = true;
@@ -630,13 +636,13 @@ namespace BasicFacebookFeatures
             {
                 setPreviewVisibilityForImage();
 
-                using (WebClient wc = new WebClient())
+                using(WebClient wc = new WebClient())
                 {
                     byte[] data = wc.DownloadData(url);
-                    using (MemoryStream ms = new MemoryStream(data))
+                    using(MemoryStream ms = new MemoryStream(data))
                     {
                         Image img = Image.FromStream(ms);
-                        if (pictureBoxPreview != null)
+                        if(pictureBoxPreview != null)
                         {
                             pictureBoxPreview.Image = new Bitmap(img);
                         }
@@ -651,15 +657,17 @@ namespace BasicFacebookFeatures
 
         private void setPreviewVisibilityForImage()
         {
-            if (placeholderLabel != null)
+            if(placeholderLabel != null)
             {
                 placeholderLabel.Visible = false;
             }
-            if (webBrowserPreview != null)
+
+            if(webBrowserPreview != null)
             {
                 webBrowserPreview.Visible = false;
             }
-            if (pictureBoxPreview != null)
+
+            if(pictureBoxPreview != null)
             {
                 pictureBoxPreview.Visible = true;
             }
@@ -667,22 +675,19 @@ namespace BasicFacebookFeatures
 
         private bool isImageUrl(string url)
         {
-            if (string.IsNullOrEmpty(url))
+            if(string.IsNullOrEmpty(url))
             {
                 return false;
             }
 
             string lower = url.ToLowerInvariant();
-            return lower.EndsWith(".jpg") ||
-                   lower.EndsWith(".jpeg") ||
-                   lower.EndsWith(".png") ||
-                   lower.EndsWith(".gif") ||
-                   lower.EndsWith(".bmp");
+            return lower.EndsWith(".jpg") || lower.EndsWith(".jpeg") || lower.EndsWith(".png") || lower.EndsWith(".gif")
+                   || lower.EndsWith(".bmp");
         }
 
         private DateTime? tryGetCreatedTime(object item)
         {
-            if (item == null)
+            if(item == null)
             {
                 return null;
             }
@@ -690,19 +695,19 @@ namespace BasicFacebookFeatures
             string[] dateProps = { "CreatedTime", "StartTime", "UpdatedTime" };
             Type t = item.GetType();
 
-            foreach (string propName in dateProps)
+            foreach(string propName in dateProps)
             {
-                var prop = t.GetProperty(propName);
-                if (prop != null)
+                PropertyInfo prop = t.GetProperty(propName);
+                if(prop != null)
                 {
                     object value = prop.GetValue(item);
-                    if (value is DateTime)
+                    if(value is DateTime)
                     {
                         return (DateTime)value;
                     }
 
                     DateTime dt;
-                    if (value is string && DateTime.TryParse((string)value, out dt))
+                    if(value is string && DateTime.TryParse((string)value, out dt))
                     {
                         return dt;
                     }
@@ -714,7 +719,7 @@ namespace BasicFacebookFeatures
 
         private string tryGetSummary(object item)
         {
-            if (item == null)
+            if(item == null)
             {
                 return "Post";
             }
@@ -722,13 +727,13 @@ namespace BasicFacebookFeatures
             string[] textProps = { "Message", "Caption", "Name", "Description" };
             Type t = item.GetType();
 
-            foreach (string propName in textProps)
+            foreach(string propName in textProps)
             {
-                var prop = t.GetProperty(propName);
-                if (prop != null)
+                PropertyInfo prop = t.GetProperty(propName);
+                if(prop != null)
                 {
                     string value = prop.GetValue(item) as string;
-                    if (!string.IsNullOrEmpty(value))
+                    if(!string.IsNullOrEmpty(value))
                     {
                         return value;
                     }
@@ -738,22 +743,21 @@ namespace BasicFacebookFeatures
             return "Post";
         }
 
-        // Back button handler: show main menu or bring main form forward then close timeline.
         private void buttonBack_Click(object sender, EventArgs e)
         {
             try
             {
-                var main = Application.OpenForms.OfType<FormMain>().FirstOrDefault();
-                if (main != null)
+                FormMain main = Application.OpenForms.OfType<FormMain>().FirstOrDefault();
+                if(main != null)
                 {
-                    var mi = main.GetType().GetMethod(
+                    MethodInfo mi = main.GetType().GetMethod(
                         "navigateToMenu",
-                        System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public);
+                        BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
 
-                    if (mi != null)
+                    if(mi != null)
                     {
                         mi.Invoke(main, null);
-                        this.Close();
+                        Close();
                         return;
                     }
 
@@ -764,14 +768,17 @@ namespace BasicFacebookFeatures
             {
             }
 
-            this.Close();
+            Close();
         }
 
         private class TimelineItem
         {
             public DateTime Created { get; set; }
+
             public string Type { get; set; }
+
             public string Summary { get; set; }
+
             public object SourceObject { get; set; }
         }
     }
