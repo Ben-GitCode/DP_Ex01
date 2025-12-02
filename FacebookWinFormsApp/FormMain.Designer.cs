@@ -48,12 +48,12 @@ namespace BasicFacebookFeatures
 
         private void InitializeComponent()
         {
-            
+
             this.StartPosition = FormStartPosition.CenterScreen;
             this.Text = "Facebook Features";
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.BackColor = Color.FromArgb(66, 103, 178);
-            this.ClientSize = new Size(1250, 600); 
+            this.ClientSize = new Size(1250, 600);
             this.MinimumSize = new Size(1250, 600);
             this.MaximumSize = new Size(1250, 600);
 
@@ -290,7 +290,7 @@ namespace BasicFacebookFeatures
                 AutoSize = false
             };
             linkPosts.LinkClicked += linkPosts_LinkClicked;
-                
+
             listBoxPosts = new ListBox()
             {
                 Location = new Point(40, 110),
