@@ -15,6 +15,8 @@ namespace BasicFacebookFeatures
         {
             InitializeComponent();
             FacebookService.s_CollectionLimit = 25;
+            // Apply initial dark mode state (false by default)
+            applyDarkMode();
         }
 
         private void buttonLogin_Click(object i_Sender, EventArgs i_EventArgs)
@@ -82,6 +84,9 @@ namespace BasicFacebookFeatures
             buttonConnectAsDesig.Enabled = true;
             buttonLogin.Text = "Login";
             buttonLogout.Enabled = false;
+            buttonLogout.Visible = false;
+            buttonGoToMenu.Enabled = false;
+            buttonGoToMenu.Visible = false;
 
             pictureBoxProfile.Image = null;
         }
@@ -128,18 +133,18 @@ namespace BasicFacebookFeatures
                 Hide();
 
                 featureForm.FormClosed += (s, e) =>
+                {
+                    try
                     {
-                        try
+                        if (!IsDisposed && IsHandleCreated)
                         {
-                            if (!IsDisposed && IsHandleCreated)
-                            {
-                                BeginInvoke(new Action(() => navigateToMenu()));
-                            }
+                            BeginInvoke(new Action(() => navigateToMenu()));
                         }
-                        catch
-                        {
-                        }
-                    };
+                    }
+                    catch
+                    {
+                    }
+                };
 
                 featureForm.Show();
             }
@@ -150,7 +155,7 @@ namespace BasicFacebookFeatures
             Show();
 
             if (tabControl1.SelectedTab != null && tabControl1.SelectedTab != tabPageLogin
-                                               && tabControl1.SelectedTab.Name != "Menu")
+                                                && tabControl1.SelectedTab.Name != "Menu")
             {
                 tabControl1.TabPages.Remove(tabControl1.SelectedTab);
             }
@@ -284,17 +289,27 @@ namespace BasicFacebookFeatures
 
             toggleCircle.Left = m_IsDarkMode ? 26 : 1;
 
-            toggleBackground.BackColor = m_IsDarkMode ? Color.DarkGray : Color.LightGray;
+            toggleBackground.BackColor = m_IsDarkMode ? ColorPalette.sr_DarkModeToggleOnBackground : ColorPalette.sr_LightModeToggleOffBackground;
         }
 
         private void applyDarkMode()
         {
-            Color formColor = m_IsDarkMode ? Color.Black : Color.White;
-            Color textColor = m_IsDarkMode ? Color.White : Color.Black;
-            Color listBoxBackColor = m_IsDarkMode ? Color.Black : Color.White;
-            Color listBoxForeColor = m_IsDarkMode ? Color.White : Color.Black;
+            Color formColor = m_IsDarkMode ? ColorPalette.sr_DarkModeFormBackground : Color.White;
+            Color textColor = m_IsDarkMode ? ColorPalette.sr_DarkModeTextColor : ColorPalette.sr_LightModeTextColor;
+            Color listBoxBackColor = m_IsDarkMode ? ColorPalette.sr_DarkModeListBoxBackground : ColorPalette.sr_LightModeListBoxBackground;
+            Color listBoxForeColor = m_IsDarkMode ? ColorPalette.sr_DarkModeTextColor : ColorPalette.sr_LightModeTextColor;
 
             tabPageLogin.BackColor = formColor;
+
+            // Update main form and bottom panel colors
+            this.BackColor = m_IsDarkMode ? ColorPalette.sr_DarkModeFormBackground : ColorPalette.sr_FacebookBlue;
+            panelBottom.BackColor = m_IsDarkMode ? ColorPalette.sr_DarkModePanelBackground : ColorPalette.sr_FacebookBlue;
+            labelDarkMode.ForeColor = textColor;
+
+            // Set toggle colors
+            toggleBackground.BackColor = m_IsDarkMode ? ColorPalette.sr_DarkModeToggleOnBackground : ColorPalette.sr_LightModeToggleOffBackground;
+            toggleCircle.BackColor = ColorPalette.sr_DarkModeToggleCircle;
+            toggleCircle.Left = m_IsDarkMode ? 26 : 1;
 
             foreach (TabPage tabPage in tabControl1.TabPages)
             {
@@ -315,7 +330,7 @@ namespace BasicFacebookFeatures
         {
             if (i_Control is Button button)
             {
-                button.BackColor = m_IsDarkMode ? Color.FromArgb(50, 50, 50) : Color.FromArgb(66, 103, 178);
+                button.BackColor = m_IsDarkMode ? ColorPalette.sr_DarkModeButtonBackground : ColorPalette.sr_FacebookBlue;
                 button.ForeColor = Color.White;
             }
             else if (i_Control is LinkLabel linkLabel)

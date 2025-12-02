@@ -59,13 +59,13 @@ namespace BasicFacebookFeatures
 
         private void applyDarkMode()
         {
-            Color formBack = r_IsDarkMode ? Color.FromArgb(24, 25, 26) : SystemColors.Control;
-            Color panelBack = r_IsDarkMode ? Color.FromArgb(36, 37, 38) : SystemColors.Control;
-            Color text = r_IsDarkMode ? Color.White : Color.Black;
-            Color listBack = r_IsDarkMode ? Color.FromArgb(24, 25, 26) : Color.White;
+            Color formBack = r_IsDarkMode ? ColorPalette.sr_DarkModeFormBackground : ColorPalette.sr_LightModeFormBackground;
+            Color panelBack = r_IsDarkMode ? ColorPalette.sr_DarkModePanelBackground : Color.FromArgb(245, 247, 250); // Lighter background for panels
+            Color text = r_IsDarkMode ? ColorPalette.sr_DarkModeTextColor : ColorPalette.sr_LightModeTextColor;
+            Color listBack = r_IsDarkMode ? ColorPalette.sr_DarkModeListBoxBackground : ColorPalette.sr_LightModeListBoxBackground;
             Color listFore = text;
-            Color headerBack = r_IsDarkMode ? Color.FromArgb(45, 60, 100) : Color.FromArgb(59, 89, 152);
-            Color back = Color.FromArgb(66, 103, 178);
+            Color headerBack = r_IsDarkMode ? ColorPalette.sr_DarkModeHeaderBackground : ColorPalette.sr_LightModeHeaderBackground;
+            Color buttonBackColor = ColorPalette.sr_FacebookBlue;
 
             BackColor = formBack;
 
@@ -73,7 +73,7 @@ namespace BasicFacebookFeatures
             applyPanelsTheme(panelBack, text);
             applyListTheme(listBack, listFore);
             applyPreviewTheme(panelBack);
-            applyButtonsTheme(back);
+            applyButtonsTheme(buttonBackColor);
             applyCombosTheme(listBack, listFore);
         }
 
@@ -86,15 +86,36 @@ namespace BasicFacebookFeatures
 
             topPanel.BackColor = i_HeaderBack;
 
-            foreach (Control control in topPanel.Controls)
+            foreach (Control control in topPanel.Controls.OfType<Panel>())
             {
-                if (control is Label || control is LinkLabel)
+                control.BackColor = i_HeaderBack;
+
+                foreach (Control subControl in control.Controls)
                 {
-                    control.ForeColor = Color.White;
+                    if (subControl is Label || subControl is LinkLabel)
+                    {
+                        if (subControl.Text.Contains("Timeline"))
+                        {
+                            subControl.ForeColor = ColorPalette.sr_DarkModeTextColor; // White
+                        }
+                        else if (subControl.Text.Contains("Recent"))
+                        {
+                            subControl.ForeColor = ColorPalette.sr_LightTextGray; // Light Gray
+                        }
+                    }
                 }
-                else
+            }
+
+            // Apply to filter panel controls
+            Control filtersPanel = topPanel.Controls.OfType<Panel>().FirstOrDefault(p => p.Location.Y == 132);
+            if (filtersPanel != null)
+            {
+                foreach (Control control in filtersPanel.Controls)
                 {
-                    control.ForeColor = i_TextColor;
+                    if (control is Label || control is LinkLabel)
+                    {
+                        control.ForeColor = i_TextColor;
+                    }
                 }
             }
         }
@@ -127,7 +148,7 @@ namespace BasicFacebookFeatures
         {
             if (placeholderLabel != null)
             {
-                placeholderLabel.ForeColor = r_IsDarkMode ? Color.Gainsboro : Color.DimGray;
+                placeholderLabel.ForeColor = r_IsDarkMode ? ColorPalette.sr_LightTextGray : ColorPalette.sr_PlaceholderText;
                 placeholderLabel.BackColor = Color.Transparent;
             }
 
@@ -144,29 +165,18 @@ namespace BasicFacebookFeatures
 
         private void applyButtonsTheme(Color i_ButtonBackColor)
         {
-            if (i_ButtonBackColor != null)
+            if (buttonBack != null)
             {
-                if (buttonBack != null)
-                {
-                    buttonBack.ForeColor = Color.White;
-                    if (buttonBack.BackColor == SystemColors.Control || buttonBack.BackColor.A == 0)
-                    {
-                        buttonBack.BackColor = i_ButtonBackColor;
-                    }
+                buttonBack.ForeColor = Color.White;
+                buttonBack.BackColor = r_IsDarkMode ? ColorPalette.sr_DarkModeButtonBackground : i_ButtonBackColor;
+                buttonBack.FlatStyle = FlatStyle.Flat;
+            }
 
-                    buttonBack.FlatStyle = FlatStyle.Flat;
-                }
-
-                if (buttonRefresh != null)
-                {
-                    buttonRefresh.ForeColor = Color.White;
-                    if (buttonRefresh.BackColor == SystemColors.Control || buttonRefresh.BackColor.A == 0)
-                    {
-                        buttonRefresh.BackColor = i_ButtonBackColor;
-                    }
-
-                    buttonRefresh.FlatStyle = FlatStyle.Flat;
-                }
+            if (buttonRefresh != null)
+            {
+                buttonRefresh.ForeColor = Color.White;
+                buttonRefresh.BackColor = r_IsDarkMode ? ColorPalette.sr_DarkModeButtonBackground : i_ButtonBackColor;
+                buttonRefresh.FlatStyle = FlatStyle.Flat;
             }
         }
 
@@ -200,19 +210,19 @@ namespace BasicFacebookFeatures
             }
 
             withListViewUpdate(() =>
+            {
+                listViewTimeline.Items.Clear();
+
+                User user = r_LoginResult != null ? r_LoginResult.LoggedInUser : null;
+                if (user == null)
                 {
-                    listViewTimeline.Items.Clear();
+                    return;
+                }
 
-                    User user = r_LoginResult != null ? r_LoginResult.LoggedInUser : null;
-                    if (user == null)
-                    {
-                        return;
-                    }
-
-                    List<TimelineItem> items = getTimelineItems(user);
-                    IEnumerable<TimelineItem> orderedItems = getSortedItems(items);
-                    fillListView(orderedItems);
-                });
+                List<TimelineItem> items = getTimelineItems(user);
+                IEnumerable<TimelineItem> orderedItems = getSortedItems(items);
+                fillListView(orderedItems);
+            });
         }
 
         private void withListViewUpdate(Action i_Action)
@@ -254,8 +264,8 @@ namespace BasicFacebookFeatures
         private string getSelectedFilter()
         {
             return comboBoxContent != null && comboBoxContent.SelectedItem != null
-                       ? comboBoxContent.SelectedItem.ToString()
-                       : "All";
+                           ? comboBoxContent.SelectedItem.ToString()
+                           : "All";
         }
 
         private void addPosts(User i_User, List<TimelineItem> i_TimelineItems)
@@ -370,16 +380,16 @@ namespace BasicFacebookFeatures
         private string getGranularity()
         {
             return comboBoxGranularity != null && comboBoxGranularity.SelectedItem != null
-                       ? comboBoxGranularity.SelectedItem.ToString()
-                       : "Timeline by date";
+                           ? comboBoxGranularity.SelectedItem.ToString()
+                           : "Timeline by date";
         }
 
         private bool tryParseBirthday(out DateTime i_Birth)
         {
             i_Birth = DateTime.MinValue;
             string birthday = r_LoginResult != null && r_LoginResult.LoggedInUser != null
-                                  ? r_LoginResult.LoggedInUser.Birthday
-                                  : null;
+                                     ? r_LoginResult.LoggedInUser.Birthday
+                                     : null;
 
             if (string.IsNullOrEmpty(birthday))
             {

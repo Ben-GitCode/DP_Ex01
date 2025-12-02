@@ -56,12 +56,15 @@ namespace BasicFacebookFeatures
 
         private void applyDarkMode()
         {
-            Color formBack = r_IsDarkMode ? Color.FromArgb(24, 25, 26) : SystemColors.Control;
-            Color primaryText = r_IsDarkMode ? Color.White : Color.FromArgb(12, 36, 86);
-            Color secondaryText = r_IsDarkMode ? Color.Gainsboro : Color.FromArgb(34, 34, 34);
-            Color mutedText = r_IsDarkMode ? Color.Silver : Color.FromArgb(90, 90, 110);
-            Color listBack = r_IsDarkMode ? Color.FromArgb(36, 37, 38) : Color.WhiteSmoke;
-            Color listFore = r_IsDarkMode ? Color.White : Color.Black;
+            Color formBack = r_IsDarkMode ? ColorPalette.sr_DarkModeFormBackground : SystemColors.Control;
+            Color panelBack = r_IsDarkMode ? ColorPalette.sr_CardInnerBackgroundDarkBottom : ColorPalette.sr_LightModePanelBackground;
+
+            Color primaryText = r_IsDarkMode ? ColorPalette.sr_DarkModeTextColor : ColorPalette.sr_CardHeaderColor;
+            Color secondaryText = r_IsDarkMode ? ColorPalette.sr_LightTextGray : ColorPalette.sr_DarkText;
+            Color mutedText = r_IsDarkMode ? Color.Silver : ColorPalette.sr_CardSubtitleColor;
+
+            Color listBack = r_IsDarkMode ? ColorPalette.sr_DarkModePanelBackground : Color.WhiteSmoke;
+            Color listFore = r_IsDarkMode ? ColorPalette.sr_DarkModeTextColor : Color.Black;
 
             BackColor = formBack;
 
@@ -87,7 +90,7 @@ namespace BasicFacebookFeatures
 
             if (labelStats != null)
             {
-                labelStats.ForeColor = r_IsDarkMode ? Color.Gainsboro : Color.FromArgb(40, 40, 40);
+                labelStats.ForeColor = r_IsDarkMode ? Color.Gainsboro : ColorPalette.sr_DarkText;
             }
 
             if (listBoxFriends != null)
@@ -98,22 +101,19 @@ namespace BasicFacebookFeatures
 
             if (pictureBoxProfile != null)
             {
-                pictureBoxProfile.BackColor = r_IsDarkMode ? Color.FromArgb(36, 37, 38) : Color.White;
+                pictureBoxProfile.BackColor = panelBack;
             }
 
             if (buttonBack != null)
             {
                 buttonBack.ForeColor = Color.White;
-                if (buttonBack.BackColor == SystemColors.Control || buttonBack.BackColor.A == 0)
-                {
-                    buttonBack.BackColor = Color.FromArgb(66, 103, 178);
-                }
-
+                buttonBack.BackColor = r_IsDarkMode ? ColorPalette.sr_DarkModeButtonBackground : ColorPalette.sr_FacebookBlue;
                 buttonBack.FlatStyle = FlatStyle.Flat;
             }
 
             if (panelCard != null)
             {
+                panelCard.BackColor = panelBack;
                 panelCard.Invalidate();
             }
         }
@@ -219,8 +219,8 @@ namespace BasicFacebookFeatures
             DateTime? earliestPostDate = null;
             try
             {
-                earliestPostDate = i_User.Posts?.Where(p => p != null && p.CreatedTime.HasValue)
-                    .Select(p => p.CreatedTime).OrderBy(d => d.Value).FirstOrDefault();
+                earliestPostDate = i_User.Posts?.Where(i_Post => i_Post != null && i_Post.CreatedTime.HasValue)
+                    .Select(i_Post => i_Post.CreatedTime).OrderBy(d => d.Value).FirstOrDefault();
             }
             catch
             {
@@ -232,14 +232,14 @@ namespace BasicFacebookFeatures
 
         private string[] getPostsByDecade(User i_User, DateTime i_Birthday)
         {
-            return i_User.Posts.Where(p => p != null && p.CreatedTime.HasValue).Select(p =>
-                {
-                    DateTime created = p.CreatedTime.Value;
-                    int ageAtPost = calculateAge(i_Birthday, created);
-                    int decadeFloor = ageAtPost / 10 * 10;
-                    string decadeLabel = decadeFloor < 0 ? "Unknown" : $"{decadeFloor}s";
-                    return decadeLabel;
-                }).GroupBy(d => d).OrderBy(g => g.Key).Select(g => $"{g.Key}: {g.Count()}").ToArray();
+            return i_User.Posts.Where(i_Post => i_Post != null && i_Post.CreatedTime.HasValue).Select(p =>
+            {
+                DateTime created = p.CreatedTime.Value;
+                int ageAtPost = calculateAge(i_Birthday, created);
+                int decadeFloor = ageAtPost / 10 * 10;
+                string decadeLabel = decadeFloor < 0 ? "Unknown" : $"{decadeFloor}s";
+                return decadeLabel;
+            }).GroupBy(d => d).OrderBy(i_Grouping => i_Grouping.Key).Select(i_Grouping => $"{i_Grouping.Key}: {i_Grouping.Count()}").ToArray();
         }
 
         private void fillFriendsList(User i_User)
@@ -248,8 +248,8 @@ namespace BasicFacebookFeatures
             listBoxFriends.Items.Clear();
             try
             {
-                string[] friendNames = i_User.Friends?.Where(f => f != null).Select(f => f.Name)
-                    .Where(n => !string.IsNullOrEmpty(n)).OrderBy(n => n).Take(12).ToArray();
+                string[] friendNames = i_User.Friends?.Where(i_User1 => i_User1 != null).Select(i_User1 => i_User1.Name)
+                    .Where(i_Value => !string.IsNullOrEmpty(i_Value)).OrderBy(n => n).Take(12).ToArray();
 
                 if (friendNames == null)
                 {
@@ -261,9 +261,9 @@ namespace BasicFacebookFeatures
                 }
                 else
                 {
-                    foreach (string fn in friendNames)
+                    foreach (string item in friendNames)
                     {
-                        listBoxFriends.Items.Add(fn);
+                        listBoxFriends.Items.Add(item);
                     }
 
                     if ((i_User.Friends?.Count() ?? 0) > friendNames.Length)
@@ -301,12 +301,12 @@ namespace BasicFacebookFeatures
             Rectangle rect = panelCard.ClientRectangle;
             rect.Inflate(-2, -2);
 
-            Color outerStart = r_IsDarkMode ? Color.FromArgb(30, 40, 60) : Color.FromArgb(40, 83, 155);
-            Color outerEnd = r_IsDarkMode ? Color.FromArgb(16, 22, 33) : Color.FromArgb(14, 36, 86);
+            Color outerStart = r_IsDarkMode ? ColorPalette.sr_CardOuterFrameDarkStart : ColorPalette.sr_CardOuterFrameLightStart;
+            Color outerEnd = r_IsDarkMode ? ColorPalette.sr_CardOuterFrameDarkEnd : ColorPalette.sr_CardOuterFrameLightEnd;
 
-            Color innerTop = r_IsDarkMode ? Color.FromArgb(44, 47, 51) : Color.FromArgb(255, 255, 255, 255);
-            Color innerBottom = r_IsDarkMode ? Color.FromArgb(36, 37, 38) : Color.FromArgb(240, 240, 246);
-            Color innerBorder = r_IsDarkMode ? Color.FromArgb(80, 80, 80) : Color.FromArgb(200, 200, 200);
+            Color innerTop = r_IsDarkMode ? ColorPalette.sr_CardInnerBackgroundDarkTop : ColorPalette.sr_CardInnerBackgroundLightTop;
+            Color innerBottom = r_IsDarkMode ? ColorPalette.sr_CardInnerBackgroundDarkBottom : ColorPalette.sr_CardInnerBackgroundLightBottom;
+            Color innerBorder = r_IsDarkMode ? ColorPalette.sr_CardInnerBorderDark : ColorPalette.sr_CardInnerBorderLight;
 
             Color shineStart = r_IsDarkMode ? Color.FromArgb(30, 255, 255, 255) : Color.FromArgb(60, 255, 255, 255);
             Color shineEnd = r_IsDarkMode ? Color.FromArgb(5, 255, 255, 255) : Color.FromArgb(10, 255, 255, 255);
@@ -322,10 +322,10 @@ namespace BasicFacebookFeatures
                 path.CloseFigure();
 
                 using (LinearGradientBrush br = new LinearGradientBrush(
-                          rect,
-                          outerStart,
-                          outerEnd,
-                          LinearGradientMode.Vertical))
+                              rect,
+                              outerStart,
+                              outerEnd,
+                              LinearGradientMode.Vertical))
                 {
                     g.FillPath(br, path);
                 }
@@ -333,10 +333,10 @@ namespace BasicFacebookFeatures
                 Rectangle innerRect = Rectangle.Inflate(rect, -8, -8);
                 using (GraphicsPath innerPath = roundedRect(innerRect, 12))
                 using (LinearGradientBrush br2 = new LinearGradientBrush(
-                          innerRect,
-                          innerTop,
-                          innerBottom,
-                          LinearGradientMode.Vertical))
+                              innerRect,
+                              innerTop,
+                              innerBottom,
+                              LinearGradientMode.Vertical))
                 {
                     g.FillPath(br2, innerPath);
                     using (Pen pen = new Pen(innerBorder))
@@ -346,10 +346,10 @@ namespace BasicFacebookFeatures
                 }
 
                 using (LinearGradientBrush shine = new LinearGradientBrush(
-                          new Rectangle(rect.Left, rect.Top, rect.Width, rect.Height / 3),
-                          shineStart,
-                          shineEnd,
-                          LinearGradientMode.Vertical))
+                              new Rectangle(rect.Left, rect.Top, rect.Width, rect.Height / 3),
+                              shineStart,
+                              shineEnd,
+                              LinearGradientMode.Vertical))
                 {
                     g.FillPath(shine, path);
                 }
