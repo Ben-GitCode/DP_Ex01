@@ -14,44 +14,56 @@ namespace BasicFacebookFeatures
 {
     public partial class FormTimeline : Form
     {
-        private readonly bool r_IsDarkMode;
-        private readonly LoginResult r_LoginResult;
+        private LoginResult m_LoginResult;
+        private UiPalette m_UiPalette;
 
-        public FormTimeline(LoginResult i_LoginResult)
+        public FormTimeline(LoginResult i_LoginResult, UiPalette i_UiPalette)
         {
             InitializeComponent();
-            r_LoginResult = i_LoginResult;
-            Load += FormTimeline_Load;
-            if(listViewTimeline != null)
+            m_LoginResult = i_LoginResult;
+            m_UiPalette = i_UiPalette;
+
+            this.Load += FormTimeline_Load;
+            if (listViewTimeline != null)
             {
                 listViewTimeline.SelectedIndexChanged += ListViewTimeline_SelectedIndexChanged;
                 listViewTimeline.DoubleClick += ListViewTimeline_DoubleClick;
             }
         }
 
-        public FormTimeline(LoginResult i_LoginResult, bool i_IsDarkMode)
-            : this(i_LoginResult)
-        {
-            r_IsDarkMode = i_IsDarkMode;
-        }
-
+        // Backward-compat overloads kept
+        public FormTimeline(LoginResult i_LoginResult) : this(i_LoginResult, null) { }
         public FormTimeline()
         {
             InitializeComponent();
-            Load += FormTimeline_Load;
-            if(listViewTimeline != null)
+            this.Load += FormTimeline_Load;
+            if (listViewTimeline != null)
             {
                 listViewTimeline.SelectedIndexChanged += ListViewTimeline_SelectedIndexChanged;
                 listViewTimeline.DoubleClick += ListViewTimeline_DoubleClick;
             }
         }
 
+        public void SetLoginResult(LoginResult i_LoginResult)
+        {
+            m_LoginResult = i_LoginResult;
+            if (IsHandleCreated && Visible)
+            {
+                populateTimeline();
+            }
+        }
 
-        private void FormTimeline_Load(object i_Sender, EventArgs i_EventArgs)
+        public void SetPalette(UiPalette palette)
+        {
+            m_UiPalette = palette ?? m_UiPalette;
+            applyDarkMode();
+        }
+
+        private void FormTimeline_Load(object sender, EventArgs e)
         {
             applyDarkMode();
             AdjustColumns();
-            if(r_LoginResult != null && r_LoginResult.LoggedInUser != null)
+            if (m_LoginResult != null && m_LoginResult.LoggedInUser != null)
             {
                 populateTimeline();
             }
@@ -59,130 +71,91 @@ namespace BasicFacebookFeatures
 
         private void applyDarkMode()
         {
-            Color formBack = r_IsDarkMode ? Color.FromArgb(24, 25, 26) : SystemColors.Control;
-            Color panelBack = r_IsDarkMode ? Color.FromArgb(36, 37, 38) : SystemColors.Control;
-            Color text = r_IsDarkMode ? Color.White : Color.Black;
-            Color listBack = r_IsDarkMode ? Color.FromArgb(24, 25, 26) : Color.White;
-            Color listFore = text;
-            Color headerBack = r_IsDarkMode ? Color.FromArgb(45, 60, 100) : Color.FromArgb(59, 89, 152);
-            Color back = Color.FromArgb(66, 103, 178);
+            var p = m_UiPalette ?? new UiPalette();
 
-            BackColor = formBack;
+            BackColor = p.FormBack;
 
-            applyHeaderTheme(headerBack, text);
-            applyPanelsTheme(panelBack, text);
-            applyListTheme(listBack, listFore);
-            applyPreviewTheme(panelBack);
-            applyButtonsTheme(back);
-            applyCombosTheme(listBack, listFore);
-        }
-
-        private void applyHeaderTheme(Color i_HeaderBack, Color i_TextColor)
-        {
-            if(topPanel == null)
+            if (topPanel != null)
             {
-                return;
-            }
-
-            topPanel.BackColor = i_HeaderBack;
-
-            foreach(Control control in topPanel.Controls)
-            {
-                if(control is Label || control is LinkLabel)
+                topPanel.BackColor = p.HeaderBack;
+                foreach (Control control in topPanel.Controls)
                 {
-                    control.ForeColor = Color.White;
-                }
-                else
-                {
-                    control.ForeColor = i_TextColor;
+                    if (control is Label || control is LinkLabel)
+                    {
+                        control.ForeColor = Color.White;
+                    }
+                    else
+                    {
+                        control.ForeColor = p.PrimaryText;
+                    }
                 }
             }
-        }
 
-        private void applyPanelsTheme(Color i_PanelBackColor, Color i_TextColor)
-        {
-            if(leftPanel != null)
+            if (leftPanel != null)
             {
-                leftPanel.BackColor = i_PanelBackColor;
-                leftPanel.ForeColor = i_TextColor;
+                leftPanel.BackColor = p.PanelBack;
+                leftPanel.ForeColor = p.PrimaryText;
             }
 
-            if(rightPanel != null)
+            if (rightPanel != null)
             {
-                rightPanel.BackColor = i_PanelBackColor;
-                rightPanel.ForeColor = i_TextColor;
+                rightPanel.BackColor = p.PanelBack;
+                rightPanel.ForeColor = p.PrimaryText;
             }
-        }
 
-        private void applyListTheme(Color i_ListBackColor, Color i_ListForeColor)
-        {
-            if(listViewTimeline != null)
+            if (listViewTimeline != null)
             {
-                listViewTimeline.BackColor = i_ListBackColor;
-                listViewTimeline.ForeColor = i_ListForeColor;
+                listViewTimeline.BackColor = p.ListBack;
+                listViewTimeline.ForeColor = p.ListFore;
             }
-        }
 
-        private void applyPreviewTheme(Color i_PanelBackColor)
-        {
-            if(placeholderLabel != null)
+            if (placeholderLabel != null)
             {
-                placeholderLabel.ForeColor = r_IsDarkMode ? Color.Gainsboro : Color.DimGray;
+                placeholderLabel.ForeColor = p.PlaceholderText;
                 placeholderLabel.BackColor = Color.Transparent;
             }
 
-            if(pictureBoxPreview != null)
+            if (pictureBoxPreview != null)
             {
-                pictureBoxPreview.BackColor = r_IsDarkMode ? Color.Black : SystemColors.ControlDark;
+                pictureBoxPreview.BackColor = p.PreviewImageBack;
             }
 
-            if(webBrowserPreview != null)
+            if (webBrowserPreview != null)
             {
-                webBrowserPreview.BackColor = i_PanelBackColor;
+                webBrowserPreview.BackColor = p.PanelBack;
             }
-        }
 
-        private void applyButtonsTheme(Color i_ButtonBackColor)
-        {
-            if(i_ButtonBackColor != null)
+            if (buttonBack != null)
             {
-                if(buttonBack != null)
+                buttonBack.ForeColor = Color.White;
+                if (buttonBack.BackColor == SystemColors.Control || buttonBack.BackColor.A == 0)
                 {
-                    buttonBack.ForeColor = Color.White;
-                    if(buttonBack.BackColor == SystemColors.Control || buttonBack.BackColor.A == 0)
-                    {
-                        buttonBack.BackColor = i_ButtonBackColor;
-                    }
-
-                    buttonBack.FlatStyle = FlatStyle.Flat;
+                    buttonBack.BackColor = p.ButtonBack;
                 }
-
-                if(buttonRefresh != null)
-                {
-                    buttonRefresh.ForeColor = Color.White;
-                    if(buttonRefresh.BackColor == SystemColors.Control || buttonRefresh.BackColor.A == 0)
-                    {
-                        buttonRefresh.BackColor = i_ButtonBackColor;
-                    }
-
-                    buttonRefresh.FlatStyle = FlatStyle.Flat;
-                }
+                buttonBack.FlatStyle = FlatStyle.Flat;
             }
-        }
 
-        private void applyCombosTheme(Color i_ListBackColor, Color i_ListForeColor)
-        {
-            if(comboBoxContent != null)
+            if (buttonRefresh != null)
             {
-                comboBoxContent.BackColor = i_ListBackColor;
-                comboBoxContent.ForeColor = i_ListForeColor;
+                buttonRefresh.ForeColor = Color.White;
+                if (buttonRefresh.BackColor == SystemColors.Control || buttonRefresh.BackColor.A == 0)
+                {
+                    buttonRefresh.BackColor = p.ButtonBack;
+                }
+                buttonRefresh.FlatStyle = FlatStyle.Flat;
+            }
+
+            if (comboBoxContent != null)
+            {
+                comboBoxContent.BackColor = p.ListBack;
+                comboBoxContent.ForeColor = p.ListFore;
                 comboBoxContent.FlatStyle = FlatStyle.Standard;
             }
 
-            if(comboBoxGranularity != null)
+            if (comboBoxGranularity != null)
             {
-                comboBoxGranularity.BackColor = i_ListBackColor;
-                comboBoxGranularity.ForeColor = i_ListForeColor;
+                comboBoxGranularity.BackColor = p.ListBack;
+                comboBoxGranularity.ForeColor = p.ListFore;
                 comboBoxGranularity.FlatStyle = FlatStyle.Standard;
             }
         }
@@ -203,7 +176,7 @@ namespace BasicFacebookFeatures
                 {
                     listViewTimeline.Items.Clear();
 
-                    User user = r_LoginResult != null ? r_LoginResult.LoggedInUser : null;
+                    User user = m_LoginResult != null ? m_LoginResult.LoggedInUser : null;
                     if(user == null)
                     {
                         return;
@@ -377,8 +350,8 @@ namespace BasicFacebookFeatures
         private bool tryParseBirthday(out DateTime i_Birth)
         {
             i_Birth = DateTime.MinValue;
-            string birthday = r_LoginResult != null && r_LoginResult.LoggedInUser != null
-                                  ? r_LoginResult.LoggedInUser.Birthday
+            string birthday = m_LoginResult != null && m_LoginResult.LoggedInUser != null
+                                  ? m_LoginResult.LoggedInUser.Birthday
                                   : null;
 
             if(string.IsNullOrEmpty(birthday))

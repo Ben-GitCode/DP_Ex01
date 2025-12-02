@@ -1,40 +1,40 @@
 ﻿using System;
-using System.Drawing;
 using System.Linq;
-using System.Reflection;
 using System.Windows.Forms;
 using FacebookWrapper;
 using FacebookWrapper.ObjectModel;
+using System.Drawing;
+using System.Reflection;
 
 namespace BasicFacebookFeatures
 {
     public partial class FormMedia : Form
     {
-        private readonly bool r_IsDarkMode;
         private readonly LoginResult r_LoginResult;
+        private UiPalette m_Palette;
 
         public FormMedia()
         {
             InitializeComponent();
         }
 
-        public FormMedia(LoginResult i_LoginResult, bool i_IsDarkMode)
-            : this()
+        public FormMedia(LoginResult i_LoginResult, UiPalette i_Palette) : this()
         {
             r_LoginResult = i_LoginResult;
-            r_IsDarkMode = i_IsDarkMode;
+            m_Palette = i_Palette;
         }
+
+        // Backward-compat ctor
+        public FormMedia(LoginResult i_LoginResult, bool i_IsDarkMode) : this(i_LoginResult, null) { }
 
         protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
+            applyPalette();
 
-            applyDarkMode();
-
-            if(r_LoginResult == null)
+            if (r_LoginResult == null)
             {
-                MessageBox.Show(
-                    "FormMedia did not receive a LoginResult. Make sure you open it with new FormMedia(r_LoginResult, isDarkMode).");
+                MessageBox.Show("FormMedia did not receive a LoginResult. Make sure you open it with new FormMedia(m_LoginResult, palette).");
                 return;
             }
 
@@ -43,66 +43,45 @@ namespace BasicFacebookFeatures
             loadPhotos();
         }
 
-
-        private void applyDarkMode()
+        public void SetPalette(UiPalette i_Palette)
         {
-            Color formBack = r_IsDarkMode ? Color.FromArgb(24, 25, 26) : Color.FromArgb(235, 236, 237);
-            Color pageBack = r_IsDarkMode ? Color.FromArgb(36, 37, 38) : Color.White;
-            Color text = r_IsDarkMode ? Color.White : Color.Black;
-            Color listBack = r_IsDarkMode ? Color.FromArgb(24, 25, 26) : Color.White;
-            Color listFore = text;
+            m_Palette = i_Palette ?? m_Palette;
+            applyPalette();
+        }
 
-            BackColor = formBack;
+        private void applyPalette()
+        {
+            var p = m_Palette ?? new UiPalette();
 
-            Action<Control> walk = null;
-            walk = i_Control =>
-                {
-                    if(i_Control is TabControl tc)
-                    {
-                        tc.BackColor = formBack;
-                        foreach(TabPage p in tc.TabPages)
-                        {
-                            p.BackColor = pageBack;
-                            walk(p);
-                        }
+            BackColor = p.FormBack;
 
-                        return;
-                    }
+            // Left lists use list colors
+            listBoxAlbums.BackColor = p.ListBack;
+            listBoxAlbums.ForeColor = p.ListFore;
 
-                    if(i_Control is ListBox listBox)
-                    {
-                        listBox.BackColor = listBack;
-                        listBox.ForeColor = listFore;
-                    }
-                    else if(i_Control is LinkLabel linkLabel)
-                    {
-                        linkLabel.LinkColor = text;
-                        linkLabel.ActiveLinkColor = r_IsDarkMode ? Color.DeepSkyBlue : Color.Blue;
-                        linkLabel.VisitedLinkColor = linkLabel.LinkColor;
-                        linkLabel.ForeColor = text;
-                    }
-                    else if(i_Control is Label label)
-                    {
-                        label.ForeColor = text;
-                    }
-                    else if(i_Control is Button button)
-                    {
-                        button.ForeColor = Color.White;
-                        if(button.BackColor == SystemColors.Control || button.BackColor.A == 0)
-                        {
-                            button.BackColor = Color.FromArgb(66, 103, 178);
-                        }
+            listBoxPosts.BackColor = p.ListBack;
+            listBoxPosts.ForeColor = p.ListFore;
 
-                        button.FlatStyle = FlatStyle.Flat;
-                    }
+            listBoxPhotos.BackColor = p.ListBack;
+            listBoxPhotos.ForeColor = p.ListFore;
 
-                    foreach(Control child in i_Control.Controls)
-                    {
-                        walk(child);
-                    }
-                };
+            // Preview areas (pictures)
+            pictureBoxAlbum.BackColor = p.PreviewImageBack;
+            pictureBoxPost.BackColor = p.PreviewImageBack;
+            pictureBoxPhoto.BackColor = p.PreviewImageBack;
 
-            walk(this);
+            // Links and labels
+            linkAlbums.LinkColor = p.PrimaryText;
+            linkPosts.LinkColor = p.PrimaryText;
+            linkPhotos.LinkColor = p.PrimaryText;
+
+            // Back button
+            buttonBack.ForeColor = Color.White;
+            if (buttonBack.BackColor == SystemColors.Control || buttonBack.BackColor.A == 0)
+            {
+                buttonBack.BackColor = p.ButtonBack;
+            }
+            buttonBack.FlatStyle = FlatStyle.Flat;
         }
 
         private void loadAlbums()

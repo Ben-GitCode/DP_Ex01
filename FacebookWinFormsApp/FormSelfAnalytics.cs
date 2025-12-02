@@ -2,40 +2,42 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using FacebookWrapper;
 using FacebookWrapper.ObjectModel;
-
+    
 namespace BasicFacebookFeatures
 {
     public partial class FormSelfAnalytics : Form
     {
-        private readonly bool r_IsDarkMode;
-        private readonly LoginResult r_LoginResult;
+        private LoginResult m_LoginResult;
+        private UiPalette m_Palette;
 
+        public FormSelfAnalytics(LoginResult i_LoginResult, UiPalette i_Palette)
+            : this()
+        {
+            m_LoginResult = i_LoginResult;
+            m_Palette = i_Palette;
+        }
+
+        // Backward-compat overload kept (defaults to light palette)
         public FormSelfAnalytics(LoginResult i_LoginResult)
             : this()
         {
-            r_LoginResult = i_LoginResult;
+            m_LoginResult = i_LoginResult;
+            m_Palette = new UiPalette(); // will be applied in applyDarkMode with default checks
         }
 
-        public FormSelfAnalytics(LoginResult i_LoginResult, bool i_IsDarkMode)
-            : this(i_LoginResult)
+        protected override void OnShown(EventArgs e)
         {
-            r_IsDarkMode = i_IsDarkMode;
-        }
-
-        protected override void OnShown(EventArgs i_EventArgs)
-        {
-            base.OnShown(i_EventArgs);
+            base.OnShown(e);
 
             applyDarkMode();
 
-            if(!isLoggedIn())
+            if (!isLoggedIn())
             {
-                MessageBox.Show("No logged-in user. Open this form with new FormSelfAnalytics(r_LoginResult).");
+                MessageBox.Show("No logged-in user. Open this form with new FormSelfAnalytics(m_LoginResult, palette).");
                 return;
             }
 
@@ -43,84 +45,62 @@ namespace BasicFacebookFeatures
             {
                 populateAnalytics();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("Failed to compute analytics: " + ex.Message);
             }
         }
 
+        public void SetPalette(UiPalette i_Palette)
+        {
+            m_Palette = i_Palette ?? m_Palette;
+            applyDarkMode();
+        }
+
         private bool isLoggedIn()
         {
-            return r_LoginResult != null && r_LoginResult.LoggedInUser != null;
+            return m_LoginResult != null && m_LoginResult.LoggedInUser != null;
         }
 
         private void applyDarkMode()
         {
-            Color formBack = r_IsDarkMode ? Color.FromArgb(24, 25, 26) : SystemColors.Control;
-            Color primaryText = r_IsDarkMode ? Color.White : Color.FromArgb(12, 36, 86);
-            Color secondaryText = r_IsDarkMode ? Color.Gainsboro : Color.FromArgb(34, 34, 34);
-            Color mutedText = r_IsDarkMode ? Color.Silver : Color.FromArgb(90, 90, 110);
-            Color listBack = r_IsDarkMode ? Color.FromArgb(36, 37, 38) : Color.WhiteSmoke;
-            Color listFore = r_IsDarkMode ? Color.White : Color.Black;
+            var p = m_Palette ?? new UiPalette();
 
-            BackColor = formBack;
+            BackColor = p.FormBack;
 
-            if(labelName != null)
+            if (labelName != null) labelName.ForeColor = p.PrimaryText;
+            if (labelSubtitle != null) labelSubtitle.ForeColor = p.MutedText;
+            if (labelBirthday != null) labelBirthday.ForeColor = p.SecondaryText;
+            if (labelGender != null) labelGender.ForeColor = p.SecondaryText;
+            if (labelStats != null) labelStats.ForeColor = p.StatsText;
+
+            if (listBoxFriends != null)
             {
-                labelName.ForeColor = primaryText;
+                listBoxFriends.BackColor = p.ListBack;
+                listBoxFriends.ForeColor = p.ListFore;
             }
 
-            if(labelSubtitle != null)
+            if (pictureBoxProfile != null)
             {
-                labelSubtitle.ForeColor = mutedText;
+                pictureBoxProfile.BackColor = p.ProfileBack;
             }
 
-            if(labelBirthday != null)
-            {
-                labelBirthday.ForeColor = secondaryText;
-            }
-
-            if(labelGender != null)
-            {
-                labelGender.ForeColor = secondaryText;
-            }
-
-            if(labelStats != null)
-            {
-                labelStats.ForeColor = r_IsDarkMode ? Color.Gainsboro : Color.FromArgb(40, 40, 40);
-            }
-
-            if(listBoxFriends != null)
-            {
-                listBoxFriends.BackColor = listBack;
-                listBoxFriends.ForeColor = listFore;
-            }
-
-            if(pictureBoxProfile != null)
-            {
-                pictureBoxProfile.BackColor = r_IsDarkMode ? Color.FromArgb(36, 37, 38) : Color.White;
-            }
-
-            if(buttonBack != null)
+            if (buttonBack != null)
             {
                 buttonBack.ForeColor = Color.White;
-                if(buttonBack.BackColor == SystemColors.Control || buttonBack.BackColor.A == 0)
+                if (buttonBack.BackColor == SystemColors.Control || buttonBack.BackColor.A == 0)
                 {
-                    buttonBack.BackColor = Color.FromArgb(66, 103, 178);
+                    buttonBack.BackColor = p.ButtonBack;
                 }
-
                 buttonBack.FlatStyle = FlatStyle.Flat;
             }
 
-            if(panelCard != null)
-            {
-                panelCard.Invalidate();
-            }
+            panelCard?.Invalidate();
         }
 
         private void populateAnalytics()
         {
-            User user = r_LoginResult.LoggedInUser;
+            User user = m_LoginResult.LoggedInUser;
 
             loadProfilePicture(user);
             setMainLabels(user);
@@ -293,26 +273,18 @@ namespace BasicFacebookFeatures
             return age;
         }
 
-        private void panelCard_Paint(object i_Sender, PaintEventArgs e)
+        private void panelCard_Paint(object sender, PaintEventArgs e)
         {
-            Graphics g = e.Graphics;
+            var p = m_Palette ?? new UiPalette();
+
+            var g = e.Graphics;
             g.SmoothingMode = SmoothingMode.AntiAlias;
 
-            Rectangle rect = panelCard.ClientRectangle;
+            var rect = panelCard.ClientRectangle;
             rect.Inflate(-2, -2);
 
-            Color outerStart = r_IsDarkMode ? Color.FromArgb(30, 40, 60) : Color.FromArgb(40, 83, 155);
-            Color outerEnd = r_IsDarkMode ? Color.FromArgb(16, 22, 33) : Color.FromArgb(14, 36, 86);
-
-            Color innerTop = r_IsDarkMode ? Color.FromArgb(44, 47, 51) : Color.FromArgb(255, 255, 255, 255);
-            Color innerBottom = r_IsDarkMode ? Color.FromArgb(36, 37, 38) : Color.FromArgb(240, 240, 246);
-            Color innerBorder = r_IsDarkMode ? Color.FromArgb(80, 80, 80) : Color.FromArgb(200, 200, 200);
-
-            Color shineStart = r_IsDarkMode ? Color.FromArgb(30, 255, 255, 255) : Color.FromArgb(60, 255, 255, 255);
-            Color shineEnd = r_IsDarkMode ? Color.FromArgb(5, 255, 255, 255) : Color.FromArgb(10, 255, 255, 255);
-
             int radius = 18;
-            using(GraphicsPath path = new GraphicsPath())
+            using (var path = new GraphicsPath())
             {
                 int d = radius * 2;
                 path.AddArc(rect.Left, rect.Top, d, d, 180, 90);
@@ -321,77 +293,45 @@ namespace BasicFacebookFeatures
                 path.AddArc(rect.Left, rect.Bottom - d, d, d, 90, 90);
                 path.CloseFigure();
 
-                using(LinearGradientBrush br = new LinearGradientBrush(
-                          rect,
-                          outerStart,
-                          outerEnd,
-                          LinearGradientMode.Vertical))
+                using (var br = new LinearGradientBrush(rect, p.CardOuterStart, p.CardOuterEnd, LinearGradientMode.Vertical))
                 {
                     g.FillPath(br, path);
                 }
 
-                Rectangle innerRect = Rectangle.Inflate(rect, -8, -8);
-                using(GraphicsPath innerPath = roundedRect(innerRect, 12))
-                using(LinearGradientBrush br2 = new LinearGradientBrush(
-                          innerRect,
-                          innerTop,
-                          innerBottom,
-                          LinearGradientMode.Vertical))
+                var innerRect = Rectangle.Inflate(rect, -8, -8);
+                using (var innerPath = RoundedRect(innerRect, 12))
+                using (var br2 = new LinearGradientBrush(innerRect, p.CardInnerTop, p.CardInnerBottom, LinearGradientMode.Vertical))
                 {
                     g.FillPath(br2, innerPath);
-                    using(Pen pen = new Pen(innerBorder))
+                    using (var pen = new Pen(p.CardInnerBorder))
                     {
                         g.DrawPath(pen, innerPath);
                     }
                 }
 
-                using(LinearGradientBrush shine = new LinearGradientBrush(
-                          new Rectangle(rect.Left, rect.Top, rect.Width, rect.Height / 3),
-                          shineStart,
-                          shineEnd,
-                          LinearGradientMode.Vertical))
+                using (var shine = new LinearGradientBrush(
+                           new Rectangle(rect.Left, rect.Top, rect.Width, rect.Height / 3),
+                           p.CardShineStart, p.CardShineEnd, LinearGradientMode.Vertical))
                 {
                     g.FillPath(shine, path);
                 }
             }
         }
 
-        private GraphicsPath roundedRect(Rectangle i_Rectangle, int i_Radius)
+        private GraphicsPath RoundedRect(Rectangle r, int radius)
         {
-            GraphicsPath gp = new GraphicsPath();
-            int d = i_Radius * 2;
-            gp.AddArc(i_Rectangle.Left, i_Rectangle.Top, d, d, 180, 90);
-            gp.AddArc(i_Rectangle.Right - d, i_Rectangle.Top, d, d, 270, 90);
-            gp.AddArc(i_Rectangle.Right - d, i_Rectangle.Bottom - d, d, d, 0, 90);
-            gp.AddArc(i_Rectangle.Left, i_Rectangle.Bottom - d, d, d, 90, 90);
+            var gp = new GraphicsPath();
+            int d = radius * 2;
+            gp.AddArc(r.Left, r.Top, d, d, 180, 90);
+            gp.AddArc(r.Right - d, r.Top, d, d, 270, 90);
+            gp.AddArc(r.Right - d, r.Bottom - d, d, d, 0, 90);
+            gp.AddArc(r.Left, r.Bottom - d, d, d, 90, 90);
             gp.CloseFigure();
             return gp;
         }
 
         private void buttonBack_Click(object i_Sender, EventArgs i_EventArgs)
         {
-            try
-            {
-                FormMain main = Application.OpenForms.OfType<FormMain>().FirstOrDefault();
-                if(main != null)
-                {
-                    MethodInfo mi = main.GetType().GetMethod(
-                        "navigateToMenu",
-                        BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
-                    if(mi != null)
-                    {
-                        mi.Invoke(main, null);
-                        Close();
-                        return;
-                    }
-
-                    main.Invoke(new Action(() => main.BringToFront()));
-                }
-            }
-            catch
-            {
-            }
-
             Close();
         }
     }
