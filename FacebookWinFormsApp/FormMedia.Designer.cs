@@ -47,18 +47,18 @@ namespace BasicFacebookFeatures
             this.ClientSize = new Size(800, 600);
             this.Name = "FormMedia";
             this.Text = "Media Viewer";
-            this.BackColor = ColorPalette.sr_LightModeFormBackground; // USE PALETTE
+            this.BackColor = ColorPalette.sr_White;
 
             Panel headerPanel = new Panel
             {
                 Dock = DockStyle.Top,
                 Height = 72,
-                BackColor = ColorPalette.sr_LightModeHeaderBackground // USE PALETTE
+                BackColor = ColorPalette.sr_FacebookBlue
             };
             Label headerTitle = new Label
             {
                 Text = "Media",
-                ForeColor = Color.White,
+                ForeColor = ColorPalette.sr_White,
                 Font = new Font("Segoe UI", 14F, FontStyle.Bold),
                 AutoSize = true,
                 Location = new Point(14, 12),
@@ -67,7 +67,7 @@ namespace BasicFacebookFeatures
             Label headerSub = new Label
             {
                 Text = "Albums • Posts • Photos",
-                ForeColor = ColorPalette.sr_LightTextGray, // USE PALETTE
+                ForeColor = ColorPalette.sr_LightGray,
                 Font = new Font("Segoe UI", 9F),
                 AutoSize = true,
                 Location = new Point(16, 50),
@@ -81,9 +81,9 @@ namespace BasicFacebookFeatures
                 Dock = DockStyle.Fill
             };
 
-            tabPageAlbums = new TabPage("Albums") { BackColor = ColorPalette.sr_LightModePanelBackground };
-            Panel albumsLeft = new Panel { Dock = DockStyle.Left, Width = 300, BackColor = Color.White, Padding = new Padding(12), Name = "albumsLeft" };
-            Panel albumsRight = new Panel { Dock = DockStyle.Fill, BackColor = Color.Black, Padding = new Padding(12, 12, 12, 70), Name = "albumsRight" };
+            tabPageAlbums = new TabPage("Albums") { BackColor = ColorPalette.sr_FacebookBlue };
+            Panel albumsLeft = new Panel { Dock = DockStyle.Left, Width = 300, BackColor = ColorPalette.sr_White, Padding = new Padding(12), Name = "albumsLeft" };
+            Panel albumsRight = new Panel { Dock = DockStyle.Fill, BackColor = ColorPalette.sr_DarkBlue, Padding = new Padding(12, 12, 12, 70), Name = "albumsRight" };
 
             linkAlbums = new LinkLabel()
             {
@@ -100,7 +100,8 @@ namespace BasicFacebookFeatures
                 Dock = DockStyle.Fill,
                 BorderStyle = BorderStyle.None,
                 Font = new Font("Segoe UI", 10F),
-                BackColor = Color.White
+                BackColor = ColorPalette.sr_White,
+                ForeColor = ColorPalette.sr_DarkBlue
             };
             listBoxAlbums.SelectedIndexChanged += listBoxAlbums_SelectedIndexChanged;
 
@@ -109,14 +110,14 @@ namespace BasicFacebookFeatures
                 Dock = DockStyle.Fill,
                 BorderStyle = BorderStyle.None,
                 SizeMode = PictureBoxSizeMode.Zoom,
-                BackColor = Color.Black
+                BackColor = ColorPalette.sr_WhitishBlue
             };
 
             Panel albumsBottom = new Panel
             {
                 Dock = DockStyle.Bottom,
                 Height = 58,
-                BackColor = Color.FromArgb(245, 247, 250),
+                BackColor = ColorPalette.sr_WhitishBlue,
                 Padding = new Padding(8, 6, 8, 6),
                 Name = "albumsBottom"
             };
@@ -125,7 +126,7 @@ namespace BasicFacebookFeatures
                 Dock = DockStyle.Top,
                 Height = 30,
                 Font = new Font("Segoe UI", 10F),
-                ForeColor = ColorPalette.sr_DarkText,
+                ForeColor = ColorPalette.sr_Black,
                 AutoEllipsis = true,
                 Text = "",
                 Name = "albumsCaption"
@@ -134,7 +135,7 @@ namespace BasicFacebookFeatures
             {
                 Dock = DockStyle.Fill,
                 Font = new Font("Segoe UI", 8F, FontStyle.Italic),
-                ForeColor = Color.FromArgb(110, 110, 110),
+                ForeColor = ColorPalette.sr_MidGray,
                 AutoEllipsis = true,
                 Text = "",
                 Name = "albumsMeta"
@@ -149,9 +150,9 @@ namespace BasicFacebookFeatures
             tabPageAlbums.Controls.Add(albumsRight);
             tabPageAlbums.Controls.Add(albumsLeft);
 
-            tabPagePosts = new TabPage("Posts") { BackColor = ColorPalette.sr_LightModePanelBackground };
-            Panel postsLeft = new Panel { Dock = DockStyle.Left, Width = 300, BackColor = Color.White, Padding = new Padding(12), Name = "postsLeft" };
-            Panel postsRight = new Panel { Dock = DockStyle.Fill, BackColor = Color.Black, Padding = new Padding(12, 12, 12, 70), Name = "postsRight" };
+            tabPagePosts = new TabPage("Posts") { BackColor = ColorPalette.sr_White };
+            Panel postsLeft = new Panel { Dock = DockStyle.Left, Width = 300, BackColor = ColorPalette.sr_White, Padding = new Padding(12), Name = "postsLeft" };
+            Panel postsRight = new Panel { Dock = DockStyle.Fill, BackColor = ColorPalette.sr_DarkBlue, Padding = new Padding(12, 12, 12, 70), Name = "postsRight" };
 
             linkPosts = new LinkLabel()
             {
@@ -168,7 +169,8 @@ namespace BasicFacebookFeatures
                 Dock = DockStyle.Fill,
                 BorderStyle = BorderStyle.None,
                 Font = new Font("Segoe UI", 10F),
-                BackColor = Color.White
+                BackColor = ColorPalette.sr_White,
+                ForeColor = ColorPalette.sr_DarkBlue
             };
             listBoxPosts.SelectedIndexChanged += listBoxPosts_SelectedIndexChanged;
 
@@ -177,14 +179,14 @@ namespace BasicFacebookFeatures
                 Dock = DockStyle.Fill,
                 BorderStyle = BorderStyle.None,
                 SizeMode = PictureBoxSizeMode.Zoom,
-                BackColor = Color.Black
+                BackColor = ColorPalette.sr_WhitishBlue
             };
 
             Panel postsBottom = new Panel
             {
                 Dock = DockStyle.Bottom,
                 Height = 58,
-                BackColor = Color.FromArgb(245, 247, 250),
+                BackColor = ColorPalette.sr_WhitishBlue,
                 Padding = new Padding(8, 6, 8, 6),
                 Name = "postsBottom"
             };
@@ -193,7 +195,7 @@ namespace BasicFacebookFeatures
                 Dock = DockStyle.Top,
                 Height = 30,
                 Font = new Font("Segoe UI", 10F),
-                ForeColor = ColorPalette.sr_DarkText,
+                ForeColor = ColorPalette.sr_Black,
                 AutoEllipsis = true,
                 Text = "",
                 Name = "postsCaption"
@@ -202,7 +204,7 @@ namespace BasicFacebookFeatures
             {
                 Dock = DockStyle.Fill,
                 Font = new Font("Segoe UI", 8F, FontStyle.Italic),
-                ForeColor = Color.FromArgb(110, 110, 110),
+                ForeColor = ColorPalette.sr_MidGray,
                 AutoEllipsis = true,
                 Text = "",
                 Name = "postsMeta"
@@ -217,9 +219,9 @@ namespace BasicFacebookFeatures
             tabPagePosts.Controls.Add(postsRight);
             tabPagePosts.Controls.Add(postsLeft);
 
-            tabPagePhotos = new TabPage("Photos") { BackColor = ColorPalette.sr_LightModePanelBackground };
-            Panel photosLeft = new Panel { Dock = DockStyle.Left, Width = 300, BackColor = Color.White, Padding = new Padding(12), Name = "photosLeft" };
-            Panel photosRight = new Panel { Dock = DockStyle.Fill, BackColor = Color.Black, Padding = new Padding(12, 12, 12, 70), Name = "photosRight" };
+            tabPagePhotos = new TabPage("Photos") { BackColor = ColorPalette.sr_White };
+            Panel photosLeft = new Panel { Dock = DockStyle.Left, Width = 300, BackColor = ColorPalette.sr_White, Padding = new Padding(12), Name = "photosLeft" };
+            Panel photosRight = new Panel { Dock = DockStyle.Fill, BackColor = ColorPalette.sr_DarkBlue, Padding = new Padding(12, 12, 12, 70), Name = "photosRight" };
 
             linkPhotos = new LinkLabel()
             {
@@ -236,7 +238,8 @@ namespace BasicFacebookFeatures
                 Dock = DockStyle.Fill,
                 BorderStyle = BorderStyle.None,
                 Font = new Font("Segoe UI", 10F),
-                BackColor = Color.White
+                BackColor = ColorPalette.sr_White,
+                ForeColor = ColorPalette.sr_DarkBlue
             };
             listBoxPhotos.SelectedIndexChanged += listBoxPhotos_SelectedIndexChanged;
 
@@ -245,14 +248,14 @@ namespace BasicFacebookFeatures
                 Dock = DockStyle.Fill,
                 BorderStyle = BorderStyle.None,
                 SizeMode = PictureBoxSizeMode.Zoom,
-                BackColor = Color.Black
+                BackColor = ColorPalette.sr_WhitishBlue
             };
 
             Panel photosBottom = new Panel
             {
                 Dock = DockStyle.Bottom,
                 Height = 58,
-                BackColor = Color.FromArgb(245, 247, 250),
+                BackColor = ColorPalette.sr_WhitishBlue,
                 Padding = new Padding(8, 6, 8, 6),
                 Name = "photosBottom"
             };
@@ -261,7 +264,7 @@ namespace BasicFacebookFeatures
                 Dock = DockStyle.Top,
                 Height = 30,
                 Font = new Font("Segoe UI", 10F),
-                ForeColor = ColorPalette.sr_DarkText,
+                ForeColor = ColorPalette.sr_Black,
                 AutoEllipsis = true,
                 Text = "",
                 Name = "photosCaption"
@@ -270,7 +273,7 @@ namespace BasicFacebookFeatures
             {
                 Dock = DockStyle.Fill,
                 Font = new Font("Segoe UI", 8F, FontStyle.Italic),
-                ForeColor = Color.FromArgb(110, 110, 110),
+                ForeColor = ColorPalette.sr_MidGray,
                 AutoEllipsis = true,
                 Text = "",
                 Name = "photosMeta"
@@ -293,7 +296,7 @@ namespace BasicFacebookFeatures
                 Size = new Size(100, 36),
                 Location = new Point(this.ClientSize.Width - 100 - 16, this.ClientSize.Height - 36 - 12),
                 BackColor = ColorPalette.sr_FacebookBlue,
-                ForeColor = Color.White,
+                ForeColor = ColorPalette.sr_White,
                 FlatStyle = FlatStyle.Flat,
                 Anchor = AnchorStyles.Bottom | AnchorStyles.Right
             };

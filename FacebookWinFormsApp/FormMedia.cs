@@ -46,61 +46,75 @@ namespace BasicFacebookFeatures
 
         private void applyDarkMode()
         {
-            Color formBack = r_IsDarkMode ? Color.FromArgb(24, 25, 26) : Color.FromArgb(235, 236, 237);
-            Color pageBack = r_IsDarkMode ? Color.FromArgb(36, 37, 38) : Color.White;
-            Color text = r_IsDarkMode ? Color.White : Color.Black;
-            Color listBack = r_IsDarkMode ? Color.FromArgb(24, 25, 26) : Color.White;
+            Color formBack = r_IsDarkMode ? ColorPalette.sr_Black : ColorPalette.sr_White;
+            Color pageBack = r_IsDarkMode ? ColorPalette.sr_DarkGray : ColorPalette.sr_White;
+            Color text = r_IsDarkMode ? ColorPalette.sr_WhitishBlue : ColorPalette.sr_DarkBlue;
+            Color listBack = r_IsDarkMode ? ColorPalette.sr_DarkGray : ColorPalette.sr_White;
             Color listFore = text;
+            Color buttonBackColor = ColorPalette.sr_FacebookBlue;
 
             BackColor = formBack;
 
             Action<Control> walk = null;
             walk = i_Control =>
+            {
+                if (i_Control is TabControl tc)
                 {
-                    if (i_Control is TabControl tc)
+                    tc.BackColor = formBack;
+                    foreach (TabPage p in tc.TabPages)
                     {
-                        tc.BackColor = formBack;
-                        foreach (TabPage p in tc.TabPages)
-                        {
-                            p.BackColor = pageBack;
-                            walk(p);
-                        }
-
-                        return;
+                        p.BackColor = pageBack;
+                        walk(p);
                     }
 
-                    if (i_Control is ListBox listBox)
-                    {
-                        listBox.BackColor = listBack;
-                        listBox.ForeColor = listFore;
-                    }
-                    else if (i_Control is LinkLabel linkLabel)
-                    {
-                        linkLabel.LinkColor = text;
-                        linkLabel.ActiveLinkColor = r_IsDarkMode ? Color.DeepSkyBlue : Color.Blue;
-                        linkLabel.VisitedLinkColor = linkLabel.LinkColor;
-                        linkLabel.ForeColor = text;
-                    }
-                    else if (i_Control is Label label)
-                    {
-                        label.ForeColor = text;
-                    }
-                    else if (i_Control is Button button)
-                    {
-                        button.ForeColor = Color.White;
-                        if (button.BackColor == SystemColors.Control || button.BackColor.A == 0)
-                        {
-                            button.BackColor = Color.FromArgb(66, 103, 178);
-                        }
+                    return;
+                }
 
-                        button.FlatStyle = FlatStyle.Flat;
+                if (i_Control is ListBox listBox)
+                {
+                    listBox.BackColor = listBack;
+                    listBox.ForeColor = listFore;
+                }
+                else if (i_Control is LinkLabel linkLabel)
+                {
+                    linkLabel.LinkColor = text;
+                    linkLabel.ActiveLinkColor = r_IsDarkMode ? ColorPalette.sr_WhitishBlue : ColorPalette.sr_DarkBlue;
+                    linkLabel.VisitedLinkColor = linkLabel.LinkColor;
+                    linkLabel.ForeColor = text;
+                }
+                else if (i_Control is Label label)
+                {
+                    label.ForeColor = text;
+                }
+                else if (i_Control is Button button)
+                {
+                    button.ForeColor = ColorPalette.sr_White;
+                    if (button.BackColor == SystemColors.Control || button.BackColor.A == 0)
+                    {
+                        button.BackColor = buttonBackColor;
                     }
 
-                    foreach (Control child in i_Control.Controls)
-                    {
-                        walk(child);
-                    }
-                };
+                    button.FlatStyle = FlatStyle.Flat;
+                }
+
+                foreach (Control child in i_Control.Controls)
+                {
+                    walk(child);
+                }
+            };
+
+            // Manually handle controls that weren't fully in the scope of `walk` or had specific overrides
+            Panel headerPanel = Controls.OfType<Panel>().FirstOrDefault(p => p.Height == 72);
+            if (headerPanel != null)
+            {
+                headerPanel.BackColor = ColorPalette.sr_FacebookBlue;
+
+                Label headerSub = headerPanel.Controls.OfType<Label>().FirstOrDefault(l => l.Text.Contains("•"));
+                if (headerSub != null)
+                {
+                    headerSub.ForeColor = ColorPalette.sr_LightGray;
+                }
+            }
 
             walk(this);
         }

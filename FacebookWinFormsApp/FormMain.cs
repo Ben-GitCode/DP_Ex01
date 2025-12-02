@@ -15,7 +15,6 @@ namespace BasicFacebookFeatures
         {
             InitializeComponent();
             FacebookService.s_CollectionLimit = 25;
-            // Apply initial dark mode state (false by default)
             applyDarkMode();
         }
 
@@ -155,7 +154,7 @@ namespace BasicFacebookFeatures
             Show();
 
             if (tabControl1.SelectedTab != null && tabControl1.SelectedTab != tabPageLogin
-                                                && tabControl1.SelectedTab.Name != "Menu")
+                                                 && tabControl1.SelectedTab.Name != "Menu")
             {
                 tabControl1.TabPages.Remove(tabControl1.SelectedTab);
             }
@@ -286,29 +285,32 @@ namespace BasicFacebookFeatures
         {
             m_IsDarkMode = !m_IsDarkMode;
             applyDarkMode();
-
             toggleCircle.Left = m_IsDarkMode ? 26 : 1;
-
-            toggleBackground.BackColor = m_IsDarkMode ? ColorPalette.sr_DarkModeToggleOnBackground : ColorPalette.sr_LightModeToggleOffBackground;
+            // Use same neutral gray for OFF state (no missing constant).
+            toggleBackground.BackColor = m_IsDarkMode ? ColorPalette.sr_LightGray : ColorPalette.sr_LightGray;
         }
 
         private void applyDarkMode()
         {
-            Color formColor = m_IsDarkMode ? ColorPalette.sr_DarkModeFormBackground : Color.White;
-            Color textColor = m_IsDarkMode ? ColorPalette.sr_DarkModeTextColor : ColorPalette.sr_LightModeTextColor;
-            Color listBoxBackColor = m_IsDarkMode ? ColorPalette.sr_DarkModeListBoxBackground : ColorPalette.sr_LightModeListBoxBackground;
-            Color listBoxForeColor = m_IsDarkMode ? ColorPalette.sr_DarkModeTextColor : ColorPalette.sr_LightModeTextColor;
+            // Map old (missing) palette entries to existing ones:
+            // Light panel background -> sr_White
+            // Light text -> sr_DarkBlue
+            // Dark text / accents -> sr_WhitishBlue
+            // Dark list box background -> sr_DarkGray
+            // Light list box background -> sr_WhitishBlue (soft tint for separation)
+            Color formColor = m_IsDarkMode ? ColorPalette.sr_Black : ColorPalette.sr_White;
+            Color textColor = m_IsDarkMode ? ColorPalette.sr_WhitishBlue : ColorPalette.sr_DarkBlue;
+            Color listBoxBackColor = m_IsDarkMode ? ColorPalette.sr_DarkGray : ColorPalette.sr_WhitishBlue;
+            Color listBoxForeColor = m_IsDarkMode ? ColorPalette.sr_WhitishBlue : ColorPalette.sr_DarkBlue;
 
             tabPageLogin.BackColor = formColor;
 
-            // Update main form and bottom panel colors
-            this.BackColor = m_IsDarkMode ? ColorPalette.sr_DarkModeFormBackground : ColorPalette.sr_FacebookBlue;
-            panelBottom.BackColor = m_IsDarkMode ? ColorPalette.sr_DarkModePanelBackground : ColorPalette.sr_FacebookBlue;
+            this.BackColor = m_IsDarkMode ? ColorPalette.sr_Black : ColorPalette.sr_FacebookBlue;
+            panelBottom.BackColor = m_IsDarkMode ? ColorPalette.sr_DarkGray : ColorPalette.sr_FacebookBlue;
             labelDarkMode.ForeColor = textColor;
 
-            // Set toggle colors
-            toggleBackground.BackColor = m_IsDarkMode ? ColorPalette.sr_DarkModeToggleOnBackground : ColorPalette.sr_LightModeToggleOffBackground;
-            toggleCircle.BackColor = ColorPalette.sr_DarkModeToggleCircle;
+            toggleBackground.BackColor = ColorPalette.sr_LightGray;
+            toggleCircle.BackColor = ColorPalette.sr_White;
             toggleCircle.Left = m_IsDarkMode ? 26 : 1;
 
             foreach (TabPage tabPage in tabControl1.TabPages)
@@ -330,8 +332,8 @@ namespace BasicFacebookFeatures
         {
             if (i_Control is Button button)
             {
-                button.BackColor = m_IsDarkMode ? ColorPalette.sr_DarkModeButtonBackground : ColorPalette.sr_FacebookBlue;
-                button.ForeColor = Color.White;
+                button.BackColor = m_IsDarkMode ? ColorPalette.sr_DarkGray : ColorPalette.sr_FacebookBlue;
+                button.ForeColor = ColorPalette.sr_White;
             }
             else if (i_Control is LinkLabel linkLabel)
             {

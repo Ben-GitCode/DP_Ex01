@@ -50,11 +50,11 @@ namespace BasicFacebookFeatures
 
             this.topPanel.Dock = DockStyle.Top;
             this.topPanel.Height = 160;
-            this.topPanel.BackColor = ColorPalette.sr_LightModeHeaderBackground; // USE PALETTE
+            this.topPanel.BackColor = ColorPalette.sr_FacebookBlue;
 
             Panel coverPanel = new Panel()
             {
-                BackColor = ColorPalette.sr_LightModeHeaderBackground, // USE PALETTE
+                BackColor = ColorPalette.sr_FacebookBlue,
                 Location = new Point(0, 0),
                 Size = new Size(800, 110),
                 Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right
@@ -66,7 +66,7 @@ namespace BasicFacebookFeatures
                 Size = new Size(84, 84),
                 SizeMode = PictureBoxSizeMode.Zoom,
                 BorderStyle = BorderStyle.FixedSingle,
-                BackColor = Color.White
+                BackColor = ColorPalette.sr_WhitishBlue // was sr_LightModePanelBackground
             };
 
             Label headerNameLabel = new Label()
@@ -74,7 +74,7 @@ namespace BasicFacebookFeatures
                 Location = new Point(110, 60),
                 AutoSize = true,
                 Font = new Font("Segoe UI", 14F, FontStyle.Bold),
-                ForeColor = Color.White,
+                ForeColor = ColorPalette.sr_White, // primary title over Facebook blue
                 Text = "Your Timeline",
                 BackColor = Color.Transparent
             };
@@ -84,7 +84,7 @@ namespace BasicFacebookFeatures
                 Location = new Point(110, 116),
                 AutoSize = true,
                 Font = new Font("Segoe UI", 9F, FontStyle.Regular),
-                ForeColor = ColorPalette.sr_LightTextGray, // USE PALETTE
+                ForeColor = ColorPalette.sr_LightGray, // was sr_CardInnerBorderLight (neutral supporting text)
                 Text = "Recent posts, photos and activity",
                 BackColor = Color.Transparent
             };
@@ -133,7 +133,7 @@ namespace BasicFacebookFeatures
             this.leftPanel.MinimumSize = new Size(320, 0);
             this.leftPanel.Resize += new EventHandler(this.leftPanel_Resize);
             this.leftPanel.Padding = new Padding(12);
-            this.leftPanel.BackColor = Color.FromArgb(245, 247, 250); // Will be adjusted by DarkMode logic
+            this.leftPanel.BackColor = ColorPalette.sr_White;
 
             this.listViewTimeline.Dock = DockStyle.Fill;
             this.listViewTimeline.View = View.Details;
@@ -141,7 +141,7 @@ namespace BasicFacebookFeatures
             this.listViewTimeline.MultiSelect = false;
             this.listViewTimeline.HeaderStyle = ColumnHeaderStyle.None;
             this.listViewTimeline.BorderStyle = BorderStyle.None;
-            this.listViewTimeline.BackColor = Color.White; // Will be adjusted by DarkMode logic
+            this.listViewTimeline.BackColor = ColorPalette.sr_WhitishBlue; // was sr_LightModePanelBackground
             this.listViewTimeline.Font = new Font("Segoe UI", 10F);
             this.listViewTimeline.Columns.Clear();
             this.listViewTimeline.Columns.Add("Date", 130);
@@ -153,11 +153,11 @@ namespace BasicFacebookFeatures
             this.rightPanel.Dock = DockStyle.Fill;
             this.rightPanel.MinimumSize = new Size(360, 0);
             this.rightPanel.Padding = new Padding(8);
-            this.rightPanel.BackColor = Color.FromArgb(250, 250, 250); // Will be adjusted by DarkMode logic
+            this.rightPanel.BackColor = ColorPalette.sr_White;
 
             this.pictureBoxPreview.Dock = DockStyle.Fill;
             this.pictureBoxPreview.SizeMode = PictureBoxSizeMode.Zoom;
-            this.pictureBoxPreview.BackColor = SystemColors.ControlDark; // Will be adjusted by DarkMode logic
+            this.pictureBoxPreview.BackColor = SystemColors.ControlDark;
             this.pictureBoxPreview.BorderStyle = BorderStyle.FixedSingle;
             this.pictureBoxPreview.Name = "pictureBoxPreview";
             this.pictureBoxPreview.Visible = false;
@@ -173,7 +173,7 @@ namespace BasicFacebookFeatures
             this.placeholderLabel.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
             this.placeholderLabel.Visible = true;
             this.placeholderLabel.BackColor = Color.Transparent;
-            this.placeholderLabel.ForeColor = ColorPalette.sr_PlaceholderText; // USE PALETTE
+            this.placeholderLabel.ForeColor = ColorPalette.sr_MidGray;
 
             this.rightPanel.Controls.Add(this.pictureBoxPreview);
             this.rightPanel.Controls.Add(this.webBrowserPreview);
@@ -184,7 +184,7 @@ namespace BasicFacebookFeatures
             this.buttonBack.Text = "Back";
             this.buttonBack.Size = new Size(100, 36);
             this.buttonBack.Location = new Point(660, 520);
-            this.buttonBack.BackColor = ColorPalette.sr_FacebookBlue; // USE PALETTE
+            this.buttonBack.BackColor = ColorPalette.sr_FacebookBlue;
             this.buttonBack.ForeColor = Color.White;
             this.buttonBack.FlatStyle = FlatStyle.Flat;
             this.buttonBack.Click += new EventHandler(this.buttonBack_Click);
@@ -196,7 +196,7 @@ namespace BasicFacebookFeatures
             this.StartPosition = FormStartPosition.CenterScreen;
             this.Text = "Timeline";
             this.Name = "FormTimeline";
-            this.BackColor = ColorPalette.sr_LightModeFormBackground; // USE PALETTE
+            this.BackColor = ColorPalette.sr_White;
 
             this.Controls.Add(this.rightPanel);
             this.Controls.Add(this.leftPanel);

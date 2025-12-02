@@ -56,15 +56,15 @@ namespace BasicFacebookFeatures
 
         private void applyDarkMode()
         {
-            Color formBack = r_IsDarkMode ? ColorPalette.sr_DarkModeFormBackground : SystemColors.Control;
-            Color panelBack = r_IsDarkMode ? ColorPalette.sr_CardInnerBackgroundDarkBottom : ColorPalette.sr_LightModePanelBackground;
+            Color formBack = r_IsDarkMode ? ColorPalette.sr_Black : SystemColors.Control;
+            Color panelBack = r_IsDarkMode ? ColorPalette.sr_DarkGray : ColorPalette.sr_White;
 
-            Color primaryText = r_IsDarkMode ? ColorPalette.sr_DarkModeTextColor : ColorPalette.sr_CardHeaderColor;
-            Color secondaryText = r_IsDarkMode ? ColorPalette.sr_LightTextGray : ColorPalette.sr_DarkText;
-            Color mutedText = r_IsDarkMode ? Color.Silver : ColorPalette.sr_CardSubtitleColor;
+            Color primaryText = r_IsDarkMode ? ColorPalette.sr_WhitishBlue : ColorPalette.sr_DarkBlue;
+            Color secondaryText = r_IsDarkMode ? ColorPalette.sr_LightGray : ColorPalette.sr_Black;
+            Color mutedText = r_IsDarkMode ? ColorPalette.sr_LightGray : ColorPalette.sr_MidGray;
 
-            Color listBack = r_IsDarkMode ? ColorPalette.sr_DarkModePanelBackground : Color.WhiteSmoke;
-            Color listFore = r_IsDarkMode ? ColorPalette.sr_DarkModeTextColor : Color.Black;
+            Color listBack = r_IsDarkMode ? ColorPalette.sr_DarkGray : ColorPalette.sr_White;
+            Color listFore = r_IsDarkMode ? ColorPalette.sr_WhitishBlue : ColorPalette.sr_DarkBlue;
 
             BackColor = formBack;
 
@@ -90,7 +90,7 @@ namespace BasicFacebookFeatures
 
             if (labelStats != null)
             {
-                labelStats.ForeColor = r_IsDarkMode ? Color.Gainsboro : ColorPalette.sr_DarkText;
+                labelStats.ForeColor = r_IsDarkMode ? ColorPalette.sr_WhitishBlue : ColorPalette.sr_Black;
             }
 
             if (listBoxFriends != null)
@@ -107,7 +107,7 @@ namespace BasicFacebookFeatures
             if (buttonBack != null)
             {
                 buttonBack.ForeColor = Color.White;
-                buttonBack.BackColor = r_IsDarkMode ? ColorPalette.sr_DarkModeButtonBackground : ColorPalette.sr_FacebookBlue;
+                buttonBack.BackColor = r_IsDarkMode ? ColorPalette.sr_DarkBlue : ColorPalette.sr_FacebookBlue;
                 buttonBack.FlatStyle = FlatStyle.Flat;
             }
 
@@ -301,12 +301,12 @@ namespace BasicFacebookFeatures
             Rectangle rect = panelCard.ClientRectangle;
             rect.Inflate(-2, -2);
 
-            Color outerStart = r_IsDarkMode ? ColorPalette.sr_CardOuterFrameDarkStart : ColorPalette.sr_CardOuterFrameLightStart;
-            Color outerEnd = r_IsDarkMode ? ColorPalette.sr_CardOuterFrameDarkEnd : ColorPalette.sr_CardOuterFrameLightEnd;
+            Color outerStart = r_IsDarkMode ? ColorPalette.sr_DarkBlue : ColorPalette.sr_WhitishBlue;
+            Color outerEnd = r_IsDarkMode ? ColorPalette.sr_Black : ColorPalette.sr_DarkBlue;
 
-            Color innerTop = r_IsDarkMode ? ColorPalette.sr_CardInnerBackgroundDarkTop : ColorPalette.sr_CardInnerBackgroundLightTop;
-            Color innerBottom = r_IsDarkMode ? ColorPalette.sr_CardInnerBackgroundDarkBottom : ColorPalette.sr_CardInnerBackgroundLightBottom;
-            Color innerBorder = r_IsDarkMode ? ColorPalette.sr_CardInnerBorderDark : ColorPalette.sr_CardInnerBorderLight;
+            Color innerTop = r_IsDarkMode ? ColorPalette.sr_DarkGray : ColorPalette.sr_White;
+            Color innerBottom = r_IsDarkMode ? ColorPalette.sr_DarkGray : ColorPalette.sr_WhitishBlue;
+            Color innerBorder = r_IsDarkMode ? ColorPalette.sr_LightGray : ColorPalette.sr_MidGray;
 
             Color shineStart = r_IsDarkMode ? Color.FromArgb(30, 255, 255, 255) : Color.FromArgb(60, 255, 255, 255);
             Color shineEnd = r_IsDarkMode ? Color.FromArgb(5, 255, 255, 255) : Color.FromArgb(10, 255, 255, 255);
