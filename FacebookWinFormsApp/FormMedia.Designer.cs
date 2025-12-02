@@ -28,11 +28,6 @@ namespace BasicFacebookFeatures
 
         private Button buttonBack;
 
-        private Label labelPreviewCaption;
-        private Label labelPreviewMeta;
-        private Button buttonPrev;
-        private Button buttonNext;
-
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))

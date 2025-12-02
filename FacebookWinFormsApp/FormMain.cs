@@ -17,7 +17,7 @@ namespace BasicFacebookFeatures
             FacebookService.s_CollectionLimit = 25;
         }
 
-        private void buttonLogin_Click(object sender, EventArgs e)
+        private void buttonLogin_Click(object i_Sender, EventArgs i_EventArgs)
         {
             if(m_LoginResult != null)
             {
@@ -46,7 +46,7 @@ namespace BasicFacebookFeatures
             afterLogin();
         }
 
-        private void buttonConnectAsDesig_Click(object sender, EventArgs e)
+        private void buttonConnectAsDesig_Click(object i_Sender, EventArgs i_EventArgs)
         {
             try
             {
@@ -73,7 +73,7 @@ namespace BasicFacebookFeatures
             pictureBoxProfile.ImageLocation = m_LoginResult.LoggedInUser.PictureNormalURL;
         }
 
-        private void buttonLogout_Click(object sender, EventArgs e)
+        private void buttonLogout_Click(object i_Sender, EventArgs i_EventArgs)
         {
             FacebookService.LogoutWithUI();
             m_LoginResult = null;
@@ -97,7 +97,7 @@ namespace BasicFacebookFeatures
             return true;
         }
 
-        private void navigateToFeature(string featureName)
+        private void navigateToFeature(string i_FeatureName)
         {
             if(m_LoginResult == null)
             {
@@ -107,7 +107,7 @@ namespace BasicFacebookFeatures
 
             Form featureForm = null;
 
-            switch(featureName)
+            switch(i_FeatureName)
             {
                 case "Media":
                     featureForm = new FormMedia(m_LoginResult, m_IsDarkMode);
@@ -161,7 +161,7 @@ namespace BasicFacebookFeatures
             }
         }
 
-        private void linkAlbums_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void linkAlbums_LinkClicked(object i_Sender, LinkLabelLinkClickedEventArgs i_EventArgs)
         {
             if(!checkLogin())
             {
@@ -177,7 +177,7 @@ namespace BasicFacebookFeatures
             }
         }
 
-        private void listBoxAlbums_SelectedIndexChanged(object sender, EventArgs e)
+        private void listBoxAlbums_SelectedIndexChanged(object i_Sender, EventArgs i_EventArgs)
         {
             if(listBoxAlbums.SelectedItem is Album album && album.PictureAlbumURL != null)
             {
@@ -185,7 +185,7 @@ namespace BasicFacebookFeatures
             }
         }
 
-        private void linkPosts_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void linkPosts_LinkClicked(object i_Sender, LinkLabelLinkClickedEventArgs i_EventArgs)
         {
             if(!checkLogin())
             {
@@ -212,7 +212,7 @@ namespace BasicFacebookFeatures
             }
         }
 
-        private void listBoxPosts_SelectedIndexChanged(object sender, EventArgs e)
+        private void listBoxPosts_SelectedIndexChanged(object i_Sender, EventArgs i_EventArgs)
         {
             if(listBoxPosts.SelectedItem is Post post)
             {
@@ -228,7 +228,7 @@ namespace BasicFacebookFeatures
             }
         }
 
-        private void linkPages_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void linkPages_LinkClicked(object i_Sender, LinkLabelLinkClickedEventArgs i_EventArgs)
         {
             if(!checkLogin())
             {
@@ -238,22 +238,22 @@ namespace BasicFacebookFeatures
             listBoxPages.Items.Clear();
             listBoxPages.DisplayMember = "Name";
 
-            foreach(Page p in m_LoginResult.LoggedInUser.LikedPages)
+            foreach(Page page in m_LoginResult.LoggedInUser.LikedPages)
             {
-                listBoxPages.Items.Add(p);
+                listBoxPages.Items.Add(page);
             }
         }
 
-        private void listBoxPages_SelectedIndexChanged(object sender, EventArgs e)
+        private void listBoxPages_SelectedIndexChanged(object i_Sender, EventArgs i_EventArgs)
         {
-            if(listBoxPages.SelectedItem is Page p && !string.IsNullOrEmpty(p.PictureNormalURL))
+            if(listBoxPages.SelectedItem is Page page && !string.IsNullOrEmpty(page.PictureNormalURL))
             {
-                pictureBoxPage.LoadAsync(p.PictureNormalURL);
+                pictureBoxPage.LoadAsync(page.PictureNormalURL);
             }
         }
 
 
-        private void linkPhotos_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void linkPhotos_LinkClicked(object i_Sender, LinkLabelLinkClickedEventArgs i_EventArgs)
         {
             if(!checkLogin())
             {
@@ -269,7 +269,7 @@ namespace BasicFacebookFeatures
             }
         }
 
-        private void listBoxPhotos_SelectedIndexChanged(object sender, EventArgs e)
+        private void listBoxPhotos_SelectedIndexChanged(object i_Sender, EventArgs i_EventArgs)
         {
             if(listBoxPhotos.SelectedItem is Photo photo && !string.IsNullOrEmpty(photo.PictureNormalURL))
             {
@@ -277,7 +277,7 @@ namespace BasicFacebookFeatures
             }
         }
 
-        private void toggleDarkMode_Click(object sender, EventArgs e)
+        private void toggleDarkMode_Click(object i_Sender, EventArgs i_EventArgs)
         {
             m_IsDarkMode = !m_IsDarkMode;
             applyDarkMode();
@@ -307,26 +307,30 @@ namespace BasicFacebookFeatures
             }
         }
 
-        private void applyColor(Control control, Color textColor, Color listBoxBackColor, Color listBoxForeColor)
+        private void applyColor(
+            Control i_Control,
+            Color i_TextColor,
+            Color i_ListBoxBackColor,
+            Color i_ListBoxForeColor)
         {
-            if(control is Button b)
+            if(i_Control is Button button)
             {
-                b.BackColor = m_IsDarkMode ? Color.FromArgb(50, 50, 50) : Color.FromArgb(66, 103, 178);
-                b.ForeColor = Color.White;
+                button.BackColor = m_IsDarkMode ? Color.FromArgb(50, 50, 50) : Color.FromArgb(66, 103, 178);
+                button.ForeColor = Color.White;
             }
-            else if(control is LinkLabel ll)
+            else if(i_Control is LinkLabel linkLabel)
             {
-                ll.LinkColor = textColor;
-                ll.ForeColor = textColor;
+                linkLabel.LinkColor = i_TextColor;
+                linkLabel.ForeColor = i_TextColor;
             }
-            else if(control is ListBox lb)
+            else if(i_Control is ListBox listBox)
             {
-                lb.BackColor = listBoxBackColor;
-                lb.ForeColor = listBoxForeColor;
+                listBox.BackColor = i_ListBoxBackColor;
+                listBox.ForeColor = i_ListBoxForeColor;
             }
             else
             {
-                control.ForeColor = textColor;
+                i_Control.ForeColor = i_TextColor;
             }
         }
     }

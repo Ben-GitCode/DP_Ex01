@@ -14,13 +14,13 @@ namespace BasicFacebookFeatures
 {
     public partial class FormTimeline : Form
     {
-        private bool m_IsDarkMode;
-        private LoginResult m_LoginResult;
+        private readonly bool r_IsDarkMode;
+        private readonly LoginResult r_LoginResult;
 
-        public FormTimeline(LoginResult loginResult)
+        public FormTimeline(LoginResult i_LoginResult)
         {
             InitializeComponent();
-            m_LoginResult = loginResult;
+            r_LoginResult = i_LoginResult;
             Load += FormTimeline_Load;
             if(listViewTimeline != null)
             {
@@ -29,10 +29,10 @@ namespace BasicFacebookFeatures
             }
         }
 
-        public FormTimeline(LoginResult loginResult, bool isDarkMode)
-            : this(loginResult)
+        public FormTimeline(LoginResult i_LoginResult, bool i_IsDarkMode)
+            : this(i_LoginResult)
         {
-            m_IsDarkMode = isDarkMode;
+            r_IsDarkMode = i_IsDarkMode;
         }
 
         public FormTimeline()
@@ -46,26 +46,12 @@ namespace BasicFacebookFeatures
             }
         }
 
-        public void SetLoginResult(LoginResult loginResult)
-        {
-            m_LoginResult = loginResult;
-            if(IsHandleCreated && Visible)
-            {
-                populateTimeline();
-            }
-        }
 
-        public void SetDarkMode(bool isDarkMode)
-        {
-            m_IsDarkMode = isDarkMode;
-            applyDarkMode();
-        }
-
-        private void FormTimeline_Load(object sender, EventArgs e)
+        private void FormTimeline_Load(object i_Sender, EventArgs i_EventArgs)
         {
             applyDarkMode();
             AdjustColumns();
-            if(m_LoginResult != null && m_LoginResult.LoggedInUser != null)
+            if(r_LoginResult != null && r_LoginResult.LoggedInUser != null)
             {
                 populateTimeline();
             }
@@ -73,13 +59,13 @@ namespace BasicFacebookFeatures
 
         private void applyDarkMode()
         {
-            Color formBack = m_IsDarkMode ? Color.FromArgb(24, 25, 26) : SystemColors.Control;
-            Color panelBack = m_IsDarkMode ? Color.FromArgb(36, 37, 38) : SystemColors.Control;
-            Color text = m_IsDarkMode ? Color.White : Color.Black;
-            Color listBack = m_IsDarkMode ? Color.FromArgb(24, 25, 26) : Color.White;
+            Color formBack = r_IsDarkMode ? Color.FromArgb(24, 25, 26) : SystemColors.Control;
+            Color panelBack = r_IsDarkMode ? Color.FromArgb(36, 37, 38) : SystemColors.Control;
+            Color text = r_IsDarkMode ? Color.White : Color.Black;
+            Color listBack = r_IsDarkMode ? Color.FromArgb(24, 25, 26) : Color.White;
             Color listFore = text;
-            Color headerBack = m_IsDarkMode ? Color.FromArgb(45, 60, 100) : Color.FromArgb(59, 89, 152);
-            Color buttonBack = Color.FromArgb(66, 103, 178);
+            Color headerBack = r_IsDarkMode ? Color.FromArgb(45, 60, 100) : Color.FromArgb(59, 89, 152);
+            Color back = Color.FromArgb(66, 103, 178);
 
             BackColor = formBack;
 
@@ -87,88 +73,88 @@ namespace BasicFacebookFeatures
             applyPanelsTheme(panelBack, text);
             applyListTheme(listBack, listFore);
             applyPreviewTheme(panelBack);
-            applyButtonsTheme(buttonBack);
+            applyButtonsTheme(back);
             applyCombosTheme(listBack, listFore);
         }
 
-        private void applyHeaderTheme(Color headerBack, Color text)
+        private void applyHeaderTheme(Color i_HeaderBack, Color i_TextColor)
         {
             if(topPanel == null)
             {
                 return;
             }
 
-            topPanel.BackColor = headerBack;
+            topPanel.BackColor = i_HeaderBack;
 
-            foreach(Control c in topPanel.Controls)
+            foreach(Control control in topPanel.Controls)
             {
-                if(c is Label || c is LinkLabel)
+                if(control is Label || control is LinkLabel)
                 {
-                    c.ForeColor = Color.White;
+                    control.ForeColor = Color.White;
                 }
                 else
                 {
-                    c.ForeColor = text;
+                    control.ForeColor = i_TextColor;
                 }
             }
         }
 
-        private void applyPanelsTheme(Color panelBack, Color text)
+        private void applyPanelsTheme(Color i_PanelBackColor, Color i_TextColor)
         {
             if(leftPanel != null)
             {
-                leftPanel.BackColor = panelBack;
-                leftPanel.ForeColor = text;
+                leftPanel.BackColor = i_PanelBackColor;
+                leftPanel.ForeColor = i_TextColor;
             }
 
             if(rightPanel != null)
             {
-                rightPanel.BackColor = panelBack;
-                rightPanel.ForeColor = text;
+                rightPanel.BackColor = i_PanelBackColor;
+                rightPanel.ForeColor = i_TextColor;
             }
         }
 
-        private void applyListTheme(Color listBack, Color listFore)
+        private void applyListTheme(Color i_ListBackColor, Color i_ListForeColor)
         {
             if(listViewTimeline != null)
             {
-                listViewTimeline.BackColor = listBack;
-                listViewTimeline.ForeColor = listFore;
+                listViewTimeline.BackColor = i_ListBackColor;
+                listViewTimeline.ForeColor = i_ListForeColor;
             }
         }
 
-        private void applyPreviewTheme(Color panelBack)
+        private void applyPreviewTheme(Color i_PanelBackColor)
         {
             if(placeholderLabel != null)
             {
-                placeholderLabel.ForeColor = m_IsDarkMode ? Color.Gainsboro : Color.DimGray;
+                placeholderLabel.ForeColor = r_IsDarkMode ? Color.Gainsboro : Color.DimGray;
                 placeholderLabel.BackColor = Color.Transparent;
             }
 
             if(pictureBoxPreview != null)
             {
-                pictureBoxPreview.BackColor = m_IsDarkMode ? Color.Black : SystemColors.ControlDark;
+                pictureBoxPreview.BackColor = r_IsDarkMode ? Color.Black : SystemColors.ControlDark;
             }
 
             if(webBrowserPreview != null)
             {
-                webBrowserPreview.BackColor = panelBack;
+                webBrowserPreview.BackColor = i_PanelBackColor;
             }
         }
 
-        private void applyButtonsTheme(Color buttonBack)
+        private void applyButtonsTheme(Color i_ButtonBackColor)
         {
-            if(buttonBack != null)
+            if(i_ButtonBackColor != null)
             {
-                if(this.buttonBack != null)
+                if(buttonBack != null)
                 {
-                    this.buttonBack.ForeColor = Color.White;
-                    if(this.buttonBack.BackColor == SystemColors.Control || this.buttonBack.BackColor.A == 0)
+                    buttonBack.ForeColor = Color.White;
+                    if(buttonBack.BackColor == SystemColors.Control || buttonBack.BackColor.A == 0)
                     {
-                        this.buttonBack.BackColor = buttonBack;
+                        buttonBack.BackColor = i_ButtonBackColor;
                     }
 
-                    this.buttonBack.FlatStyle = FlatStyle.Flat;
+                    buttonBack.FlatStyle = FlatStyle.Flat;
                 }
 
                 if(buttonRefresh != null)
@@ -176,7 +162,7 @@ namespace BasicFacebookFeatures
                     buttonRefresh.ForeColor = Color.White;
                     if(buttonRefresh.BackColor == SystemColors.Control || buttonRefresh.BackColor.A == 0)
                     {
-                        buttonRefresh.BackColor = buttonBack;
+                        buttonRefresh.BackColor = i_ButtonBackColor;
                     }
 
                     buttonRefresh.FlatStyle = FlatStyle.Flat;
@@ -184,24 +170,24 @@ namespace BasicFacebookFeatures
             }
         }
 
-        private void applyCombosTheme(Color listBack, Color listFore)
+        private void applyCombosTheme(Color i_ListBackColor, Color i_ListForeColor)
         {
             if(comboBoxContent != null)
             {
-                comboBoxContent.BackColor = listBack;
-                comboBoxContent.ForeColor = listFore;
+                comboBoxContent.BackColor = i_ListBackColor;
+                comboBoxContent.ForeColor = i_ListForeColor;
                 comboBoxContent.FlatStyle = FlatStyle.Standard;
             }
 
             if(comboBoxGranularity != null)
             {
-                comboBoxGranularity.BackColor = listBack;
-                comboBoxGranularity.ForeColor = listFore;
+                comboBoxGranularity.BackColor = i_ListBackColor;
+                comboBoxGranularity.ForeColor = i_ListForeColor;
                 comboBoxGranularity.FlatStyle = FlatStyle.Standard;
             }
         }
 
-        private void buttonRefresh_Click(object sender, EventArgs e)
+        private void buttonRefresh_Click(object i_Sender, EventArgs i_EventArgs)
         {
             populateTimeline();
         }
@@ -217,7 +203,7 @@ namespace BasicFacebookFeatures
                 {
                     listViewTimeline.Items.Clear();
 
-                    User user = m_LoginResult != null ? m_LoginResult.LoggedInUser : null;
+                    User user = r_LoginResult != null ? r_LoginResult.LoggedInUser : null;
                     if(user == null)
                     {
                         return;
@@ -229,7 +215,7 @@ namespace BasicFacebookFeatures
                 });
         }
 
-        private void withListViewUpdate(Action action)
+        private void withListViewUpdate(Action i_Action)
         {
             if(listViewTimeline == null)
             {
@@ -239,7 +225,7 @@ namespace BasicFacebookFeatures
             listViewTimeline.BeginUpdate();
             try
             {
-                action?.Invoke();
+                i_Action?.Invoke();
             }
             finally
             {
@@ -247,19 +233,19 @@ namespace BasicFacebookFeatures
             }
         }
 
-        private List<TimelineItem> getTimelineItems(User user)
+        private List<TimelineItem> getTimelineItems(User i_User)
         {
             List<TimelineItem> items = new List<TimelineItem>();
             string filter = getSelectedFilter();
 
             if(filter == "All" || filter == "Posts")
             {
-                addPosts(user, items);
+                addPosts(i_User, items);
             }
 
             if(filter == "All" || filter == "Photos")
             {
-                addPhotos(user, items);
+                addPhotos(i_User, items);
             }
 
             return items;
@@ -272,16 +258,16 @@ namespace BasicFacebookFeatures
                        : "All";
         }
 
-        private void addPosts(User user, List<TimelineItem> items)
+        private void addPosts(User i_User, List<TimelineItem> i_TimelineItems)
         {
             try
             {
-                foreach(Post post in user.Posts)
+                foreach(Post post in i_User.Posts)
                 {
                     DateTime? created = tryGetCreatedTime(post);
                     if(created.HasValue)
                     {
-                        items.Add(
+                        i_TimelineItems.Add(
                             new TimelineItem
                                 {
                                     Created = created.Value,
@@ -297,22 +283,22 @@ namespace BasicFacebookFeatures
             }
         }
 
-        private void addPhotos(User user, List<TimelineItem> items)
+        private void addPhotos(User i_User, List<TimelineItem> i_TimelineItems)
         {
-            addTaggedPhotos(user, items);
-            addAlbumPhotos(user, items);
+            addTaggedPhotos(i_User, i_TimelineItems);
+            addAlbumPhotos(i_User, i_TimelineItems);
         }
 
-        private void addTaggedPhotos(User user, List<TimelineItem> items)
+        private void addTaggedPhotos(User i_User, List<TimelineItem> i_TimelineItems)
         {
             try
             {
-                foreach(Photo photo in user.PhotosTaggedIn)
+                foreach(Photo photo in i_User.PhotosTaggedIn)
                 {
                     DateTime? created = tryGetCreatedTime(photo);
                     if(created.HasValue)
                     {
-                        items.Add(
+                        i_TimelineItems.Add(
                             new TimelineItem
                                 {
                                     Created = created.Value,
@@ -328,18 +314,18 @@ namespace BasicFacebookFeatures
             }
         }
 
-        private void addAlbumPhotos(User user, List<TimelineItem> items)
+        private void addAlbumPhotos(User i_User, List<TimelineItem> i_TimelineItems)
         {
             try
             {
-                foreach(Album album in user.Albums)
+                foreach(Album album in i_User.Albums)
                 {
                     foreach(Photo photo in album.Photos)
                     {
                         DateTime? created = tryGetCreatedTime(photo);
                         if(created.HasValue)
                         {
-                            items.Add(
+                            i_TimelineItems.Add(
                                 new TimelineItem
                                     {
                                         Created = created.Value,
@@ -356,28 +342,29 @@ namespace BasicFacebookFeatures
             }
         }
 
-        private IEnumerable<TimelineItem> getSortedItems(List<TimelineItem> items)
+        private IEnumerable<TimelineItem> getSortedItems(List<TimelineItem> i_TimelineItems)
         {
             string granularity = getGranularity();
 
             if(granularity.Contains("Year"))
             {
-                return items.OrderByDescending(i => i.Created.Year).ThenByDescending(i => i.Created);
+                return i_TimelineItems.OrderByDescending(i => i.Created.Year).ThenByDescending(i => i.Created);
             }
 
             if(granularity.Contains("Month"))
             {
-                return items.OrderByDescending(i => i.Created.Year).ThenByDescending(i => i.Created.Month)
+                return i_TimelineItems.OrderByDescending(i => i.Created.Year).ThenByDescending(i => i.Created.Month)
                     .ThenByDescending(i => i.Created);
             }
 
             DateTime birth;
             if(granularity.Contains("Age") && tryParseBirthday(out birth))
             {
-                return items.OrderByDescending(i => getAge(i.Created, birth)).ThenByDescending(i => i.Created);
+                return i_TimelineItems.OrderByDescending(i => getAge(i.Created, birth))
+                    .ThenByDescending(i => i.Created);
             }
 
-            return items.OrderByDescending(i => i.Created);
+            return i_TimelineItems.OrderByDescending(i => i.Created);
         }
 
         private string getGranularity()
@@ -387,11 +374,11 @@ namespace BasicFacebookFeatures
                        : "Timeline by date";
         }
 
-        private bool tryParseBirthday(out DateTime birth)
+        private bool tryParseBirthday(out DateTime i_Birth)
         {
-            birth = DateTime.MinValue;
-            string birthday = m_LoginResult != null && m_LoginResult.LoggedInUser != null
-                                  ? m_LoginResult.LoggedInUser.Birthday
+            i_Birth = DateTime.MinValue;
+            string birthday = r_LoginResult != null && r_LoginResult.LoggedInUser != null
+                                  ? r_LoginResult.LoggedInUser.Birthday
                                   : null;
 
             if(string.IsNullOrEmpty(birthday))
@@ -399,13 +386,13 @@ namespace BasicFacebookFeatures
                 return false;
             }
 
-            return DateTime.TryParse(birthday, out birth);
+            return DateTime.TryParse(birthday, out i_Birth);
         }
 
-        private int getAge(DateTime created, DateTime birth)
+        private int getAge(DateTime i_Created, DateTime i_Birth)
         {
-            int age = created.Year - birth.Year;
-            if(created < birth.AddYears(age))
+            int age = i_Created.Year - i_Birth.Year;
+            if(i_Created < i_Birth.AddYears(age))
             {
                 age--;
             }
@@ -413,12 +400,12 @@ namespace BasicFacebookFeatures
             return age;
         }
 
-        private void fillListView(IEnumerable<TimelineItem> items)
+        private void fillListView(IEnumerable<TimelineItem> i_TimelineItems)
         {
             bool hasBirthday = tryParseBirthday(out DateTime birthDate);
             string granularity = getGranularity();
 
-            foreach(TimelineItem item in items)
+            foreach(TimelineItem item in i_TimelineItems)
             {
                 string dateText = formatDateText(item, granularity, hasBirthday, birthDate);
                 string summary = formatSummary(item.Summary);
@@ -427,47 +414,51 @@ namespace BasicFacebookFeatures
             }
         }
 
-        private string formatDateText(TimelineItem item, string granularity, bool hasBirthday, DateTime birthDate)
+        private string formatDateText(
+            TimelineItem i_TimelineItem,
+            string i_Granularity,
+            bool i_HasBirthday,
+            DateTime i_BirthDate)
         {
-            if(granularity.Contains("Year"))
+            if(i_Granularity.Contains("Year"))
             {
-                return item.Created.Year.ToString();
+                return i_TimelineItem.Created.Year.ToString();
             }
 
-            if(granularity.Contains("Month"))
+            if(i_Granularity.Contains("Month"))
             {
-                return item.Created.ToString("MMM yyyy");
+                return i_TimelineItem.Created.ToString("MMM yyyy");
             }
 
-            if(granularity.Contains("Age") && hasBirthday)
+            if(i_Granularity.Contains("Age") && i_HasBirthday)
             {
-                int age = getAge(item.Created, birthDate);
+                int age = getAge(i_TimelineItem.Created, i_BirthDate);
                 return age >= 0 ? age + "y" : "Unknown";
             }
 
-            return item.Created.ToString("g");
+            return i_TimelineItem.Created.ToString("g");
         }
 
-        private string formatSummary(string summary)
+        private string formatSummary(string i_Summary)
         {
-            if(string.IsNullOrEmpty(summary))
+            if(string.IsNullOrEmpty(i_Summary))
             {
                 return string.Empty;
             }
 
-            return summary.Length > 100 ? summary.Substring(0, 100) + "..." : summary;
+            return i_Summary.Length > 100 ? i_Summary.Substring(0, 100) + "..." : i_Summary;
         }
 
-        private void addListViewItem(TimelineItem item, string dateText, string summary)
+        private void addListViewItem(TimelineItem i_TimelineItem, string i_DateText, string i_Summary)
         {
-            ListViewItem listItem = new ListViewItem(dateText);
-            listItem.SubItems.Add(item.Type);
-            listItem.SubItems.Add(summary);
-            listItem.Tag = item.SourceObject;
+            ListViewItem listItem = new ListViewItem(i_DateText);
+            listItem.SubItems.Add(i_TimelineItem.Type);
+            listItem.SubItems.Add(i_Summary);
+            listItem.Tag = i_TimelineItem.SourceObject;
             listViewTimeline.Items.Add(listItem);
         }
 
-        private void ListViewTimeline_DoubleClick(object sender, EventArgs e)
+        private void ListViewTimeline_DoubleClick(object i_Sender, EventArgs i_EventArgs)
         {
             if(listViewTimeline.SelectedItems.Count == 0)
             {
@@ -501,7 +492,7 @@ namespace BasicFacebookFeatures
             MessageBox.Show(selected.SubItems[2].Text);
         }
 
-        private void ListViewTimeline_SelectedIndexChanged(object sender, EventArgs e)
+        private void ListViewTimeline_SelectedIndexChanged(object i_Sender, EventArgs i_EventArgs)
         {
             if(listViewTimeline.SelectedItems.Count == 0)
             {
@@ -526,22 +517,22 @@ namespace BasicFacebookFeatures
             }
         }
 
-        private string getMediaUrl(object item)
+        private string getMediaUrl(object i_Item)
         {
-            if(item == null)
+            if(i_Item == null)
             {
                 return null;
             }
 
             string[] props = { "PictureNormalURL", "FullPicture", "PictureURL", "Picture", "Source", "Image" };
-            Type t = item.GetType();
+            Type t = i_Item.GetType();
 
             foreach(string propName in props)
             {
                 PropertyInfo prop = t.GetProperty(propName);
                 if(prop != null)
                 {
-                    string value = prop.GetValue(item) as string;
+                    string value = prop.GetValue(i_Item) as string;
                     if(!string.IsNullOrEmpty(value))
                     {
                         return value;
@@ -593,25 +584,25 @@ namespace BasicFacebookFeatures
             }
         }
 
-        private void showMedia(string url)
+        private void showMedia(string i_Url)
         {
-            if(string.IsNullOrEmpty(url))
+            if(string.IsNullOrEmpty(i_Url))
             {
                 clearPreview();
                 return;
             }
 
-            if(!isImageUrl(url))
+            if(!isImageUrl(i_Url))
             {
-                showNonImageMedia(url);
+                showNonImageMedia(i_Url);
                 return;
             }
 
             clearPreview();
-            loadImage(url);
+            loadImage(i_Url);
         }
 
-        private void showNonImageMedia(string url)
+        private void showNonImageMedia(string i_Url)
         {
             if(pictureBoxPreview != null)
             {
@@ -625,23 +616,23 @@ namespace BasicFacebookFeatures
 
             if(webBrowserPreview != null)
             {
-                webBrowserPreview.Navigate(url);
+                webBrowserPreview.Navigate(i_Url);
                 webBrowserPreview.Visible = true;
             }
         }
 
-        private void loadImage(string url)
+        private void loadImage(string i_Url)
         {
             try
             {
                 setPreviewVisibilityForImage();
 
-                using(WebClient wc = new WebClient())
+                using(WebClient webClient = new WebClient())
                 {
-                    byte[] data = wc.DownloadData(url);
-                    using(MemoryStream ms = new MemoryStream(data))
+                    byte[] data = webClient.DownloadData(i_Url);
+                    using(MemoryStream memoryStream = new MemoryStream(data))
                     {
-                        Image img = Image.FromStream(ms);
+                        Image img = Image.FromStream(memoryStream);
                         if(pictureBoxPreview != null)
                         {
                             pictureBoxPreview.Image = new Bitmap(img);
@@ -673,43 +664,43 @@ namespace BasicFacebookFeatures
             }
         }
 
-        private bool isImageUrl(string url)
+        private bool isImageUrl(string i_Url)
         {
-            if(string.IsNullOrEmpty(url))
+            if(string.IsNullOrEmpty(i_Url))
             {
                 return false;
             }
 
-            string lower = url.ToLowerInvariant();
+            string lower = i_Url.ToLowerInvariant();
             return lower.EndsWith(".jpg") || lower.EndsWith(".jpeg") || lower.EndsWith(".png") || lower.EndsWith(".gif")
                    || lower.EndsWith(".bmp");
         }
 
-        private DateTime? tryGetCreatedTime(object item)
+        private DateTime? tryGetCreatedTime(object i_Item)
         {
-            if(item == null)
+            if(i_Item == null)
             {
                 return null;
             }
 
             string[] dateProps = { "CreatedTime", "StartTime", "UpdatedTime" };
-            Type t = item.GetType();
+            Type t = i_Item.GetType();
 
             foreach(string propName in dateProps)
             {
                 PropertyInfo prop = t.GetProperty(propName);
                 if(prop != null)
                 {
-                    object value = prop.GetValue(item);
+                    object value = prop.GetValue(i_Item);
                     if(value is DateTime)
                     {
                         return (DateTime)value;
                     }
 
-                    DateTime dt;
-                    if(value is string && DateTime.TryParse((string)value, out dt))
+                    DateTime dateTime;
+                    if(value is string && DateTime.TryParse((string)value, out dateTime))
                     {
-                        return dt;
+                        return dateTime;
                     }
                 }
             }
@@ -717,22 +708,22 @@ namespace BasicFacebookFeatures
             return null;
         }
 
-        private string tryGetSummary(object item)
+        private string tryGetSummary(object i_Item)
         {
-            if(item == null)
+            if(i_Item == null)
             {
                 return "Post";
             }
 
             string[] textProps = { "Message", "Caption", "Name", "Description" };
-            Type t = item.GetType();
+            Type t = i_Item.GetType();
 
             foreach(string propName in textProps)
             {
                 PropertyInfo prop = t.GetProperty(propName);
                 if(prop != null)
                 {
-                    string value = prop.GetValue(item) as string;
+                    string value = prop.GetValue(i_Item) as string;
                     if(!string.IsNullOrEmpty(value))
                     {
                         return value;
@@ -743,20 +734,20 @@ namespace BasicFacebookFeatures
             return "Post";
         }
 
-        private void buttonBack_Click(object sender, EventArgs e)
+        private void buttonBack_Click(object i_Sender, EventArgs i_EventArgs)
         {
             try
             {
                 FormMain main = Application.OpenForms.OfType<FormMain>().FirstOrDefault();
                 if(main != null)
                 {
-                    MethodInfo mi = main.GetType().GetMethod(
+                    MethodInfo methodInfo = main.GetType().GetMethod(
                         "navigateToMenu",
                         BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
 
-                    if(mi != null)
+                    if(methodInfo != null)
                     {
-                        mi.Invoke(main, null);
+                        methodInfo.Invoke(main, null);
                         Close();
                         return;
                     }
