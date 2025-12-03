@@ -256,7 +256,6 @@ namespace BasicFacebookFeatures
             }
         }
 
-
         private void linkPhotos_LinkClicked(object i_Sender, LinkLabelLinkClickedEventArgs i_EventArgs)
         {
             if (!checkLogin())
