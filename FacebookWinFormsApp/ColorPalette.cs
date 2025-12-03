@@ -17,8 +17,5 @@ namespace BasicFacebookFeatures
 
         public static readonly Color sr_DarkBlue = Color.FromArgb(12, 36, 86);
         public static readonly Color sr_MidGray = Color.FromArgb(90, 90, 110);
-
-
-
     }
 }

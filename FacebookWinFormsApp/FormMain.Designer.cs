@@ -64,8 +64,8 @@ namespace BasicFacebookFeatures
                 ItemSize = new Size(120, 25)
             };
 
-            tabPageLogin = new TabPage("Login") { BackColor = Color.White };
-            TabPage tabPageMenu = new TabPage("Menu") { BackColor = Color.White, Name = "Menu" };
+            tabPageLogin = new TabPage("Login") { BackColor = ColorPalette.sr_White };
+            TabPage tabPageMenu = new TabPage("Menu") { BackColor = ColorPalette.sr_White, Name = "Menu" };
 
             tabControl1.TabPages.Add(tabPageLogin);
             tabControl1.TabPages.Add(tabPageMenu);
@@ -81,7 +81,7 @@ namespace BasicFacebookFeatures
             labelDarkMode = new Label()
             {
                 Text = "Dark Mode",
-                ForeColor = Color.White,
+                ForeColor = ColorPalette.sr_White,
                 Location = new Point(20, 20),
                 AutoSize = true
             };
@@ -90,7 +90,7 @@ namespace BasicFacebookFeatures
             {
                 Size = new Size(50, 25),
                 Location = new Point(120, 17),
-                BackColor = ColorPalette.sr_LightGray, // using existing light neutral for toggle OFF
+                BackColor = ColorPalette.sr_LightGray,
                 BorderStyle = BorderStyle.FixedSingle
             };
 
@@ -116,7 +116,7 @@ namespace BasicFacebookFeatures
                 Location = new Point(20, 20),
                 Size = new Size(120, 35),
                 BackColor = ColorPalette.sr_FacebookBlue,
-                ForeColor = Color.White,
+                ForeColor = ColorPalette.sr_White,
                 FlatStyle = FlatStyle.Flat
             };
             buttonLogin.Click += buttonLogin_Click;
@@ -127,7 +127,7 @@ namespace BasicFacebookFeatures
                 Location = new Point(160, 20),
                 Size = new Size(150, 35),
                 BackColor = ColorPalette.sr_FacebookBlue,
-                ForeColor = Color.White,
+                ForeColor = ColorPalette.sr_White,
                 FlatStyle = FlatStyle.Flat
             };
             buttonConnectAsDesig.Click += buttonConnectAsDesig_Click;
@@ -138,7 +138,7 @@ namespace BasicFacebookFeatures
                 Location = new Point(330, 20),
                 Size = new Size(120, 35),
                 BackColor = ColorPalette.sr_FacebookBlue,
-                ForeColor = Color.White,
+                ForeColor = ColorPalette.sr_White,
                 FlatStyle = FlatStyle.Flat,
                 Enabled = false,
                 Visible = false
@@ -166,7 +166,7 @@ namespace BasicFacebookFeatures
                 Location = new Point(20, 120),
                 Size = new Size(200, 50),
                 BackColor = ColorPalette.sr_FacebookBlue,
-                ForeColor = Color.White,
+                ForeColor = ColorPalette.sr_White,
                 FlatStyle = FlatStyle.Flat,
                 Enabled = false,
                 Visible = false
@@ -186,7 +186,7 @@ namespace BasicFacebookFeatures
                 Location = new Point(20, 20),
                 Size = new Size(200, 50),
                 BackColor = ColorPalette.sr_FacebookBlue,
-                ForeColor = Color.White,
+                ForeColor = ColorPalette.sr_White,
                 FlatStyle = FlatStyle.Flat
             };
             buttonMedia.Click += (sender, e) => navigateToFeature("Media");
@@ -197,7 +197,7 @@ namespace BasicFacebookFeatures
                 Location = new Point(20, 90),
                 Size = new Size(200, 50),
                 BackColor = ColorPalette.sr_FacebookBlue,
-                ForeColor = Color.White,
+                ForeColor = ColorPalette.sr_White,
                 FlatStyle = FlatStyle.Flat
             };
             buttonSelfAnalytics.Click += (sender, e) => navigateToFeature("Self Analytics");
@@ -208,7 +208,7 @@ namespace BasicFacebookFeatures
                 Location = new Point(20, 160),
                 Size = new Size(200, 50),
                 BackColor = ColorPalette.sr_FacebookBlue,
-                ForeColor = Color.White,
+                ForeColor = ColorPalette.sr_White,
                 FlatStyle = FlatStyle.Flat
             };
             buttonTimeline.Click += (sender, e) => navigateToFeature("Timeline");
@@ -229,7 +229,7 @@ namespace BasicFacebookFeatures
                 Location = new Point(20, 20),
                 Size = new Size(100, 35),
                 BackColor = ColorPalette.sr_FacebookBlue,
-                ForeColor = Color.White,
+                ForeColor = ColorPalette.sr_White,
                 FlatStyle = FlatStyle.Flat
             };
             buttonBack.Click += (sender, e) => navigateToMenu();
@@ -275,7 +275,7 @@ namespace BasicFacebookFeatures
                 Location = new Point(20, 20),
                 Size = new Size(100, 35),
                 BackColor = ColorPalette.sr_FacebookBlue,
-                ForeColor = Color.White,
+                ForeColor = ColorPalette.sr_White,
                 FlatStyle = FlatStyle.Flat
             };
             buttonBack.Click += (sender, e) => navigateToMenu();
@@ -321,7 +321,7 @@ namespace BasicFacebookFeatures
                 Location = new Point(20, 20),
                 Size = new Size(100, 35),
                 BackColor = ColorPalette.sr_FacebookBlue,
-                ForeColor = Color.White,
+                ForeColor = ColorPalette.sr_White,
                 FlatStyle = FlatStyle.Flat
             };
             buttonBack.Click += (sender, e) => navigateToMenu();
@@ -367,7 +367,7 @@ namespace BasicFacebookFeatures
                 Location = new Point(20, 20),
                 Size = new Size(100, 35),
                 BackColor = ColorPalette.sr_FacebookBlue,
-                ForeColor = Color.White,
+                ForeColor = ColorPalette.sr_White,
                 FlatStyle = FlatStyle.Flat
             };
             buttonBack.Click += (sender, e) => navigateToMenu();

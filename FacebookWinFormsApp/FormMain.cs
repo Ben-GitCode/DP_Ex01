@@ -20,7 +20,7 @@ namespace BasicFacebookFeatures
 
         private void buttonLogin_Click(object i_Sender, EventArgs i_EventArgs)
         {
-            if (m_LoginResult != null)
+            if(m_LoginResult != null)
             {
                 MessageBox.Show("Already logged in.");
                 return;
@@ -38,7 +38,7 @@ namespace BasicFacebookFeatures
                 "user_gender",
                 "user_link");
 
-            if (!string.IsNullOrEmpty(m_LoginResult.ErrorMessage))
+            if(!string.IsNullOrEmpty(m_LoginResult.ErrorMessage))
             {
                 MessageBox.Show("Login failed: " + m_LoginResult.ErrorMessage);
                 return;
@@ -55,7 +55,7 @@ namespace BasicFacebookFeatures
                     "EAAUm6cZC4eUEBPZCFs9rJRpwlUmdHcPvU1tUNkIyP37zRZCjSvfdHaW5t3xsOnUL0bEKHL8Snjk6AZC3O32KWEbaItglEnXWQ2zEMXHqsdfdv0ecXNs3hO69juHrZCfRN9FGvfuJZAXhP4Pm57DRRoDeB8De6ZABnfrRflh6zgPwnavpyHS3ZCYX1E6K1QLTHff5sAZDZD");
                 afterLogin();
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 MessageBox.Show("Connect failed: " + ex.Message);
             }
@@ -92,7 +92,7 @@ namespace BasicFacebookFeatures
 
         private bool checkLogin()
         {
-            if (m_LoginResult == null)
+            if(m_LoginResult == null)
             {
                 MessageBox.Show("You must login first.");
                 return false;
@@ -103,7 +103,7 @@ namespace BasicFacebookFeatures
 
         private void navigateToFeature(string i_FeatureName)
         {
-            if (m_LoginResult == null)
+            if(m_LoginResult == null)
             {
                 MessageBox.Show("Please login first.");
                 return;
@@ -111,7 +111,7 @@ namespace BasicFacebookFeatures
 
             Form featureForm = null;
 
-            switch (i_FeatureName)
+            switch(i_FeatureName)
             {
                 case "Media":
                     featureForm = new FormMedia(m_LoginResult, m_IsDarkMode);
@@ -127,23 +127,23 @@ namespace BasicFacebookFeatures
                     return;
             }
 
-            if (featureForm != null)
+            if(featureForm != null)
             {
                 Hide();
 
                 featureForm.FormClosed += (s, e) =>
-                {
-                    try
                     {
-                        if (!IsDisposed && IsHandleCreated)
+                        try
                         {
-                            BeginInvoke(new Action(() => navigateToMenu()));
+                            if(!IsDisposed && IsHandleCreated)
+                            {
+                                BeginInvoke(new Action(() => navigateToMenu()));
+                            }
                         }
-                    }
-                    catch
-                    {
-                    }
-                };
+                        catch
+                        {
+                        }
+                    };
 
                 featureForm.Show();
             }
@@ -153,13 +153,13 @@ namespace BasicFacebookFeatures
         {
             Show();
 
-            if (tabControl1.SelectedTab != null && tabControl1.SelectedTab != tabPageLogin
-                                                 && tabControl1.SelectedTab.Name != "Menu")
+            if(tabControl1.SelectedTab != null && tabControl1.SelectedTab != tabPageLogin
+                                               && tabControl1.SelectedTab.Name != "Menu")
             {
                 tabControl1.TabPages.Remove(tabControl1.SelectedTab);
             }
 
-            if (tabControl1.TabPages["Menu"] != null)
+            if(tabControl1.TabPages["Menu"] != null)
             {
                 tabControl1.SelectedTab = tabControl1.TabPages["Menu"];
             }
@@ -167,7 +167,7 @@ namespace BasicFacebookFeatures
 
         private void linkAlbums_LinkClicked(object i_Sender, LinkLabelLinkClickedEventArgs i_EventArgs)
         {
-            if (!checkLogin())
+            if(!checkLogin())
             {
                 return;
             }
@@ -175,7 +175,7 @@ namespace BasicFacebookFeatures
             listBoxAlbums.Items.Clear();
             listBoxAlbums.DisplayMember = "Name";
 
-            foreach (Album album in m_LoginResult.LoggedInUser.Albums)
+            foreach(Album album in m_LoginResult.LoggedInUser.Albums)
             {
                 listBoxAlbums.Items.Add(album);
             }
@@ -183,7 +183,7 @@ namespace BasicFacebookFeatures
 
         private void listBoxAlbums_SelectedIndexChanged(object i_Sender, EventArgs i_EventArgs)
         {
-            if (listBoxAlbums.SelectedItem is Album album && album.PictureAlbumURL != null)
+            if(listBoxAlbums.SelectedItem is Album album && album.PictureAlbumURL != null)
             {
                 pictureBoxAlbum.LoadAsync(album.PictureAlbumURL);
             }
@@ -191,7 +191,7 @@ namespace BasicFacebookFeatures
 
         private void linkPosts_LinkClicked(object i_Sender, LinkLabelLinkClickedEventArgs i_EventArgs)
         {
-            if (!checkLogin())
+            if(!checkLogin())
             {
                 return;
             }
@@ -199,13 +199,13 @@ namespace BasicFacebookFeatures
             listBoxPosts.Items.Clear();
             listBoxPosts.DisplayMember = "Message";
 
-            foreach (Post post in m_LoginResult.LoggedInUser.Posts)
+            foreach(Post post in m_LoginResult.LoggedInUser.Posts)
             {
-                if (post.Message != null)
+                if(post.Message != null)
                 {
                     listBoxPosts.Items.Add(post);
                 }
-                else if (post.Caption != null)
+                else if(post.Caption != null)
                 {
                     listBoxPosts.Items.Add(post);
                 }
@@ -218,9 +218,9 @@ namespace BasicFacebookFeatures
 
         private void listBoxPosts_SelectedIndexChanged(object i_Sender, EventArgs i_EventArgs)
         {
-            if (listBoxPosts.SelectedItem is Post post)
+            if(listBoxPosts.SelectedItem is Post post)
             {
-                if (!string.IsNullOrEmpty(post.PictureURL))
+                if(!string.IsNullOrEmpty(post.PictureURL))
                 {
                     pictureBoxPost.LoadAsync(post.PictureURL);
                 }
@@ -234,7 +234,7 @@ namespace BasicFacebookFeatures
 
         private void linkPages_LinkClicked(object i_Sender, LinkLabelLinkClickedEventArgs i_EventArgs)
         {
-            if (!checkLogin())
+            if(!checkLogin())
             {
                 return;
             }
@@ -242,7 +242,7 @@ namespace BasicFacebookFeatures
             listBoxPages.Items.Clear();
             listBoxPages.DisplayMember = "Name";
 
-            foreach (Page page in m_LoginResult.LoggedInUser.LikedPages)
+            foreach(Page page in m_LoginResult.LoggedInUser.LikedPages)
             {
                 listBoxPages.Items.Add(page);
             }
@@ -250,7 +250,7 @@ namespace BasicFacebookFeatures
 
         private void listBoxPages_SelectedIndexChanged(object i_Sender, EventArgs i_EventArgs)
         {
-            if (listBoxPages.SelectedItem is Page page && !string.IsNullOrEmpty(page.PictureNormalURL))
+            if(listBoxPages.SelectedItem is Page page && !string.IsNullOrEmpty(page.PictureNormalURL))
             {
                 pictureBoxPage.LoadAsync(page.PictureNormalURL);
             }
@@ -259,7 +259,7 @@ namespace BasicFacebookFeatures
 
         private void linkPhotos_LinkClicked(object i_Sender, LinkLabelLinkClickedEventArgs i_EventArgs)
         {
-            if (!checkLogin())
+            if(!checkLogin())
             {
                 return;
             }
@@ -267,7 +267,7 @@ namespace BasicFacebookFeatures
             listBoxPhotos.Items.Clear();
             listBoxPhotos.DisplayMember = "Name";
 
-            foreach (Photo photo in m_LoginResult.LoggedInUser.PhotosTaggedIn)
+            foreach(Photo photo in m_LoginResult.LoggedInUser.PhotosTaggedIn)
             {
                 listBoxPhotos.Items.Add(photo);
             }
@@ -275,7 +275,7 @@ namespace BasicFacebookFeatures
 
         private void listBoxPhotos_SelectedIndexChanged(object i_Sender, EventArgs i_EventArgs)
         {
-            if (listBoxPhotos.SelectedItem is Photo photo && !string.IsNullOrEmpty(photo.PictureNormalURL))
+            if(listBoxPhotos.SelectedItem is Photo photo && !string.IsNullOrEmpty(photo.PictureNormalURL))
             {
                 pictureBoxPhoto.LoadAsync(photo.PictureNormalURL);
             }
@@ -286,18 +286,11 @@ namespace BasicFacebookFeatures
             m_IsDarkMode = !m_IsDarkMode;
             applyDarkMode();
             toggleCircle.Left = m_IsDarkMode ? 26 : 1;
-            // Use same neutral gray for OFF state (no missing constant).
             toggleBackground.BackColor = m_IsDarkMode ? ColorPalette.sr_LightGray : ColorPalette.sr_LightGray;
         }
 
         private void applyDarkMode()
         {
-            // Map old (missing) palette entries to existing ones:
-            // Light panel background -> sr_White
-            // Light text -> sr_DarkBlue
-            // Dark text / accents -> sr_WhitishBlue
-            // Dark list box background -> sr_DarkGray
-            // Light list box background -> sr_WhitishBlue (soft tint for separation)
             Color formColor = m_IsDarkMode ? ColorPalette.sr_Black : ColorPalette.sr_White;
             Color textColor = m_IsDarkMode ? ColorPalette.sr_WhitishBlue : ColorPalette.sr_DarkBlue;
             Color listBoxBackColor = m_IsDarkMode ? ColorPalette.sr_DarkGray : ColorPalette.sr_WhitishBlue;
@@ -305,7 +298,7 @@ namespace BasicFacebookFeatures
 
             tabPageLogin.BackColor = formColor;
 
-            this.BackColor = m_IsDarkMode ? ColorPalette.sr_Black : ColorPalette.sr_FacebookBlue;
+            BackColor = m_IsDarkMode ? ColorPalette.sr_Black : ColorPalette.sr_FacebookBlue;
             panelBottom.BackColor = m_IsDarkMode ? ColorPalette.sr_DarkGray : ColorPalette.sr_FacebookBlue;
             labelDarkMode.ForeColor = textColor;
 
@@ -313,11 +306,11 @@ namespace BasicFacebookFeatures
             toggleCircle.BackColor = ColorPalette.sr_White;
             toggleCircle.Left = m_IsDarkMode ? 26 : 1;
 
-            foreach (TabPage tabPage in tabControl1.TabPages)
+            foreach(TabPage tabPage in tabControl1.TabPages)
             {
                 tabPage.BackColor = formColor;
 
-                foreach (Control control in tabPage.Controls)
+                foreach(Control control in tabPage.Controls)
                 {
                     applyColor(control, textColor, listBoxBackColor, listBoxForeColor);
                 }
@@ -330,17 +323,17 @@ namespace BasicFacebookFeatures
             Color i_ListBoxBackColor,
             Color i_ListBoxForeColor)
         {
-            if (i_Control is Button button)
+            if(i_Control is Button button)
             {
                 button.BackColor = m_IsDarkMode ? ColorPalette.sr_DarkGray : ColorPalette.sr_FacebookBlue;
                 button.ForeColor = ColorPalette.sr_White;
             }
-            else if (i_Control is LinkLabel linkLabel)
+            else if(i_Control is LinkLabel linkLabel)
             {
                 linkLabel.LinkColor = i_TextColor;
                 linkLabel.ForeColor = i_TextColor;
             }
-            else if (i_Control is ListBox listBox)
+            else if(i_Control is ListBox listBox)
             {
                 listBox.BackColor = i_ListBoxBackColor;
                 listBox.ForeColor = i_ListBoxForeColor;

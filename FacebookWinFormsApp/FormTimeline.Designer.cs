@@ -66,7 +66,7 @@ namespace BasicFacebookFeatures
                 Size = new Size(84, 84),
                 SizeMode = PictureBoxSizeMode.Zoom,
                 BorderStyle = BorderStyle.FixedSingle,
-                BackColor = ColorPalette.sr_WhitishBlue // was sr_LightModePanelBackground
+                BackColor = ColorPalette.sr_WhitishBlue
             };
 
             Label headerNameLabel = new Label()
@@ -74,7 +74,7 @@ namespace BasicFacebookFeatures
                 Location = new Point(110, 60),
                 AutoSize = true,
                 Font = new Font("Segoe UI", 14F, FontStyle.Bold),
-                ForeColor = ColorPalette.sr_White, // primary title over Facebook blue
+                ForeColor = ColorPalette.sr_White,
                 Text = "Your Timeline",
                 BackColor = Color.Transparent
             };
@@ -84,7 +84,7 @@ namespace BasicFacebookFeatures
                 Location = new Point(110, 116),
                 AutoSize = true,
                 Font = new Font("Segoe UI", 9F, FontStyle.Regular),
-                ForeColor = ColorPalette.sr_LightGray, // was sr_CardInnerBorderLight (neutral supporting text)
+                ForeColor = ColorPalette.sr_LightGray,
                 Text = "Recent posts, photos and activity",
                 BackColor = Color.Transparent
             };
@@ -141,7 +141,7 @@ namespace BasicFacebookFeatures
             this.listViewTimeline.MultiSelect = false;
             this.listViewTimeline.HeaderStyle = ColumnHeaderStyle.None;
             this.listViewTimeline.BorderStyle = BorderStyle.None;
-            this.listViewTimeline.BackColor = ColorPalette.sr_WhitishBlue; // was sr_LightModePanelBackground
+            this.listViewTimeline.BackColor = ColorPalette.sr_WhitishBlue;
             this.listViewTimeline.Font = new Font("Segoe UI", 10F);
             this.listViewTimeline.Columns.Clear();
             this.listViewTimeline.Columns.Add("Date", 130);
@@ -185,7 +185,7 @@ namespace BasicFacebookFeatures
             this.buttonBack.Size = new Size(100, 36);
             this.buttonBack.Location = new Point(660, 520);
             this.buttonBack.BackColor = ColorPalette.sr_FacebookBlue;
-            this.buttonBack.ForeColor = Color.White;
+            this.buttonBack.ForeColor = ColorPalette.sr_White;
             this.buttonBack.FlatStyle = FlatStyle.Flat;
             this.buttonBack.Click += new EventHandler(this.buttonBack_Click);
             this.Controls.Add(this.buttonBack);
