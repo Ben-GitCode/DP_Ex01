@@ -21,12 +21,11 @@ namespace BasicFacebookFeatures
             m_Palette = i_Palette;
         }
 
-        // Backward-compat overload kept (defaults to light palette)
         public FormSelfAnalytics(LoginResult i_LoginResult)
             : this()
         {
             m_LoginResult = i_LoginResult;
-            m_Palette = new UiPalette(); // will be applied in applyDarkMode with default checks
+            m_Palette = new UiPalette();
         }
 
         protected override void OnShown(EventArgs e)

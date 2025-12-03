@@ -24,7 +24,6 @@ namespace BasicFacebookFeatures
             m_Palette = i_Palette;
         }
 
-        // Backward-compat ctor
         public FormMedia(LoginResult i_LoginResult, bool i_IsDarkMode) : this(i_LoginResult, null) { }
 
         protected override void OnShown(EventArgs e)
@@ -55,7 +54,6 @@ namespace BasicFacebookFeatures
 
             BackColor = p.FormBack;
 
-            // Left lists use list colors
             listBoxAlbums.BackColor = p.ListBack;
             listBoxAlbums.ForeColor = p.ListFore;
 
@@ -65,17 +63,14 @@ namespace BasicFacebookFeatures
             listBoxPhotos.BackColor = p.ListBack;
             listBoxPhotos.ForeColor = p.ListFore;
 
-            // Preview areas (pictures)
             pictureBoxAlbum.BackColor = p.PreviewImageBack;
             pictureBoxPost.BackColor = p.PreviewImageBack;
             pictureBoxPhoto.BackColor = p.PreviewImageBack;
 
-            // Links and labels
             linkAlbums.LinkColor = p.PrimaryText;
             linkPosts.LinkColor = p.PrimaryText;
             linkPhotos.LinkColor = p.PrimaryText;
 
-            // Back button
             buttonBack.ForeColor = Color.White;
             if (buttonBack.BackColor == SystemColors.Control || buttonBack.BackColor.A == 0)
             {

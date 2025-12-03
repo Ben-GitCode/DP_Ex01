@@ -31,7 +31,6 @@ namespace BasicFacebookFeatures
             }
         }
 
-        // Backward-compat overloads kept
         public FormTimeline(LoginResult i_LoginResult) : this(i_LoginResult, null) { }
         public FormTimeline()
         {
