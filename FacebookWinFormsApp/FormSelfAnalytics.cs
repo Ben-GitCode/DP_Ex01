@@ -63,7 +63,15 @@ namespace BasicFacebookFeatures
 
         private void applyDarkMode()
         {
-            var p = m_Palette ?? new UiPalette();
+            Color formBack = r_IsDarkMode ? ColorPalette.sr_Black : SystemColors.Control;
+            Color panelBack = r_IsDarkMode ? ColorPalette.sr_DarkGray : ColorPalette.sr_White;
+
+            Color primaryText = r_IsDarkMode ? ColorPalette.sr_WhitishBlue : ColorPalette.sr_DarkBlue;
+            Color secondaryText = r_IsDarkMode ? ColorPalette.sr_LightGray : ColorPalette.sr_Black;
+            Color mutedText = r_IsDarkMode ? ColorPalette.sr_LightGray : ColorPalette.sr_MidGray;
+
+            Color listBack = r_IsDarkMode ? ColorPalette.sr_DarkGray : ColorPalette.sr_White;
+            Color listFore = r_IsDarkMode ? ColorPalette.sr_WhitishBlue : ColorPalette.sr_DarkBlue;
 
             BackColor = p.FormBack;
 
@@ -84,17 +92,39 @@ namespace BasicFacebookFeatures
                 pictureBoxProfile.BackColor = p.ProfileBack;
             }
 
-            if (buttonBack != null)
+            if(labelGender != null)
             {
-                buttonBack.ForeColor = Color.White;
-                if (buttonBack.BackColor == SystemColors.Control || buttonBack.BackColor.A == 0)
-                {
-                    buttonBack.BackColor = p.ButtonBack;
-                }
+                labelGender.ForeColor = secondaryText;
+            }
+
+            if(labelStats != null)
+            {
+                labelStats.ForeColor = r_IsDarkMode ? ColorPalette.sr_WhitishBlue : ColorPalette.sr_Black;
+            }
+
+            if(listBoxFriends != null)
+            {
+                listBoxFriends.BackColor = listBack;
+                listBoxFriends.ForeColor = listFore;
+            }
+
+            if(pictureBoxProfile != null)
+            {
+                pictureBoxProfile.BackColor = panelBack;
+            }
+
+            if(buttonBack != null)
+            {
+                buttonBack.ForeColor = ColorPalette.sr_White;
+                buttonBack.BackColor = r_IsDarkMode ? ColorPalette.sr_DarkBlue : ColorPalette.sr_FacebookBlue;
                 buttonBack.FlatStyle = FlatStyle.Flat;
             }
 
-            panelCard?.Invalidate();
+            if(panelCard != null)
+            {
+                panelCard.BackColor = panelBack;
+                panelCard.Invalidate();
+            }
         }
 
         private void populateAnalytics()
@@ -198,8 +228,8 @@ namespace BasicFacebookFeatures
             DateTime? earliestPostDate = null;
             try
             {
-                earliestPostDate = i_User.Posts?.Where(p => p != null && p.CreatedTime.HasValue)
-                    .Select(p => p.CreatedTime).OrderBy(d => d.Value).FirstOrDefault();
+                earliestPostDate = i_User.Posts?.Where(i_Post => i_Post != null && i_Post.CreatedTime.HasValue)
+                    .Select(i_Post => i_Post.CreatedTime).OrderBy(d => d.Value).FirstOrDefault();
             }
             catch
             {
@@ -211,14 +241,15 @@ namespace BasicFacebookFeatures
 
         private string[] getPostsByDecade(User i_User, DateTime i_Birthday)
         {
-            return i_User.Posts.Where(p => p != null && p.CreatedTime.HasValue).Select(p =>
-                {
-                    DateTime created = p.CreatedTime.Value;
-                    int ageAtPost = calculateAge(i_Birthday, created);
-                    int decadeFloor = ageAtPost / 10 * 10;
-                    string decadeLabel = decadeFloor < 0 ? "Unknown" : $"{decadeFloor}s";
-                    return decadeLabel;
-                }).GroupBy(d => d).OrderBy(g => g.Key).Select(g => $"{g.Key}: {g.Count()}").ToArray();
+            return i_User.Posts.Where(i_Post => i_Post != null && i_Post.CreatedTime.HasValue).Select(p =>
+                    {
+                        DateTime created = p.CreatedTime.Value;
+                        int ageAtPost = calculateAge(i_Birthday, created);
+                        int decadeFloor = ageAtPost / 10 * 10;
+                        string decadeLabel = decadeFloor < 0 ? "Unknown" : $"{decadeFloor}s";
+                        return decadeLabel;
+                    }).GroupBy(d => d).OrderBy(i_Grouping => i_Grouping.Key)
+                .Select(i_Grouping => $"{i_Grouping.Key}: {i_Grouping.Count()}").ToArray();
         }
 
         private void fillFriendsList(User i_User)
@@ -227,8 +258,8 @@ namespace BasicFacebookFeatures
             listBoxFriends.Items.Clear();
             try
             {
-                string[] friendNames = i_User.Friends?.Where(f => f != null).Select(f => f.Name)
-                    .Where(n => !string.IsNullOrEmpty(n)).OrderBy(n => n).Take(12).ToArray();
+                string[] friendNames = i_User.Friends?.Where(i_User1 => i_User1 != null).Select(i_User1 => i_User1.Name)
+                    .Where(i_Value => !string.IsNullOrEmpty(i_Value)).OrderBy(n => n).Take(12).ToArray();
 
                 if(friendNames == null)
                 {
@@ -240,9 +271,9 @@ namespace BasicFacebookFeatures
                 }
                 else
                 {
-                    foreach(string fn in friendNames)
+                    foreach(string item in friendNames)
                     {
-                        listBoxFriends.Items.Add(fn);
+                        listBoxFriends.Items.Add(item);
                     }
 
                     if((i_User.Friends?.Count() ?? 0) > friendNames.Length)
@@ -281,6 +312,16 @@ namespace BasicFacebookFeatures
 
             var rect = panelCard.ClientRectangle;
             rect.Inflate(-2, -2);
+
+            Color outerStart = r_IsDarkMode ? ColorPalette.sr_DarkBlue : ColorPalette.sr_WhitishBlue;
+            Color outerEnd = r_IsDarkMode ? ColorPalette.sr_Black : ColorPalette.sr_DarkBlue;
+
+            Color innerTop = r_IsDarkMode ? ColorPalette.sr_DarkGray : ColorPalette.sr_White;
+            Color innerBottom = r_IsDarkMode ? ColorPalette.sr_DarkGray : ColorPalette.sr_WhitishBlue;
+            Color innerBorder = r_IsDarkMode ? ColorPalette.sr_LightGray : ColorPalette.sr_MidGray;
+
+            Color shineStart = r_IsDarkMode ? Color.FromArgb(30, 255, 255, 255) : Color.FromArgb(60, 255, 255, 255);
+            Color shineEnd = r_IsDarkMode ? Color.FromArgb(5, 255, 255, 255) : Color.FromArgb(10, 255, 255, 255);
 
             int radius = 18;
             using (var path = new GraphicsPath())

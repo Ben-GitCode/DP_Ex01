@@ -50,7 +50,12 @@ namespace BasicFacebookFeatures
 
         private void applyPalette()
         {
-            var p = m_Palette ?? new UiPalette();
+            Color formBack = r_IsDarkMode ? ColorPalette.sr_Black : ColorPalette.sr_White;
+            Color pageBack = r_IsDarkMode ? ColorPalette.sr_DarkGray : ColorPalette.sr_White;
+            Color text = r_IsDarkMode ? ColorPalette.sr_WhitishBlue : ColorPalette.sr_DarkBlue;
+            Color listBack = r_IsDarkMode ? ColorPalette.sr_DarkGray : ColorPalette.sr_White;
+            Color listFore = text;
+            Color buttonBackColor = ColorPalette.sr_FacebookBlue;
 
             BackColor = p.FormBack;
 
@@ -60,8 +65,30 @@ namespace BasicFacebookFeatures
             listBoxPosts.BackColor = p.ListBack;
             listBoxPosts.ForeColor = p.ListFore;
 
-            listBoxPhotos.BackColor = p.ListBack;
-            listBoxPhotos.ForeColor = p.ListFore;
+                    if(i_Control is ListBox listBox)
+                    {
+                        listBox.BackColor = listBack;
+                        listBox.ForeColor = listFore;
+                    }
+                    else if(i_Control is LinkLabel linkLabel)
+                    {
+                        linkLabel.LinkColor = text;
+                        linkLabel.ActiveLinkColor =
+                            r_IsDarkMode ? ColorPalette.sr_WhitishBlue : ColorPalette.sr_DarkBlue;
+                        linkLabel.VisitedLinkColor = linkLabel.LinkColor;
+                        linkLabel.ForeColor = text;
+                    }
+                    else if(i_Control is Label label)
+                    {
+                        label.ForeColor = text;
+                    }
+                    else if(i_Control is Button button)
+                    {
+                        button.ForeColor = ColorPalette.sr_White;
+                        if(button.BackColor == SystemColors.Control || button.BackColor.A == 0)
+                        {
+                            button.BackColor = buttonBackColor;
+                        }
 
             pictureBoxAlbum.BackColor = p.PreviewImageBack;
             pictureBoxPost.BackColor = p.PreviewImageBack;
@@ -71,12 +98,19 @@ namespace BasicFacebookFeatures
             linkPosts.LinkColor = p.PrimaryText;
             linkPhotos.LinkColor = p.PrimaryText;
 
-            buttonBack.ForeColor = Color.White;
-            if (buttonBack.BackColor == SystemColors.Control || buttonBack.BackColor.A == 0)
+            Panel headerPanel = Controls.OfType<Panel>().FirstOrDefault(p => p.Height == 72);
+            if(headerPanel != null)
             {
-                buttonBack.BackColor = p.ButtonBack;
+                headerPanel.BackColor = ColorPalette.sr_FacebookBlue;
+
+                Label headerSub = headerPanel.Controls.OfType<Label>().FirstOrDefault(l => l.Text.Contains("•"));
+                if(headerSub != null)
+                {
+                    headerSub.ForeColor = ColorPalette.sr_LightGray;
+                }
             }
-            buttonBack.FlatStyle = FlatStyle.Flat;
+
+            walk(this);
         }
 
         private void loadAlbums()

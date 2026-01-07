@@ -102,7 +102,7 @@ namespace BasicFacebookFeatures
                 Size = pictureBoxProfileSize,
                 SizeMode = PictureBoxSizeMode.Zoom,
                 BorderStyle = BorderStyle.None,
-                BackColor = Color.White
+                BackColor = ColorPalette.sr_White
             };
 
             labelName = new Label()
@@ -110,7 +110,7 @@ namespace BasicFacebookFeatures
                 Location = labelNameLocation,
                 Size = labelNameSize,
                 Font = new Font("Segoe UI Semibold", labelNameFontSize, FontStyle.Bold),
-                ForeColor = Color.FromArgb(12, 36, 86),
+                ForeColor = ColorPalette.sr_DarkBlue,
                 Text = "(name)",
                 AutoEllipsis = true,
                 BackColor = Color.Transparent
@@ -121,7 +121,7 @@ namespace BasicFacebookFeatures
                 Location = labelSubtitleLocation,
                 Size = labelSubtitleSize,
                 Font = new Font("Segoe UI", labelSubtitleFontSize, FontStyle.Italic),
-                ForeColor = Color.FromArgb(90, 90, 110),
+                ForeColor = ColorPalette.sr_MidGray,
                 Text = "Personal ID Card",
                 BackColor = Color.Transparent
             };
@@ -151,7 +151,7 @@ namespace BasicFacebookFeatures
                 Location = labelStatsLocation,
                 Size = labelStatsSize,
                 Font = new Font("Consolas", labelStatsFontSize),
-                ForeColor = Color.FromArgb(40, 40, 40),
+                ForeColor = ColorPalette.sr_DarkGray,
                 Text = "",
                 AutoSize = false,
                 BackColor = Color.Transparent
@@ -162,7 +162,7 @@ namespace BasicFacebookFeatures
                 Location = listBoxFriendsLocation,
                 Size = listBoxFriendsSize,
                 Font = new Font("Segoe UI", listBoxFriendsFontSize),
-                BackColor = Color.WhiteSmoke
+                BackColor = ColorPalette.sr_White
             };
 
             buttonBack = new Button()
@@ -170,8 +170,8 @@ namespace BasicFacebookFeatures
                 Text = "Back",
                 Size = buttonBackSize,
                 Location = buttonBackLocation,
-                BackColor = Color.FromArgb(66, 103, 178),
-                ForeColor = Color.White,
+                BackColor = ColorPalette.sr_FacebookBlue,
+                ForeColor = ColorPalette.sr_White,
                 FlatStyle = FlatStyle.Flat
             };
             buttonBack.Click += buttonBack_Click;

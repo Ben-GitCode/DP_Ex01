@@ -54,8 +54,22 @@ namespace BasicFacebookFeatures
 
         public void SetPalette(UiPalette palette)
         {
-            m_UiPalette = palette ?? m_UiPalette;
-            applyDarkMode();
+            Color formBack = r_IsDarkMode ? ColorPalette.sr_Black : ColorPalette.sr_White;
+            Color panelBack = r_IsDarkMode ? ColorPalette.sr_DarkGray : ColorPalette.sr_White;
+            Color text = r_IsDarkMode ? ColorPalette.sr_WhitishBlue : ColorPalette.sr_DarkBlue;
+            Color listBack = r_IsDarkMode ? ColorPalette.sr_DarkGray : ColorPalette.sr_White;
+            Color listFore = text;
+            Color headerBack = r_IsDarkMode ? ColorPalette.sr_DarkBlue : ColorPalette.sr_WhitishBlue;
+            Color buttonBackColor = ColorPalette.sr_FacebookBlue;
+
+            BackColor = formBack;
+
+            applyHeaderTheme(headerBack, text);
+            applyPanelsTheme(panelBack, text);
+            applyListTheme(listBack, listFore);
+            applyPreviewTheme(panelBack);
+            applyButtonsTheme(buttonBackColor);
+            applyCombosTheme(listBack, listFore);
         }
 
         private void FormTimeline_Load(object sender, EventArgs e)
@@ -72,20 +86,38 @@ namespace BasicFacebookFeatures
         {
             var p = m_UiPalette ?? new UiPalette();
 
-            BackColor = p.FormBack;
-
-            if (topPanel != null)
+            foreach(Control control in topPanel.Controls.OfType<Panel>())
             {
-                topPanel.BackColor = p.HeaderBack;
-                foreach (Control control in topPanel.Controls)
+                control.BackColor = i_HeaderBack;
+
+                foreach(Control subControl in control.Controls)
                 {
-                    if (control is Label || control is LinkLabel)
+                    if(subControl is Label || subControl is LinkLabel)
                     {
-                        control.ForeColor = Color.White;
+                        if(subControl.Text.Contains("Timeline"))
+                        {
+                            subControl.ForeColor = ColorPalette.sr_White;
+                        }
+                        else if(subControl.Text.Contains("Recent"))
+                        {
+                            subControl.ForeColor = ColorPalette.sr_MidGray;
+                        }
+                        else
+                        {
+                            subControl.ForeColor = i_TextColor;
+                        }
                     }
-                    else
+                }
+            }
+
+            Control filtersPanel = topPanel.Controls.OfType<Panel>().FirstOrDefault(p => p.Location.Y == 132);
+            if(filtersPanel != null)
+            {
+                foreach(Control control in filtersPanel.Controls)
+                {
+                    if(control is Label || control is LinkLabel)
                     {
-                        control.ForeColor = p.PrimaryText;
+                        control.ForeColor = i_TextColor;
                     }
                 }
             }
@@ -110,13 +142,13 @@ namespace BasicFacebookFeatures
 
             if (placeholderLabel != null)
             {
-                placeholderLabel.ForeColor = p.PlaceholderText;
+                placeholderLabel.ForeColor = r_IsDarkMode ? ColorPalette.sr_MidGray : ColorPalette.sr_MidGray;
                 placeholderLabel.BackColor = Color.Transparent;
             }
 
             if (pictureBoxPreview != null)
             {
-                pictureBoxPreview.BackColor = p.PreviewImageBack;
+                pictureBoxPreview.BackColor = r_IsDarkMode ? ColorPalette.sr_DarkGray : SystemColors.ControlDark;
             }
 
             if (webBrowserPreview != null)
@@ -124,23 +156,19 @@ namespace BasicFacebookFeatures
                 webBrowserPreview.BackColor = p.PanelBack;
             }
 
-            if (buttonBack != null)
+        private void applyButtonsTheme(Color i_ButtonBackColor)
+        {
+            if(buttonBack != null)
             {
-                buttonBack.ForeColor = Color.White;
-                if (buttonBack.BackColor == SystemColors.Control || buttonBack.BackColor.A == 0)
-                {
-                    buttonBack.BackColor = p.ButtonBack;
-                }
+                buttonBack.ForeColor = ColorPalette.sr_White;
+                buttonBack.BackColor = r_IsDarkMode ? ColorPalette.sr_DarkBlue : i_ButtonBackColor;
                 buttonBack.FlatStyle = FlatStyle.Flat;
             }
 
-            if (buttonRefresh != null)
+            if(buttonRefresh != null)
             {
-                buttonRefresh.ForeColor = Color.White;
-                if (buttonRefresh.BackColor == SystemColors.Control || buttonRefresh.BackColor.A == 0)
-                {
-                    buttonRefresh.BackColor = p.ButtonBack;
-                }
+                buttonRefresh.ForeColor = ColorPalette.sr_White;
+                buttonRefresh.BackColor = r_IsDarkMode ? ColorPalette.sr_DarkBlue : i_ButtonBackColor;
                 buttonRefresh.FlatStyle = FlatStyle.Flat;
             }
 

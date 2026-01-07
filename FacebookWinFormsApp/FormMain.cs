@@ -17,7 +17,7 @@ namespace BasicFacebookFeatures
         {
             InitializeComponent();
             FacebookService.s_CollectionLimit = 25;
-            m_Palette = buildPalette(m_IsDarkMode);
+            applyDarkMode();
         }
 
         private void buttonLogin_Click(object i_Sender, EventArgs i_EventArgs)
@@ -85,6 +85,9 @@ namespace BasicFacebookFeatures
             buttonConnectAsDesig.Enabled = true;
             buttonLogin.Text = "Login";
             buttonLogout.Enabled = false;
+            buttonLogout.Visible = false;
+            buttonGoToMenu.Enabled = false;
+            buttonGoToMenu.Visible = false;
 
             pictureBoxProfile.Image = null;
         }
@@ -281,25 +284,29 @@ namespace BasicFacebookFeatures
         private void toggleDarkMode_Click(object i_Sender, EventArgs i_EventArgs)
         {
             m_IsDarkMode = !m_IsDarkMode;
-
-            m_Palette = buildPalette(m_IsDarkMode);
-                    applyDarkMode();
-
+            applyDarkMode();
             toggleCircle.Left = m_IsDarkMode ? 26 : 1;
-            toggleBackground.BackColor = m_IsDarkMode ? Color.DarkGray : Color.LightGray;
-
-            foreach (Form f in Application.OpenForms)
-            {
-                if (f is FormSelfAnalytics fsa) { fsa.SetPalette(m_Palette); }
-                if (f is FormTimeline ftl) { ftl.SetPalette(m_Palette); }
-                if (f is FormMedia fm) { fm.SetPalette(m_Palette); }
-            }
+            toggleBackground.BackColor = m_IsDarkMode ? ColorPalette.sr_LightGray : ColorPalette.sr_LightGray;
         }
 
         private UiPalette buildPalette(bool i_IsDark)
         {
-            UiPalette palette = new UiPalette();
-            if (i_IsDark)
+            Color formColor = m_IsDarkMode ? ColorPalette.sr_Black : ColorPalette.sr_White;
+            Color textColor = m_IsDarkMode ? ColorPalette.sr_WhitishBlue : ColorPalette.sr_DarkBlue;
+            Color listBoxBackColor = m_IsDarkMode ? ColorPalette.sr_DarkGray : ColorPalette.sr_WhitishBlue;
+            Color listBoxForeColor = m_IsDarkMode ? ColorPalette.sr_WhitishBlue : ColorPalette.sr_DarkBlue;
+
+            tabPageLogin.BackColor = formColor;
+
+            BackColor = m_IsDarkMode ? ColorPalette.sr_Black : ColorPalette.sr_FacebookBlue;
+            panelBottom.BackColor = m_IsDarkMode ? ColorPalette.sr_DarkGray : ColorPalette.sr_FacebookBlue;
+            labelDarkMode.ForeColor = textColor;
+
+            toggleBackground.BackColor = ColorPalette.sr_LightGray;
+            toggleCircle.BackColor = ColorPalette.sr_White;
+            toggleCircle.Left = m_IsDarkMode ? 26 : 1;
+
+            foreach(TabPage tabPage in tabControl1.TabPages)
             {
                 palette= new UiPalette
                 {
@@ -362,12 +369,12 @@ namespace BasicFacebookFeatures
 
         private void applyDarkMode()
         {
-            BackColor = m_Palette.FormBack;
-            ForeColor = m_Palette.PrimaryText;
-
-            applyPaletteToControls(Controls);
-
-            if(toggleBackground != null)
+            if(i_Control is Button button)
+            {
+                button.BackColor = m_IsDarkMode ? ColorPalette.sr_DarkGray : ColorPalette.sr_FacebookBlue;
+                button.ForeColor = ColorPalette.sr_White;
+            }
+            else if(i_Control is LinkLabel linkLabel)
             {
                 toggleBackground.BackColor = m_IsDarkMode ? Color.DarkGray : Color.LightGray;
             }
