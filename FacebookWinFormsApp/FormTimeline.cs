@@ -14,50 +14,45 @@ namespace BasicFacebookFeatures
 {
     public partial class FormTimeline : Form
     {
-        private readonly bool r_IsDarkMode;
-        private readonly LoginResult r_LoginResult;
+        private LoginResult m_LoginResult;
+        private UiPalette m_UiPalette;
 
-        public FormTimeline(LoginResult i_LoginResult)
+        public FormTimeline(LoginResult i_LoginResult, UiPalette i_UiPalette)
         {
             InitializeComponent();
-            r_LoginResult = i_LoginResult;
-            Load += FormTimeline_Load;
-            if(listViewTimeline != null)
+            m_LoginResult = i_LoginResult;
+            m_UiPalette = i_UiPalette;
+
+            this.Load += FormTimeline_Load;
+            if (listViewTimeline != null)
             {
                 listViewTimeline.SelectedIndexChanged += ListViewTimeline_SelectedIndexChanged;
                 listViewTimeline.DoubleClick += ListViewTimeline_DoubleClick;
             }
         }
 
-        public FormTimeline(LoginResult i_LoginResult, bool i_IsDarkMode)
-            : this(i_LoginResult)
-        {
-            r_IsDarkMode = i_IsDarkMode;
-        }
-
+        public FormTimeline(LoginResult i_LoginResult) : this(i_LoginResult, null) { }
         public FormTimeline()
         {
             InitializeComponent();
-            Load += FormTimeline_Load;
-            if(listViewTimeline != null)
+            this.Load += FormTimeline_Load;
+            if (listViewTimeline != null)
             {
                 listViewTimeline.SelectedIndexChanged += ListViewTimeline_SelectedIndexChanged;
                 listViewTimeline.DoubleClick += ListViewTimeline_DoubleClick;
             }
         }
 
-
-        private void FormTimeline_Load(object i_Sender, EventArgs i_EventArgs)
+        public void SetLoginResult(LoginResult i_LoginResult)
         {
-            applyDarkMode();
-            AdjustColumns();
-            if(r_LoginResult != null && r_LoginResult.LoggedInUser != null)
+            m_LoginResult = i_LoginResult;
+            if (IsHandleCreated && Visible)
             {
                 populateTimeline();
             }
         }
 
-        private void applyDarkMode()
+        public void SetPalette(UiPalette palette)
         {
             Color formBack = r_IsDarkMode ? ColorPalette.sr_Black : ColorPalette.sr_White;
             Color panelBack = r_IsDarkMode ? ColorPalette.sr_DarkGray : ColorPalette.sr_White;
@@ -77,14 +72,19 @@ namespace BasicFacebookFeatures
             applyCombosTheme(listBack, listFore);
         }
 
-        private void applyHeaderTheme(Color i_HeaderBack, Color i_TextColor)
+        private void FormTimeline_Load(object sender, EventArgs e)
         {
-            if(topPanel == null)
+            applyDarkMode();
+            AdjustColumns();
+            if (m_LoginResult != null && m_LoginResult.LoggedInUser != null)
             {
-                return;
+                populateTimeline();
             }
+        }
 
-            topPanel.BackColor = i_HeaderBack;
+        private void applyDarkMode()
+        {
+            var p = m_UiPalette ?? new UiPalette();
 
             foreach(Control control in topPanel.Controls.OfType<Panel>())
             {
@@ -121,50 +121,40 @@ namespace BasicFacebookFeatures
                     }
                 }
             }
-        }
 
-        private void applyPanelsTheme(Color i_PanelBackColor, Color i_TextColor)
-        {
-            if(leftPanel != null)
+            if (leftPanel != null)
             {
-                leftPanel.BackColor = i_PanelBackColor;
-                leftPanel.ForeColor = i_TextColor;
+                leftPanel.BackColor = p.PanelBack;
+                leftPanel.ForeColor = p.PrimaryText;
             }
 
-            if(rightPanel != null)
+            if (rightPanel != null)
             {
-                rightPanel.BackColor = i_PanelBackColor;
-                rightPanel.ForeColor = i_TextColor;
+                rightPanel.BackColor = p.PanelBack;
+                rightPanel.ForeColor = p.PrimaryText;
             }
-        }
 
-        private void applyListTheme(Color i_ListBackColor, Color i_ListForeColor)
-        {
-            if(listViewTimeline != null)
+            if (listViewTimeline != null)
             {
-                listViewTimeline.BackColor = i_ListBackColor;
-                listViewTimeline.ForeColor = i_ListForeColor;
+                listViewTimeline.BackColor = p.ListBack;
+                listViewTimeline.ForeColor = p.ListFore;
             }
-        }
 
-        private void applyPreviewTheme(Color i_PanelBackColor)
-        {
-            if(placeholderLabel != null)
+            if (placeholderLabel != null)
             {
                 placeholderLabel.ForeColor = r_IsDarkMode ? ColorPalette.sr_MidGray : ColorPalette.sr_MidGray;
                 placeholderLabel.BackColor = Color.Transparent;
             }
 
-            if(pictureBoxPreview != null)
+            if (pictureBoxPreview != null)
             {
                 pictureBoxPreview.BackColor = r_IsDarkMode ? ColorPalette.sr_DarkGray : SystemColors.ControlDark;
             }
 
-            if(webBrowserPreview != null)
+            if (webBrowserPreview != null)
             {
-                webBrowserPreview.BackColor = i_PanelBackColor;
+                webBrowserPreview.BackColor = p.PanelBack;
             }
-        }
 
         private void applyButtonsTheme(Color i_ButtonBackColor)
         {
@@ -181,21 +171,18 @@ namespace BasicFacebookFeatures
                 buttonRefresh.BackColor = r_IsDarkMode ? ColorPalette.sr_DarkBlue : i_ButtonBackColor;
                 buttonRefresh.FlatStyle = FlatStyle.Flat;
             }
-        }
 
-        private void applyCombosTheme(Color i_ListBackColor, Color i_ListForeColor)
-        {
-            if(comboBoxContent != null)
+            if (comboBoxContent != null)
             {
-                comboBoxContent.BackColor = i_ListBackColor;
-                comboBoxContent.ForeColor = i_ListForeColor;
+                comboBoxContent.BackColor = p.ListBack;
+                comboBoxContent.ForeColor = p.ListFore;
                 comboBoxContent.FlatStyle = FlatStyle.Standard;
             }
 
-            if(comboBoxGranularity != null)
+            if (comboBoxGranularity != null)
             {
-                comboBoxGranularity.BackColor = i_ListBackColor;
-                comboBoxGranularity.ForeColor = i_ListForeColor;
+                comboBoxGranularity.BackColor = p.ListBack;
+                comboBoxGranularity.ForeColor = p.ListFore;
                 comboBoxGranularity.FlatStyle = FlatStyle.Standard;
             }
         }
@@ -216,7 +203,7 @@ namespace BasicFacebookFeatures
                 {
                     listViewTimeline.Items.Clear();
 
-                    User user = r_LoginResult != null ? r_LoginResult.LoggedInUser : null;
+                    User user = m_LoginResult != null ? m_LoginResult.LoggedInUser : null;
                     if(user == null)
                     {
                         return;
@@ -390,8 +377,8 @@ namespace BasicFacebookFeatures
         private bool tryParseBirthday(out DateTime i_Birth)
         {
             i_Birth = DateTime.MinValue;
-            string birthday = r_LoginResult != null && r_LoginResult.LoggedInUser != null
-                                  ? r_LoginResult.LoggedInUser.Birthday
+            string birthday = m_LoginResult != null && m_LoginResult.LoggedInUser != null
+                                  ? m_LoginResult.LoggedInUser.Birthday
                                   : null;
 
             if(string.IsNullOrEmpty(birthday))

@@ -104,6 +104,7 @@
     <Compile Include="FormSelfAnalytics.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="UiPalette.cs" />
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
       <SubType>Designer</SubType>

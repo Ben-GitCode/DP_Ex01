@@ -1,40 +1,39 @@
 ﻿using System;
-using System.Drawing;
 using System.Linq;
-using System.Reflection;
 using System.Windows.Forms;
 using FacebookWrapper;
 using FacebookWrapper.ObjectModel;
+using System.Drawing;
+using System.Reflection;
 
 namespace BasicFacebookFeatures
 {
     public partial class FormMedia : Form
     {
-        private readonly bool r_IsDarkMode;
         private readonly LoginResult r_LoginResult;
+        private UiPalette m_Palette;
 
         public FormMedia()
         {
             InitializeComponent();
         }
 
-        public FormMedia(LoginResult i_LoginResult, bool i_IsDarkMode)
-            : this()
+        public FormMedia(LoginResult i_LoginResult, UiPalette i_Palette) : this()
         {
             r_LoginResult = i_LoginResult;
-            r_IsDarkMode = i_IsDarkMode;
+            m_Palette = i_Palette;
         }
+
+        public FormMedia(LoginResult i_LoginResult, bool i_IsDarkMode) : this(i_LoginResult, null) { }
 
         protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
+            applyPalette();
 
-            applyDarkMode();
-
-            if(r_LoginResult == null)
+            if (r_LoginResult == null)
             {
-                MessageBox.Show(
-                    "FormMedia did not receive a LoginResult. Make sure you open it with new FormMedia(r_LoginResult, isDarkMode).");
+                MessageBox.Show("FormMedia did not receive a LoginResult. Make sure you open it with new FormMedia(m_LoginResult, palette).");
                 return;
             }
 
@@ -43,8 +42,13 @@ namespace BasicFacebookFeatures
             loadPhotos();
         }
 
+        public void SetPalette(UiPalette i_Palette)
+        {
+            m_Palette = i_Palette ?? m_Palette;
+            applyPalette();
+        }
 
-        private void applyDarkMode()
+        private void applyPalette()
         {
             Color formBack = r_IsDarkMode ? ColorPalette.sr_Black : ColorPalette.sr_White;
             Color pageBack = r_IsDarkMode ? ColorPalette.sr_DarkGray : ColorPalette.sr_White;
@@ -53,22 +57,13 @@ namespace BasicFacebookFeatures
             Color listFore = text;
             Color buttonBackColor = ColorPalette.sr_FacebookBlue;
 
-            BackColor = formBack;
+            BackColor = p.FormBack;
 
-            Action<Control> walk = null;
-            walk = i_Control =>
-                {
-                    if(i_Control is TabControl tc)
-                    {
-                        tc.BackColor = formBack;
-                        foreach(TabPage p in tc.TabPages)
-                        {
-                            p.BackColor = pageBack;
-                            walk(p);
-                        }
+            listBoxAlbums.BackColor = p.ListBack;
+            listBoxAlbums.ForeColor = p.ListFore;
 
-                        return;
-                    }
+            listBoxPosts.BackColor = p.ListBack;
+            listBoxPosts.ForeColor = p.ListFore;
 
                     if(i_Control is ListBox listBox)
                     {
@@ -95,14 +90,13 @@ namespace BasicFacebookFeatures
                             button.BackColor = buttonBackColor;
                         }
 
-                        button.FlatStyle = FlatStyle.Flat;
-                    }
+            pictureBoxAlbum.BackColor = p.PreviewImageBack;
+            pictureBoxPost.BackColor = p.PreviewImageBack;
+            pictureBoxPhoto.BackColor = p.PreviewImageBack;
 
-                    foreach(Control child in i_Control.Controls)
-                    {
-                        walk(child);
-                    }
-                };
+            linkAlbums.LinkColor = p.PrimaryText;
+            linkPosts.LinkColor = p.PrimaryText;
+            linkPhotos.LinkColor = p.PrimaryText;
 
             Panel headerPanel = Controls.OfType<Panel>().FirstOrDefault(p => p.Height == 72);
             if(headerPanel != null)

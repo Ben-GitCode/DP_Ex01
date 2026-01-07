@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using FacebookWrapper;
 using FacebookWrapper.ObjectModel;
@@ -10,6 +11,7 @@ namespace BasicFacebookFeatures
     {
         private bool m_IsDarkMode;
         private LoginResult m_LoginResult;
+        private UiPalette m_Palette;
 
         public FormMain()
         {
@@ -103,7 +105,7 @@ namespace BasicFacebookFeatures
 
         private void navigateToFeature(string i_FeatureName)
         {
-            if(m_LoginResult == null)
+            if (m_LoginResult == null)
             {
                 MessageBox.Show("Please login first.");
                 return;
@@ -111,40 +113,38 @@ namespace BasicFacebookFeatures
 
             Form featureForm = null;
 
-            switch(i_FeatureName)
+            switch (i_FeatureName)
             {
                 case "Media":
-                    featureForm = new FormMedia(m_LoginResult, m_IsDarkMode);
+                    featureForm = new FormMedia(m_LoginResult, m_Palette);
                     break;
                 case "Self Analytics":
-                    featureForm = new FormSelfAnalytics(m_LoginResult, m_IsDarkMode);
+                    featureForm = new FormSelfAnalytics(m_LoginResult, m_Palette);
                     break;
                 case "Timeline":
-                    featureForm = new FormTimeline(m_LoginResult, m_IsDarkMode);
+                    featureForm = new FormTimeline(m_LoginResult, m_Palette);
                     break;
                 default:
                     MessageBox.Show("Feature not found.");
                     return;
             }
 
-            if(featureForm != null)
+            if (featureForm != null)
             {
                 Hide();
-
                 featureForm.FormClosed += (s, e) =>
+                {
+                    try
                     {
-                        try
+                        if (!IsDisposed && IsHandleCreated)
                         {
-                            if(!IsDisposed && IsHandleCreated)
-                            {
-                                BeginInvoke(new Action(() => navigateToMenu()));
-                            }
+                            BeginInvoke(new Action(() => navigateToMenu()));
                         }
-                        catch
-                        {
-                        }
-                    };
-
+                    }
+                    catch
+                    {
+                    }
+                };
                 featureForm.Show();
             }
         }
@@ -289,7 +289,7 @@ namespace BasicFacebookFeatures
             toggleBackground.BackColor = m_IsDarkMode ? ColorPalette.sr_LightGray : ColorPalette.sr_LightGray;
         }
 
-        private void applyDarkMode()
+        private UiPalette buildPalette(bool i_IsDark)
         {
             Color formColor = m_IsDarkMode ? ColorPalette.sr_Black : ColorPalette.sr_White;
             Color textColor = m_IsDarkMode ? ColorPalette.sr_WhitishBlue : ColorPalette.sr_DarkBlue;
@@ -308,20 +308,66 @@ namespace BasicFacebookFeatures
 
             foreach(TabPage tabPage in tabControl1.TabPages)
             {
-                tabPage.BackColor = formColor;
-
-                foreach(Control control in tabPage.Controls)
+                palette= new UiPalette
                 {
-                    applyColor(control, textColor, listBoxBackColor, listBoxForeColor);
-                }
+                    FormBack = Color.FromArgb(24, 25, 26),
+                    PanelBack = Color.FromArgb(36, 37, 38),
+                    HeaderBack = Color.FromArgb(45, 60, 100),
+                    PrimaryText = Color.White,
+                    SecondaryText = Color.Gainsboro,
+                    MutedText = Color.Silver,
+
+                    ListBack = Color.FromArgb(24, 25, 26),
+                    ListFore = Color.White,
+                    ButtonBack = Color.FromArgb(66, 103, 178),
+                    PlaceholderText = Color.Gainsboro,
+                    PreviewImageBack = Color.Black,
+                    StatsText = Color.Gainsboro,
+                    ProfileBack = Color.FromArgb(36, 37, 38),
+
+                    CardOuterStart = Color.FromArgb(30, 40, 60),
+                    CardOuterEnd = Color.FromArgb(16, 22, 33),
+                    CardInnerTop = Color.FromArgb(44, 47, 51),
+                    CardInnerBottom = Color.FromArgb(36, 37, 38),
+                    CardInnerBorder = Color.FromArgb(80, 80, 80),
+                    CardShineStart = Color.FromArgb(30, 255, 255, 255),
+                    CardShineEnd = Color.FromArgb(5, 255, 255, 255)
+                };
             }
+            else
+            {   
+
+                palette = new UiPalette
+                {
+                    FormBack = SystemColors.Control,
+                    PanelBack = SystemColors.Control,
+                    HeaderBack = Color.FromArgb(59, 89, 152),
+                    PrimaryText = Color.FromArgb(12, 36, 86),
+                    SecondaryText = Color.FromArgb(34, 34, 34),
+                    MutedText = Color.FromArgb(90, 90, 110),
+
+                    ListBack = Color.White,
+                    ListFore = Color.Black,
+                    ButtonBack = Color.FromArgb(66, 103, 178),
+                    PlaceholderText = Color.DimGray,
+                    PreviewImageBack = SystemColors.ControlDark,
+                    StatsText = Color.FromArgb(40, 40, 40),
+                    ProfileBack = Color.White,
+
+                    CardOuterStart = Color.FromArgb(40, 83, 155),
+                    CardOuterEnd = Color.FromArgb(14, 36, 86),
+                    CardInnerTop = Color.FromArgb(255, 255, 255, 255),
+                    CardInnerBottom = Color.FromArgb(240, 240, 246),
+                    CardInnerBorder = Color.FromArgb(200, 200, 200),
+                    CardShineStart = Color.FromArgb(60, 255, 255, 255),
+                    CardShineEnd = Color.FromArgb(10, 255, 255, 255)
+                };
+            }
+
+            return palette;
         }
 
-        private void applyColor(
-            Control i_Control,
-            Color i_TextColor,
-            Color i_ListBoxBackColor,
-            Color i_ListBoxForeColor)
+        private void applyDarkMode()
         {
             if(i_Control is Button button)
             {
@@ -330,17 +376,84 @@ namespace BasicFacebookFeatures
             }
             else if(i_Control is LinkLabel linkLabel)
             {
-                linkLabel.LinkColor = i_TextColor;
-                linkLabel.ForeColor = i_TextColor;
+                toggleBackground.BackColor = m_IsDarkMode ? Color.DarkGray : Color.LightGray;
             }
-            else if(i_Control is ListBox listBox)
+
+            if(pictureBoxProfile != null && pictureBoxProfile.Image == null)
             {
-                listBox.BackColor = i_ListBoxBackColor;
-                listBox.ForeColor = i_ListBoxForeColor;
+                pictureBoxProfile.BackColor = m_Palette.ProfileBack;
             }
-            else
+        }
+
+        private void applyPaletteToControls(Control.ControlCollection i_Controls)
+        {
+            foreach(Control control in i_Controls)
             {
-                i_Control.ForeColor = i_TextColor;
+                if(control is Panel)
+                {
+                    control.BackColor = m_Palette.PanelBack;
+                    control.ForeColor = m_Palette.PrimaryText;
+                }
+                else if(control is TabControl || control is TabPage)
+                {
+                    control.BackColor = m_Palette.FormBack;
+                    control.ForeColor = m_Palette.PrimaryText;
+                }
+                else if(control is GroupBox)
+                {
+                    control.BackColor = m_Palette.PanelBack;
+                    control.ForeColor = m_Palette.PrimaryText;
+                }
+                else if(control is Label)
+                {
+                    control.ForeColor = m_Palette.PrimaryText;
+                }
+                else if(control is LinkLabel link)
+                {
+                    link.BackColor = Color.Transparent;
+                    link.ForeColor = m_Palette.PrimaryText;
+                    link.LinkColor = m_Palette.ButtonBack;
+                    link.ActiveLinkColor = m_Palette.ButtonBack;
+                    link.VisitedLinkColor = m_Palette.ButtonBack;
+                }
+                else if(control is Button btn)
+                {
+                    btn.BackColor = m_Palette.ButtonBack;
+                    btn.ForeColor = Color.White;
+                }
+                else if(control is ListBox listBox)
+                {
+                    listBox.BackColor = m_Palette.ListBack;
+                    listBox.ForeColor = m_Palette.ListFore;
+                }
+                else if(control is ListView listView)
+                {
+                    listView.BackColor = m_Palette.ListBack;
+                    listView.ForeColor = m_Palette.ListFore;
+                }
+                else if(control is TextBox textBox)
+                {
+                    textBox.BackColor = m_Palette.PanelBack;
+                    textBox.ForeColor = m_Palette.PrimaryText;
+                }
+                else if(control is PictureBox pictureBox)
+                {
+                    pictureBox.BackColor = m_Palette.PreviewImageBack;
+                }
+                else
+                {
+                    if(control.BackColor == SystemColors.Control)
+                    {
+                        control.BackColor = m_Palette.PanelBack;
+                    }
+
+                    control.ForeColor = m_Palette.PrimaryText;
+                }
+
+                if(control.HasChildren)
+                {
+                    applyPaletteToControls(control.Controls);
+                }
             }
         }
     }
