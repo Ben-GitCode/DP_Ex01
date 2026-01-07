@@ -6,6 +6,8 @@ using FacebookWrapper.ObjectModel;
 
 namespace BasicFacebookFeatures
 {
+    // yo! please don't hate me for the big class :(
+
     public partial class FormMain : Form
     {
         private bool m_IsDarkMode;
